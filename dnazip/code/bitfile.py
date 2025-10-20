@@ -49,27 +49,31 @@ def encodeStringToBytes(str):
     return "".join(format(byte, '08b') for byte in byte_representation)
 
 
-def readBitVINT(bytes_obj):
-
-    bit_string = BytesToBitString(bytes_obj)
+def readBitVINT(bit_string):
     
     num = 0
     shift = 0
+    bytes_used = 0
 
     for i in range(0, len(bit_string), 8):
 
         byte = bit_string[i:i+8]
+        if len(byte) < 8:
+            break
+
         bits = byte[1:]
         bit_val = int(bits, 2)
 
         num |= (bit_val << shift)
 
         shift += 7
+        bytes_used += 1
 
         if byte[0] == '0':
             break
 
-    return num
+    bits_used = bytes_used * 8
+    return num, bit_string[bits_used:]
 
 
 '''

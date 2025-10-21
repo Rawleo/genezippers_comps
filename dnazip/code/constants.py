@@ -5,6 +5,13 @@ NUC_ENCODING = {
     "T": "11",
 }
 
+TWO_BIT_ENCODING = {
+    "00": "A",
+    "01": "C",
+    "10": "G",
+    "11": "T",
+}
+
 VARIATION_FLAG = {
     'SNPS': 0,
     'DELETIONS': 1,

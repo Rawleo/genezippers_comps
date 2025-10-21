@@ -4,8 +4,7 @@ import os
 from constants import *
 from bitfile import *
 
-CURR_DIR = os.path.dirname(__file__)
-ENC_FILE_PATH = os.path.join(CURR_DIR, '../data/output/HG002_GRCh38_Encoded.bin')
+ENC_FILE_PATH = '../data/output/HG003_GRCh38_Encoded.bin'
 
 def decode(file_to_bin_file):
     

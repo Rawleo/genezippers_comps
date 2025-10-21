@@ -1,7 +1,7 @@
 ToDo:
 binary or fibonacci
-window
 palindrome position from i not from start
+length encoded starting at 7 endding at 38
 
 note:
 encoding - factor=0

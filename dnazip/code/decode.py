@@ -6,9 +6,10 @@ from constants import *
 from bitfile import *
 from huffman import *
 
-ENC_FILE_PATH = '../data/output/HG003_GRCh38_Encoded.bin'
-CHR_FILE_PATH = '../data/chr/'
-TREE_PATH = '../data/huffman_trees/Huffman_Tree_HG002.txt'
+VARIANT_NAME    = 'HG004_GRCh38'
+ENC_FILE_PATH   = f"../data/output/{VARIANT_NAME}_Encoded.bin"
+CHR_FILE_PATH   = '../data/chr/'
+TREE_PATH       = f"../data/huffman_trees/{VARIANT_NAME}.txt"
 
 def decode(file_to_bin_file):
     
@@ -27,7 +28,6 @@ def decode(file_to_bin_file):
 #     len_bitstr
 #     bitstr_len_vint
 #     ins_seq_bitstr
-    
     
 #     return
 
@@ -53,7 +53,7 @@ def createRefGen(chr):
     return refGen
 
 
-def load_map_from_file(filepath: str) -> dict:
+def load_map_from_file(filepath):
     """
     Reads a text file containing a Python dictionary literal
     and parses it into a dict object.
@@ -72,7 +72,7 @@ def load_map_from_file(filepath: str) -> dict:
     return encoding_map
 
 
-def reconstruct_huffman_tree(encoding_map: dict) -> Node:
+def reconstruct_huffman_tree(encoding_map):
     """
     Reconstructs the Huffman tree from a given encoding map,
     using the user-provided Node class.
@@ -85,35 +85,25 @@ def reconstruct_huffman_tree(encoding_map: dict) -> Node:
         The root node (Node) of the reconstructed tree.
     """
 
-    # We must provide symbol and frequency, so we use None
-    # for internal nodes.
     root = Node(symbol=None, frequency=None)
 
-    # Iterate over every symbol and its code
     for symbol, code in encoding_map.items():
         current_node = root
 
-        # Traverse the tree, creating nodes as needed
-        # We loop through all bits *except* the last one
         for bit in code[:-1]:
             if bit == '0':
                 if current_node.leftChild is None:
-                    # Create a new internal node
                     current_node.leftChild = Node(symbol=None, frequency=None)
                 current_node = current_node.leftChild
-            else: # bit == '1'
+            else:
                 if current_node.rightChild is None:
-                    # Create a new internal node
                     current_node.rightChild = Node(symbol=None, frequency=None)
                 current_node = current_node.rightChild
 
-        # At the last bit, we place the leaf node
         last_bit = code[-1]
         if last_bit == '0':
-            # Create a leaf node with the symbol. Frequency is unknown.
             current_node.leftChild = Node(symbol=symbol, frequency=None)
-        else: # last_bit == '1'
-            # Create a leaf node with the symbol. Frequency is unknown.
+        else:
             current_node.rightChild = Node(symbol=symbol, frequency=None)
             
     return root

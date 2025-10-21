@@ -4,11 +4,10 @@ import pandas as pd
 import numpy as np
 from constants import *
 
-    
-INPUT_FILE_PATH = "../data/variants/HG004_GRCh38_sorted_variants.txt"
-DBSNP_PATH = "../dbSNP/"
-OUTPUT_PATH = "../data/output/HG004_GRCh38_Encoded"
-
+VARIANT_NAME    = 'HG004_GRCh38'
+INPUT_FILE_PATH = f"../data/variants/{VARIANT_NAME}_sorted_variants.txt"
+DBSNP_PATH      = "../data/dbSNP/"
+OUTPUT_PATH     = f"../data/output/{VARIANT_NAME}_Encoded"
 
 def encode_file(input_file_path, dbSNP_path, k_mer_size):
     
@@ -52,11 +51,15 @@ def encode_file(input_file_path, dbSNP_path, k_mer_size):
 
         # Start of INSRs 
         # Encoding of INSRs
-        ins_size_vint, ins_pos_bitstr, ins_len_bitstr, ins_bitstr_len_vint, ins_seq_bitstr = insr.encode_ins(insr_df, k_mer_size)
+        ins_size_vint, ins_pos_bitstr, ins_len_bitstr, ins_bitstr_len_vint, ins_seq_bitstr, encoding_map = insr.encode_ins(insr_df, k_mer_size)
         
         ### Add above to bin        
         insertion_bitstring = ins_size_vint + ins_pos_bitstr + ins_len_bitstr + ins_bitstr_len_vint + ins_seq_bitstr
         bitfile.export_as_binary(OUTPUT_PATH, insertion_bitstring)
+        
+        # Export Huffman Encoding Map
+        huffman.export_as_txt(f"../data/huffman_trees/{VARIANT_NAME}", encoding_map)
+
 
 
 def main(): 

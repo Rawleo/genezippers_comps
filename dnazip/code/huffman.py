@@ -120,11 +120,9 @@ def run_huffman(ins_seq, k_mer_size):
     huffman_root    = build_huffman_tree(ins_frq_dict)
     
     map_encodings(huffman_root, encoding_map, "")
-    
-    export_as_txt('../data/output/Huffman_Tree_HG002', encoding_map)
-    
+        
     extra_nuc_bitstr    = "".join(NUC_ENCODING[x] for x in ins_seq[:(len(ins_seq) % k)])
     insr_seq_bitstr     = encode_insertions(encoding_map, k_mer_array)
     insr_seq_bitstr     += extra_nuc_bitstr
         
-    return insr_seq_bitstr
+    return insr_seq_bitstr, encoding_map

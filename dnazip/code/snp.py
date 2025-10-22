@@ -14,6 +14,6 @@ def encode_SNPs(snps_df):
 
     pos_bitstring = ''.join(snps_df['pos'].astype(str).tolist())
     nuc_bitstring = ''.join(snps_df['var_info'].astype(str).tolist())
-    snp_size_vint = writeBitVINT(snps_df.shape[0])
+    snp_size_vint, _ = writeBitVINT(snps_df.shape[0])
 
     return snp_size_vint, pos_bitstring, nuc_bitstring

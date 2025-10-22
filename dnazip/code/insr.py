@@ -6,7 +6,7 @@ from constants import *
 def encode_ins(insr_df, k_mer_size):
     
     # Calculate size of insertions and convert to VINT
-    insr_size_vint, _ = writeBitVINT(insr_df.shape[0])
+    insr_size_vint = writeBitVINT(insr_df.shape[0])
     
     # Convert positions to VINTs
     insr_df["pos"] = insr_df["pos"].astype(int).apply(writeBitVINT)

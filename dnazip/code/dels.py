@@ -4,7 +4,7 @@ from vint import *
 
 def encode_dels(dels_df):
     # Calculate number of DELs
-    del_size_vint, _ = writeBitVINT(dels_df.shape[0])
+    del_size_vint = writeBitVINT(dels_df.shape[0])
     
     # Convert position and variation length info into vints 
     dels_df["pos"]        = dels_df["pos"].astype(int).apply(writeBitVINT)

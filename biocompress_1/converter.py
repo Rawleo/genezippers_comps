@@ -1,4 +1,5 @@
 from config import CONTENT
+import math
 
 def encodeFibonacci(num):
     fibNumbers = [1,2]
@@ -31,10 +32,20 @@ def decodeFibonacci(num):
     return decoded
 
 
-def encodeBinary(num):
-    return bin(num)[2:]
-    
+def encodeBinary(num, i):
+    binary = str(bin(num)[2:])
+    k =  math.ceil(math.log2(i))
+    binary = binary.zfill(k)
+    index = binary.find("11")
+    if (index != -1): 
+        binary = binary[:index + 2] + '1' + binary[index + 2:]
+    return binary
 
+def decodeBinary(num):
+    index = num.find("111")
+    if(index != -1):
+        num = num[:index]+num[index+1:]
+    return int(num,2)
 
 def baseToBinary(base: str):
     mapping = {
@@ -54,7 +65,7 @@ def binaryToBase(base):
         }
     return mapping.get(base, "A")
 
-def encodeFactor(factor):
+def encodeFactor(factor, i):
     length = factor[1]
     type = factor[2]
     position = factor[0][0]+1
@@ -62,8 +73,14 @@ def encodeFactor(factor):
         typeEncoded="0"
     else:
         typeEncoded="1"
-    posFib=encodeFibonacci(position)
-    position = posFib #figure out binary later
+    posFib=encodeFibonacci(position)+"0"
+    posBin=encodeBinary(position, i)
+    if(len(posBin)<len(posFib)):
+        position=posBin
+    else:
+        position=posFib
+    print("posBin:", posBin, decodeBinary(posBin))
+    print("posFib:", posFib)
     lengthEncoded=encodeFibonacci(length)
 
     if((factor[1]*2)<=len(lengthEncoded+typeEncoded+position)):
@@ -79,7 +96,7 @@ def encodeFactor(factor):
 
 
 def main():
-    print(encodeFibonacci(3))
+    print(encodeFibonacci(8))
 
 if __name__ == "__main__":
     main()

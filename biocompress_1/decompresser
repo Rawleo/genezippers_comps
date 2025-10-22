@@ -1,17 +1,41 @@
 from config import HEIGHT, DNA_FILE
-from converter import decodeFibonacci, binaryToBase
+from converter import decodeFibonacci, binaryToBase, decodeBinary
+import math
 
 open(DNA_FILE + "_dencoded.txt", "w").close()
 outputFile = open(DNA_FILE + "_dencoded.txt", "a", encoding="utf-8")
 with open(DNA_FILE + "_encoded.txt", "r") as file:
     inputFile = file.read()
 
-def parseNum(i):
+def parseNum(i): 
     num = ""
     while(num[-2:] != "11"):
         num+=inputFile[i]
         i+=1
     return decodeFibonacci(num), len(num)
+
+def parseNumPos(i, window=None):
+    num=""
+    if(window):
+        k =  math.ceil(math.log2(window))
+        print("window:", window)
+        print("k:", k)
+    for x in range(k):
+        num+=inputFile[i+x]
+    index = num.find("11")
+    if(index==-1):
+        type="binary"
+    else:
+        if(num[index+2]=="0"):
+            type="fibonacci"
+        else:
+            type="binary"
+            num+=inputFile[i+k+1]
+    if(type=="binary"):
+        return decodeBinary(num), len(num)
+    else:
+        return decodeFibonacci(num), len(num)+1
+
 
 def parseBases(num, position):
     bases=""
@@ -20,17 +44,19 @@ def parseBases(num, position):
         position+=2
     return bases
 
-def parseFactors(num, position):
+def parseFactors(num, position, outputDraft):
+    window = len(outputDraft)
     factors = []
     for i in range(num):
         factorLength, length = parseNum(position)
         position+=length
         factorType = inputFile[position]
         position+=1
-        factorPos, length = parseNum(position)
+        factorPos, length = parseNumPos(position, window)
         position+=length
         factor = (factorLength, factorType, factorPos-1)
         factors.append(factor)
+        window+=factorLength
     return factors, position
 
 def decodeFactors(factors, outputDraft):
@@ -38,6 +64,12 @@ def decodeFactors(factors, outputDraft):
         if(factor[1]=="0"):
             for i in range(factor[0]):
                 outputDraft+=outputDraft[factor[2]+i]
+        if(factor[1]=="1"):
+            temp = ""
+            table = str.maketrans("ACTG", "TGAC")
+            for i in range(factor[0]):
+                temp+=outputDraft[len(outputDraft)-factor[2]+i]
+            outputDraft+=temp.translate(table)
     return outputDraft
 
 
@@ -56,7 +88,7 @@ def main():
             outputDraft+=bases
 
         elif(type == "factors"):
-            factors, i = parseFactors(num, i)
+            factors, i = parseFactors(num, i, outputDraft)
             print("factors:", factors)
             outputDraft=decodeFactors(factors, outputDraft)
             type= "bases"

@@ -7,7 +7,7 @@
             encoding dictionary.
 '''
 
-import re, sys, argparse, os, vint
+import re, sys, argparse, os, vint, ast
 from constants import *
 
 
@@ -106,6 +106,76 @@ def encode_insertions(encoding_map, k_mer_array):
 def export_as_txt(export_name, text):
     with open(export_name + ".txt", "w") as file:
         file.write(str(text))
+        
+
+def decode_huffman(encoded_text, root):
+    result = ""
+    curr = root
+    for char in encoded_text:
+        if char == "0":
+            curr = curr.leftChild
+        else:
+            curr = curr.rightChild
+        if curr.leftChild is None and curr.rightChild is None:
+            result += curr.symbol
+            curr = root
+    return result
+
+
+def load_map_from_file(filepath):
+    """
+    Reads a text file containing a Python dictionary literal
+    and parses it into a dict object.
+    
+    Args:
+        filepath: The path to the text file.
+
+    Returns:
+        The parsed dictionary.
+    """
+    with open(filepath, 'r') as f:
+        file_content = f.read()
+        
+    encoding_map = ast.literal_eval(file_content)
+    
+    return encoding_map
+
+
+def reconstruct_huffman_tree(encoding_map):
+    """
+    Reconstructs the Huffman tree from a given encoding map,
+    using the user-provided Node class.
+    
+    Args:
+        encoding_map: A dictionary mapping symbols to their
+                      binary Huffman code (e.g., {'A': '0', 'B': '11'}).
+
+    Returns:
+        The root node (Node) of the reconstructed tree.
+    """
+
+    root = Node(symbol=None, frequency=None)
+
+    for symbol, code in encoding_map.items():
+        current_node = root
+
+        for bit in code[:-1]:
+            if bit == '0':
+                if current_node.leftChild is None:
+                    current_node.leftChild = Node(symbol=None, frequency=None)
+                current_node = current_node.leftChild
+            else:
+                if current_node.rightChild is None:
+                    current_node.rightChild = Node(symbol=None, frequency=None)
+                current_node = current_node.rightChild
+
+        last_bit = code[-1]
+        if last_bit == '0':
+            current_node.leftChild = Node(symbol=symbol, frequency=None)
+        else:
+            current_node.rightChild = Node(symbol=symbol, frequency=None)
+            
+    return root
         
         
 def run_huffman(ins_seq, k_mer_size):

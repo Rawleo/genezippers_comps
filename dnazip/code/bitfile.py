@@ -73,7 +73,8 @@ def readBitVINT(bit_string):
             break
 
     bits_used = bytes_used * 8
-    return num, bit_string[bits_used:]
+    
+    return num, bits_used
 
 
 '''

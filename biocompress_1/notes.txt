@@ -1,7 +1,6 @@
 ToDo:
-binary or fibonacci
-palindrome position from i not from start
-length encoded starting at 7 endding at 38
+binary or fibonacci, fix parseNum(), currently not parsing correctly
+length encoded starting at 7 endding at 38, sometimes more efficient to do factor with length under 7
 
 note:
 encoding - factor=0

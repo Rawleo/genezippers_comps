@@ -71,7 +71,7 @@ def longestFactorPalindrome(i: int) -> tuple[Optional[list[int]], Optional[int],
                     addLength = addLengthTemp
                     positionNum = positionNumTemp
                 positionNumTemp +=1
-            palindromePos=([palindromePos[0][positionNum]], palindromePos[1]+addLength)
+            palindromePos=([i-palindromePos[0][positionNum]], palindromePos[1]+addLength)
     
     if(factorPos[1] and palindromePos[1]):
         if factorPos[1] >= palindromePos[1]:
@@ -87,7 +87,7 @@ def process(i: int):
     TREE.createPositions(segment, i)
 
     if(longestFactor[0]):
-        longestFactor = encodeFactor(longestFactor)
+        longestFactor = encodeFactor(longestFactor, i)
         print("longestFactor", longestFactor)
         return longestFactor
     else: 

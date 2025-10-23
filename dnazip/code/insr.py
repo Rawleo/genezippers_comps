@@ -1,9 +1,28 @@
 from vint import *
 from huffman import *
-import pandas as pd
 from constants import *
+import pandas as pd
+import os
+
+
+def ins_seq_to_bitstr(ins_seq, encoding_map, k_mer_size):
+    ins_seq_kmer = insertions_to_kmers(ins_seq, k_mer_size)
+    ins_seq_bitstr  = encode_insertions(encoding_map, ins_seq_kmer)
+    
+    return ins_seq_bitstr
+
+
+def create_insertion_seq_file(chr, ins_seq, out_path):
+    
+    result = f"{chr} Insertion Sequence: " + ins_seq + '\n'
+    
+    append_as_txt(INS_SEQ_CONCAT, result)
+    
 
 def encode_ins(insr_df, encoding_map, k_mer_size):
+    
+    # Current chromosome
+    chr = insr_df["chr"].values[0]
     
     # Calculate size of insertions and convert to VINT
     insr_size_vint = writeBitVINT(insr_df.shape[0])
@@ -26,10 +45,12 @@ def encode_ins(insr_df, encoding_map, k_mer_size):
     # Concatenate all position length VINTs
     len_bitstr = ''.join(insr_df["var_length"].astype(str).tolist())
 
-    ### THEN RUN HUFFMAN ENCODING STUFF FOR THIS CHROMOSOME
-    ins_seq_kmer = insertions_to_kmers(ins_seq, k_mer_size)
-    ins_seq_bitstr  = encode_insertions(encoding_map, ins_seq_kmer)
+    # Huffman encoding of the current chromosome's insertion sequences
+    ins_seq_bitstr  = ins_seq_to_bitstr(ins_seq, encoding_map, k_mer_size)
 
+    create_insertion_seq_file(chr, ins_seq, INS_SEQ_CONCAT)
+
+    # VINT for bitstring length
     bitstr_len_vint = writeBitVINT(len(ins_seq_bitstr))
         
     return insr_size_vint, pos_bitstr, len_bitstr, bitstr_len_vint, ins_seq_bitstr

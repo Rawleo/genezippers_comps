@@ -4,10 +4,6 @@ from constants import *
 from bitfile import *
 from huffman import *
 
-VARIANT_NAME    = 'HG002_GRCh38'
-ENC_FILE_PATH   = f"../data/output/{VARIANT_NAME}_Encoded.bin"
-CHR_FILE_PATH   = '../data/chr/'
-TREE_PATH       = f"../data/huffman_trees/{VARIANT_NAME}.txt"
 
 def add_padding(bit_string):
 
@@ -152,6 +148,8 @@ def decode(bit_string):
 
             # Final insertion sequence
             ins_seq  = decode_huffman(huffman_bitmap, huffman_root)
+            
+            print(chr, "Insertion Sequence:", ins_seq)
 
             
             #Making df example:

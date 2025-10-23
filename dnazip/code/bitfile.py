@@ -48,7 +48,6 @@ def encodeStringToBytes(str):
     
     return "".join(format(byte, '08b') for byte in byte_representation)
 
-
 def readBitVINT(bit_string):
     
     num = 0
@@ -114,11 +113,11 @@ in big-endian order.
 @return:
  * Exports a .bin file of the encoded string now as bytes to the current directory
 '''
-def export_as_binary(export_name, bitstr):
+def export_as_binary(export_name_with_extension, bitstr):
     
     byte_value = int(bitstr, 2).to_bytes((len(bitstr) + 7) // 8, byteorder='big')
     
-    with open(export_name + ".bin", "ab") as file:
+    with open(export_name_with_extension, "ab") as file:
         file.write(byte_value)
 
 

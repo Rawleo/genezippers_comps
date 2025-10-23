@@ -48,7 +48,6 @@ def encodeStringToBytes(str):
     
     return "".join(format(byte, '08b') for byte in byte_representation)
 
-
 def readBitVINT(bit_string):
     
     num = 0
@@ -76,6 +75,28 @@ def readBitVINT(bit_string):
     
     return num, bits_used
 
+def readBitVINT_from(bit_string, start):
+    num = 0
+    shift = 0
+    bytes_used = 0
+    i = start
+
+    while i + 8 <= len(bit_string):
+        byte = bit_string[i:i+8]
+        bits = byte[1:]
+        bit_val = int(bits, 2)
+        num |= (bit_val << shift)
+
+        shift += 7
+        bytes_used += 1
+
+        i += 8
+        if byte[0] == '0':
+            break
+
+    bits_used = bytes_used * 8
+    return num, bits_used
+
 
 '''
 Export as binary file consisting of the encoded string transformed into bytes.
@@ -92,11 +113,11 @@ in big-endian order.
 @return:
  * Exports a .bin file of the encoded string now as bytes to the current directory
 '''
-def export_as_binary(export_name, bitstr):
+def export_as_binary(export_name_with_extension, bitstr):
     
     byte_value = int(bitstr, 2).to_bytes((len(bitstr) + 7) // 8, byteorder='big')
     
-    with open(export_name + ".bin", "ab") as file:
+    with open(export_name_with_extension, "ab") as file:
         file.write(byte_value)
 
 

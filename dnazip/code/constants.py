@@ -1,3 +1,57 @@
+"""
+Directory Structure:
+--------------------
+
+dnazip/
+├── code/
+│   └── (your_script.py)              <-- Running script's location
+└── data/
+    ├── chr/                          <-- CHR_FILE_PATH
+    │   └── (chromosome files)
+    ├── dbSNP/                        <-- DBSNP_PATH
+    │   └── (dbSNP files)
+    ├── huffman_trees/                <-- TREE_PATH directory
+    │   └── HG002_GRCh38.txt          <-- Example TREE_PATH file
+    ├── output/                       <-- Output directory
+    │   ├── HG002_GRCh38_Encoded.bin  <-- OUTPUT_BIN_PATH / ENC_FILE_PATH
+    │   └── HG002_GRCh38_INS_SEQ.txt  <-- INS_SEQ_CONCAT
+    └── variants/                     <-- INPUT_FILE_PATH directory
+        └── HG002_GRCh38_sorted_variants.txt <-- Example INPUT_FILE_PATH file
+"""
+
+###
+# DEFAULTS
+###
+VARIANT_NAME = 'HG004_GRCh38'
+K_MER_SIZE   = 4
+
+###
+# FILEPATHS
+###
+DBSNP_PATH      = "../data/dbSNP/"
+CHR_FILE_PATH   = '../data/chr/'
+INPUT_FILE_PATH = f"../data/variants/{VARIANT_NAME}_sorted_variants.txt"
+OUTPUT_BIN_PATH = f"../data/output/{VARIANT_NAME}_Encoded.bin"
+INS_SEQ_CONCAT  = f"../data/output/{VARIANT_NAME}_INS_SEQ.txt"
+ENC_FILE_PATH   = f"../data/output/{VARIANT_NAME}_Encoded.bin"
+TREE_PATH       = f"../data/huffman_trees/{VARIANT_NAME}.txt"
+
+###
+# Array of Chromosomes
+###
+
+CHROMOSOMES = [
+    'chr1', 'chr2', 'chr3', 'chr4', 'chr5',
+    'chr6', 'chr7', 'chr8', 'chr9', 'chr10',
+    'chr11', 'chr12', 'chr13', 'chr14', 'chr15', 
+    'chr16', 'chr17', 'chr18', 'chr19', 'chr20', 
+    'chr21', 'chr22'
+]
+
+###
+# Dictionaries
+###
+
 NUC_ENCODING = {
     "A": "00",
     "C": "01",
@@ -17,11 +71,3 @@ VARIATION_FLAG = {
     'DELETIONS': 1,
     'INSERTIONS': 2,
 }
-
-CHROMOSOMES = [
-    'chr1', 'chr2', 'chr3', 'chr4', 'chr5',
-    'chr6', 'chr7', 'chr8', 'chr9', 'chr10',
-    'chr11', 'chr12', 'chr13', 'chr14', 'chr15', 
-    'chr16', 'chr17', 'chr18', 'chr19', 'chr20', 
-    'chr21', 'chr22', 'chrX', 'chrY'
-]

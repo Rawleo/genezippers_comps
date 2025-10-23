@@ -9,6 +9,7 @@ dnazip/data/dbSNP/*
 dnazip/data/original_paper_data/*
 dnazip/data/vcf/*
 dnazip/data/output*
+biocompress_1/data
 
 alignment/files/*
 alignment/all2vcf*

@@ -1,10 +1,10 @@
-from config import HEIGHT, DNA_FILE
+from config import HEIGHT, DNA_FILE, DNA_FILE_PATH
 from converter import decodeFibonacci, binaryToBase, decodeBinary
 import math
 
-open(DNA_FILE + "_dencoded.txt", "w").close()
-outputFile = open(DNA_FILE + "_dencoded.txt", "a", encoding="utf-8")
-with open(DNA_FILE + "_encoded.txt", "r") as file:
+open(DNA_FILE_PATH+ DNA_FILE + "_dencoded.txt", "w").close()
+outputFile = open(DNA_FILE_PATH+DNA_FILE + "_dencoded.txt", "a", encoding="utf-8")
+with open(DNA_FILE_PATH+DNA_FILE + "_encoded.txt", "r") as file:
     inputFile = file.read()
 
 def parseNum(i): 
@@ -26,11 +26,12 @@ def parseNumPos(i, window=None):
     if(index==-1):
         type="binary"
     else:
+        num+=inputFile[i+k+1]
         if(num[index+2]=="0"):
             type="fibonacci"
         else:
             type="binary"
-            num+=inputFile[i+k+1]
+
     if(type=="binary"):
         return decodeBinary(num), len(num)
     else:

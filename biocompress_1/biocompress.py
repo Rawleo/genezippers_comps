@@ -1,13 +1,12 @@
 from AGCT_tree import createTree, findFactor
-from config import HEIGHT, DNA_FILE, CONTENT
-from converter import baseToBinary, encodeFactor, encodeFibonacci
+from config import HEIGHT, DNA_FILE, CONTENT,DNA_FILE_PATH
+from converter import baseToBinary, encodeFactor, encodeFibonacci, binaryToBase
 from typing import Optional
+import sys
 
 
-open(DNA_FILE + "_encoded.txt", "w").close()
-outputFile = open(DNA_FILE + "_encoded.txt", "a", encoding="utf-8")
-open(DNA_FILE + "_encodedText.txt", "w").close()
-outputFileText = open(DNA_FILE + "_encodedText.txt", "a", encoding="utf-8")
+open(DNA_FILE_PATH + DNA_FILE + "_encoded.txt", "w").close()
+outputFile = open(DNA_FILE_PATH + DNA_FILE + "_encoded.txt", "a", encoding="utf-8")
 
 TREE = createTree(HEIGHT)
 
@@ -83,39 +82,33 @@ def longestFactorPalindrome(i: int) -> tuple[Optional[list[int]], Optional[int],
 def process(i: int):
     segment = CONTENT[i:i+HEIGHT]
     longestFactor = longestFactorPalindrome(i)
-    print(longestFactor)
     TREE.createPositions(segment, i)
 
     if(longestFactor[0]):
         longestFactor = encodeFactor(longestFactor, i)
-        print("longestFactor", longestFactor)
         return longestFactor
     else: 
         return (baseToBinary(CONTENT[i]), "base", 1)
     
 def printBuf(buffer):
-    outputFileText.write("L")
+
     if(buffer[0][1]=="base"):
         length=0
         for item in buffer:
             length+=item[2]
         outputFile.write(encodeFibonacci(length))
-        outputFileText.write(encodeFibonacci(length))
     else:
         outputFile.write(encodeFibonacci(len(buffer)))
-        outputFileText.write(encodeFibonacci(len(buffer)))
 
-    # outputFileText.write(str(len(buffer)))
 
     # outputFile.write(" ")
-    outputFileText.write(" ")
 
 
     for item in buffer:
+        # outputFile.write(binaryToBase(item[0]))
         outputFile.write(item[0])
-        outputFileText.write(item[0])
+
         # outputFile.write(" ")
-        outputFileText.write(" ")
 
             
     
@@ -134,17 +127,13 @@ def main():
     position = 0
     buffer=[]
     while(position<len(CONTENT)):
-        print("i:", position)
         processed = process(position)
         buffer = encode(processed, buffer)
-        print("buffer:", buffer)
 
 
         position+=processed[2]
-
     printBuf(buffer)
 
-    #print(TREE)
     outputFile.close()
 
 if __name__ == "__main__":

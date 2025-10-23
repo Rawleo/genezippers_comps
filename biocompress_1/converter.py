@@ -79,12 +79,13 @@ def encodeFactor(factor, i):
         position=posBin
     else:
         position=posFib
-    print("posBin:", posBin, decodeBinary(posBin))
-    print("posFib:", posFib)
     lengthEncoded=encodeFibonacci(length)
 
     if((factor[1]*2)<=len(lengthEncoded+typeEncoded+position)):
         string = CONTENT[factor[0][0]:factor[0][0]+factor[1]]
+        if(type=="palindrome"):
+            table = str.maketrans("ACTG", "TGAC")
+            string.translate(table)
         binary = ""
         for base in string:
             binary+=baseToBinary(base)

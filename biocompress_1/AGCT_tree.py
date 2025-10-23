@@ -92,7 +92,6 @@ def createTree(height: int) -> Node:
 
 
 def findFactor(string: str, tree: Node):
-    print("String:", string)
     curr = tree
     last_pos: Optional[list[int]] = None
     last_level: Optional[int] = None

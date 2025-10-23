@@ -76,6 +76,28 @@ def readBitVINT(bit_string):
     
     return num, bits_used
 
+def readBitVINT_from(bit_string, start):
+    num = 0
+    shift = 0
+    bytes_used = 0
+    i = start
+
+    while i + 8 <= len(bit_string):
+        byte = bit_string[i:i+8]
+        bits = byte[1:]
+        bit_val = int(bits, 2)
+        num |= (bit_val << shift)
+
+        shift += 7
+        bytes_used += 1
+
+        i += 8
+        if byte[0] == '0':
+            break
+
+    bits_used = bytes_used * 8
+    return num, bits_used
+
 
 '''
 Export as binary file consisting of the encoded string transformed into bytes.

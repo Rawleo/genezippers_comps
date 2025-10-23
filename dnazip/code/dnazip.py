@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 from constants import *
 
-VARIANT_NAME    = 'HG004_GRCh38'
+VARIANT_NAME    = 'HG003_GRCh38'
 INPUT_FILE_PATH = f"../data/variants/{VARIANT_NAME}_sorted_variants.txt"
 DBSNP_PATH      = "../data/dbSNP/"
 OUTPUT_PATH     = f"../data/output/{VARIANT_NAME}_Encoded"
@@ -18,7 +18,22 @@ def encode_file(input_file_path, dbSNP_path, k_mer_size):
     # # Create list of chromosomes to encode
     # chr_list = variants_df['chr'].unique()
 
-    chr_list = ['chr1']
+    chr_list = CHROMOSOMES
+    not_used = ''
+    
+    ### Export Huffman Encoding Map
+    insr_df = variants_df.where(variants_df['var_type'] == 2).dropna()
+    # Split insertions into relevant nucleotides
+    insr_df["var_info"] = insr_df["var_info"].apply(lambda x: x.split('/')[1])
+    # Concatenate all position length VINTs
+    ins_seq = ''.join(insr_df["var_info"].astype(str).tolist())
+
+    # Produce encoding_map
+    not_used, encoding_map = huffman.run_huffman(ins_seq, k_mer_size)
+    
+    # print(encoding_map)
+    
+    huffman.export_as_txt(f"../data/huffman_trees/{VARIANT_NAME}", encoding_map)
 
     for chr in chr_list:
 
@@ -51,15 +66,11 @@ def encode_file(input_file_path, dbSNP_path, k_mer_size):
 
         # Start of INSRs 
         # Encoding of INSRs
-        ins_size_vint, ins_pos_bitstr, ins_len_bitstr, ins_bitstr_len_vint, ins_seq_bitstr, encoding_map = insr.encode_ins(insr_df, k_mer_size)
+        ins_size_vint, ins_pos_bitstr, ins_len_bitstr, ins_bitstr_len_vint, ins_seq_bitstr = insr.encode_ins(insr_df, encoding_map, k_mer_size)
         
         ### Add above to bin        
         insertion_bitstring = ins_size_vint + ins_pos_bitstr + ins_len_bitstr + ins_bitstr_len_vint + ins_seq_bitstr
         bitfile.export_as_binary(OUTPUT_PATH, insertion_bitstring)
-        
-        # Export Huffman Encoding Map
-        huffman.export_as_txt(f"../data/huffman_trees/{VARIANT_NAME}", encoding_map)
-
 
 
 def main(): 

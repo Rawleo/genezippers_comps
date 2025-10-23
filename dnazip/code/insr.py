@@ -3,7 +3,7 @@ from huffman import *
 import pandas as pd
 from constants import *
 
-def encode_ins(insr_df, k_mer_size):
+def encode_ins(insr_df, encoding_map, k_mer_size):
     
     # Calculate size of insertions and convert to VINT
     insr_size_vint = writeBitVINT(insr_df.shape[0])
@@ -27,10 +27,12 @@ def encode_ins(insr_df, k_mer_size):
     len_bitstr = ''.join(insr_df["var_length"].astype(str).tolist())
 
     ### THEN RUN HUFFMAN ENCODING STUFF FOR THIS CHROMOSOME
-    ins_seq_bitstr, encoding_map  = run_huffman(ins_seq, k_mer_size)
+    ins_seq_kmer = insertions_to_kmers(ins_seq, k_mer_size)
+    ins_seq_bitstr  = encode_insertions(encoding_map, ins_seq_kmer)
+
     bitstr_len_vint = writeBitVINT(len(ins_seq_bitstr))
         
-    return insr_size_vint, pos_bitstr, len_bitstr, bitstr_len_vint, ins_seq_bitstr, encoding_map
+    return insr_size_vint, pos_bitstr, len_bitstr, bitstr_len_vint, ins_seq_bitstr
 
 
 def main():

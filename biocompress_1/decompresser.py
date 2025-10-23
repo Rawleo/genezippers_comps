@@ -18,8 +18,6 @@ def parseNumPos(i, window=None):
     num=""
     if(window):
         k =  math.ceil(math.log2(window))
-        print("window:", window)
-        print("k:", k)
     for x in range(k):
         num+=inputFile[i+x]
     index = num.find("11")
@@ -62,15 +60,17 @@ def parseFactors(num, position, outputDraft):
 
 def decodeFactors(factors, outputDraft):
     for factor in factors:
+        print(factor)
+        print(len(outputDraft))
         if(factor[1]=="0"):
             for i in range(factor[0]):
                 outputDraft+=outputDraft[factor[2]+i]
         if(factor[1]=="1"):
             temp = ""
+            length = len(outputDraft)
             table = str.maketrans("ACTG", "TGAC")
             for i in range(factor[0]):
-                temp+=outputDraft[len(outputDraft)-factor[2]+i]
-            outputDraft+=temp.translate(table)
+                outputDraft+=outputDraft[length-factor[2]+i].translate(table)
     return outputDraft
 
 
@@ -90,7 +90,7 @@ def main():
 
         elif(type == "factors"):
             factors, i = parseFactors(num, i, outputDraft)
-            print("factors:", factors)
+            print("i:", i)
             outputDraft=decodeFactors(factors, outputDraft)
             type= "bases"
 

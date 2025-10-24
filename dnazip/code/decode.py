@@ -2,10 +2,6 @@ import pandas as pd
 import numpy as np
 from constants import *
 from bitfile import *
-from huffman import *
-from dbsnp import *
-from snp import *
-from dels import *
 
 
 def add_padding(bit_string):
@@ -58,22 +54,3 @@ def createRefGen(chr):
                 refGen.append(char)
         
     return refGen
-
-
-
-
-
-
-
-
-    
-        
-def main():   
-    
-    bit_string = readBinFile(ENC_FILE_PATH)
-    decode(bit_string)
-  
-    
-       
-if __name__ == "__main__":
-    main()

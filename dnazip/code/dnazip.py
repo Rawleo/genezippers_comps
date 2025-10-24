@@ -28,7 +28,7 @@ def encode_file(input_file_path, dbSNP_path, k_mer_size):
                               names = ['var_type', 'chr', 'pos', 'var_info'],
                               header = None)
     
-    encoding_map = insr.create_and_export_huffman_map(variants_df)
+    encoding_map = create_and_export_huffman_map(variants_df)
 
     for chr in CHROMOSOMES:
         # Choose current chromosome

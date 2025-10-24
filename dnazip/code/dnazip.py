@@ -26,11 +26,11 @@ def encode_file(input_file_path, dbSNP_path, k_mer_size):
     ins_seq = ''.join(insr_df["var_info"].astype(str).tolist())
 
     # Produce encoding_map
-    encoding_map = huffman.run_insr_huffman(ins_seq, k_mer_size)
+    encoding_map = run_insr_huffman(ins_seq, k_mer_size)
     
     # print(encoding_map)
     
-    huffman.export_as_txt(f"../data/huffman_trees/{VARIANT_NAME}.txt", encoding_map)
+    export_as_txt(f"../data/huffman_trees/{VARIANT_NAME}.txt", encoding_map)
 
     for chr in chr_list:
 
@@ -44,30 +44,30 @@ def encode_file(input_file_path, dbSNP_path, k_mer_size):
         
 
         # Encoding of Mapped SNPs
-        bitmap, bitmap_size_vint, unmapped_df = dbsnp.compares_dbsnp(snps_df, dbSNP_path, chr)
+        bitmap, bitmap_size_vint, unmapped_df = compares_dbsnp(snps_df, dbSNP_path, chr)
 
         # Encoding of Unmapped SNPs
-        snp_size_vint, unmapped_pos_bitstr, unmapped_nuc_bitstr = snp.encode_SNPs(unmapped_df)
+        snp_size_vint, unmapped_pos_bitstr, unmapped_nuc_bitstr = encode_SNPs(unmapped_df)
         snp_bitstring = bitmap_size_vint + bitmap + snp_size_vint + unmapped_pos_bitstr + unmapped_nuc_bitstr
-        bitfile.export_as_binary(OUTPUT_BIN_PATH, snp_bitstring)
+        export_as_binary(OUTPUT_BIN_PATH, snp_bitstring)
                     
         # Start of DELs
 
         # Encoding of DELs
-        del_size_vint, del_pos_bitstr, del_len_bitstr = dels.encode_dels(dels_df)
+        del_size_vint, del_pos_bitstr, del_len_bitstr = encode_dels(dels_df)
 
         
         ### Add above to bin 
         del_bitstring = del_size_vint + del_pos_bitstr + del_len_bitstr
-        bitfile.export_as_binary(OUTPUT_BIN_PATH, del_bitstring)
+        export_as_binary(OUTPUT_BIN_PATH, del_bitstring)
 
         # Start of INSRs 
         # Encoding of INSRs
-        ins_size_vint, ins_pos_bitstr, ins_len_bitstr, ins_bitstr_len_vint, ins_seq_bitstr = insr.encode_ins(insr_df, encoding_map, k_mer_size)
+        ins_size_vint, ins_pos_bitstr, ins_len_bitstr, ins_bitstr_len_vint, ins_seq_bitstr = encode_ins(insr_df, encoding_map, k_mer_size)
         
         ### Add above to bin        
         insertion_bitstring = ins_size_vint + ins_pos_bitstr + ins_len_bitstr + ins_bitstr_len_vint + ins_seq_bitstr
-        bitfile.export_as_binary(OUTPUT_BIN_PATH, insertion_bitstring)
+        export_as_binary(OUTPUT_BIN_PATH, insertion_bitstring)
 
 def decode(bit_string):
     

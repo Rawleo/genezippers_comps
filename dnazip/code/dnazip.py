@@ -69,7 +69,7 @@ def encode_file(input_file_path, dbSNP_path, k_mer_size):
         insertion_bitstring = ins_size_vint + ins_pos_bitstr + ins_len_bitstr + ins_bitstr_len_vint + ins_seq_bitstr
         export_as_binary(OUTPUT_BIN_PATH, insertion_bitstring)
 
-def decode(bit_string):
+def decode_file(bit_string):
     
         encoding_map = load_map_from_file(TREE_PATH)
         huffman_root = reconstruct_huffman_tree(encoding_map)
@@ -131,9 +131,6 @@ def remove_file_if_exists(filepath):
     else:
         print("This file does not exist:", filepath)
         print("Continuing...") 
-
-
-
 
 def main(): 
     

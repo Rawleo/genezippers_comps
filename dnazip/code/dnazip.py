@@ -10,30 +10,27 @@ from snp import *
 from insr import *
 from decode import *
 
+
+'''
+Encoding of a variant file into a compressed binary file, 
+processing the data chromosome by chromosome.
+
+@params: 
+ * input_file_path - file path (str) to the input variant file. 
+ * dbSNP_path - directory path (str) containing dbSNP reference files.
+ * k_mer_size - integer size of the k-mers.
+@return:
+ * None, writes the encoded outout to 'OUTPUT_BIN_PATH'.
+'''
 def encode_file(input_file_path, dbSNP_path, k_mer_size):
     
-    variants_df       = pd.read_csv(input_file_path, 
-                                    names=['var_type', 'chr', 'pos', 'var_info'],
-                                    header=None)
-
-    chr_list = CHROMOSOMES
+    variants_df = pd.read_csv(input_file_path, 
+                              names = ['var_type', 'chr', 'pos', 'var_info'],
+                              header = None)
     
-    ### Export Huffman Encoding Map
-    insr_df = variants_df.where(variants_df['var_type'] == 2).dropna()
-    # Split insertions into relevant nucleotides
-    insr_df["var_info"] = insr_df["var_info"].apply(lambda x: x.split('/')[1])
-    # Concatenate all position length VINTs
-    ins_seq = ''.join(insr_df["var_info"].astype(str).tolist())
+    encoding_map = create_and_export_huffman_map(variants_df)
 
-    # Produce encoding_map
-    encoding_map = run_insr_huffman(ins_seq, k_mer_size)
-    
-    # print(encoding_map)
-    
-    export_as_txt(f"../data/huffman_trees/{VARIANT_NAME}.txt", encoding_map)
-
-    for chr in chr_list:
-
+    for chr in CHROMOSOMES:
         # Choose current chromosome
         chr_df = variants_df.where(variants_df['chr'] == chr)
 
@@ -42,7 +39,7 @@ def encode_file(input_file_path, dbSNP_path, k_mer_size):
         dels_df = chr_df.where(chr_df['var_type'] == 1).dropna()
         insr_df = chr_df.where(chr_df['var_type'] == 2).dropna()
         
-
+        ### Start of SNPs
         # Encoding of Mapped SNPs
         bitmap, bitmap_size_vint, unmapped_df = compares_dbsnp(snps_df, dbSNP_path, chr)
 
@@ -51,21 +48,19 @@ def encode_file(input_file_path, dbSNP_path, k_mer_size):
         snp_bitstring = bitmap_size_vint + bitmap + snp_size_vint + unmapped_pos_bitstr + unmapped_nuc_bitstr
         export_as_binary(OUTPUT_BIN_PATH, snp_bitstring)
                     
-        # Start of DELs
-
+        ### Start of DELs
         # Encoding of DELs
         del_size_vint, del_pos_bitstr, del_len_bitstr = encode_dels(dels_df)
 
-        
-        ### Add above to bin 
+        # Add above to bin 
         del_bitstring = del_size_vint + del_pos_bitstr + del_len_bitstr
         export_as_binary(OUTPUT_BIN_PATH, del_bitstring)
 
-        # Start of INSRs 
+        ### Start of INSRs 
         # Encoding of INSRs
         ins_size_vint, ins_pos_bitstr, ins_len_bitstr, ins_bitstr_len_vint, ins_seq_bitstr = encode_ins(insr_df, encoding_map, k_mer_size)
         
-        ### Add above to bin        
+        # Add above to bin        
         insertion_bitstring = ins_size_vint + ins_pos_bitstr + ins_len_bitstr + ins_bitstr_len_vint + ins_seq_bitstr
         export_as_binary(OUTPUT_BIN_PATH, insertion_bitstring)
 

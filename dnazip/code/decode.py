@@ -3,6 +3,9 @@ import numpy as np
 from constants import *
 from bitfile import *
 from huffman import *
+from dbsnp import *
+from snp import *
+from dels import *
 
 
 def add_padding(bit_string):
@@ -65,56 +68,16 @@ def decode(bit_string):
         for chr in CHROMOSOMES:
 
             bit_string = add_padding(bit_string)
-
-            bitmap_size, bits_shifted = readBitVINT(bit_string)
-            bit_string = bit_string[bits_shifted:]
-
-            bitmap = bit_string[:bitmap_size]
-            bit_string = bit_string[bitmap_size:]
-
+            bitmap_df, bit_string = decode_dbsnp(bit_string, DBSNP_PATH, chr)
+            snp_df, bit_string = decode_SNPs(bit_string, chr)
             # print("Bitmap Size: " + str(bitmap_size))
-
-            snp_size, bits_shifted = readBitVINT(bit_string)
-            bit_string = bit_string[bits_shifted:]
-
-            # print("SNPs Size: " + str(snp_size))
             
-            snp_pos, snp_pos_bits = parse_vints(bit_string, snp_size)
-            bit_string = bit_string[snp_pos_bits:]
-
-            # print("SNP Positions Decoded")
-
-            snp_nucs = []
-
-            for i in range(0, snp_size * 2, 2):
-
-                two_bits = bit_string[i:i+2]
-                nuc = TWO_BIT_ENCODING[two_bits]
-                snp_nucs.append(nuc)
-
-            # print("SNP Nucleotides Decoded")
-
-            bit_string = bit_string[snp_size * 2:]
 
             bit_string = add_padding(bit_string)
-        
-            del_size, bits_shifted = readBitVINT(bit_string)
-            bit_string = bit_string[bits_shifted:]
-
-            # print("Dels Size: " + str(del_size))
-
-            del_pos, del_pos_bits = parse_vints(bit_string, del_size)
-            bit_string = bit_string[del_pos_bits:]
-
-            # print("Deletion Positions Decoded")
-
-            del_size, del_size_bits = parse_vints(bit_string, del_size)
-            bit_string = bit_string[del_size_bits:]
-
+            del_df, bit_string = decode_dels(bit_string, chr)
             # print("Deletion Sizes Decoded")
 
             bit_string = add_padding(bit_string)
-
             ins_size, bits_shifted = readBitVINT(bit_string)
             bit_string = bit_string[bits_shifted:]
 
@@ -150,20 +113,6 @@ def decode(bit_string):
             ins_seq  = decode_huffman(huffman_bitmap, huffman_root)
             
             print(chr, "Insertion Sequence:", ins_seq)
-
-            
-            #Making df example:
-
-            snp_data = {
-                 "snp_pos":None,
-                 "snp_nucs":None
-            }
-
-            # snp_data["snp_pos"] = snp_pos
-            # snp_data["snp_nucs"] = snp_nucs
-            
-            # snp_df = pd.DataFrame(snp_data)
-            # display(snp_df)
 
 
 

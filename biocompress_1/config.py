@@ -1,4 +1,4 @@
-DNA_FILE = "chr21"
+DNA_FILE = "DNA_test"
 DNA_FILE_PATH = "./data/"
 DNA_FILE_TXT = DNA_FILE + ".txt"
 DNA_FILE_FA = DNA_FILE + ".fa"

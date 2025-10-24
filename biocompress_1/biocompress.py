@@ -57,7 +57,6 @@ def longestFactorPalindrome(i: int) -> tuple[Optional[list[int]], Optional[int],
                 
             factorPos=([factorPos[0][positionNum]], factorPos[1]+addLength)
 
-
     palindromePos = findFactor(palindrome, TREE)
     if (palindromePos[1]==HEIGHT):
         addLength = 0
@@ -91,7 +90,7 @@ def process(i: int):
         return (baseToBinary(CONTENT[i]), "base", 1)
     
 def printBuf(buffer):
-
+    print(buffer)
     if(buffer[0][1]=="base"):
         length=0
         for item in buffer:
@@ -99,10 +98,6 @@ def printBuf(buffer):
         outputFile.write(encodeFibonacci(length))
     else:
         outputFile.write(encodeFibonacci(len(buffer)))
-
-
-    # outputFile.write(" ")
-
 
     for item in buffer:
         # outputFile.write(binaryToBase(item[0]))
@@ -129,7 +124,6 @@ def main():
     while(position<len(CONTENT)):
         processed = process(position)
         buffer = encode(processed, buffer)
-
 
         position+=processed[2]
     printBuf(buffer)

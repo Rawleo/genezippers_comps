@@ -12,6 +12,8 @@ def parseNum(i):
     while(num[-2:] != "11"):
         num+=inputFile[i]
         i+=1
+    print(num)
+    print(decodeFibonacci(num))
     return decodeFibonacci(num), len(num)
 
 def parseNumPos(i, window=None):
@@ -33,7 +35,7 @@ def parseNumPos(i, window=None):
     if(type=="binary"):
         return decodeBinary(num), len(num)
     else:
-        return decodeFibonacci(num), len(num)+1
+        return decodeFibonacci(num), len(num)
 
 
 def parseBases(num, position):
@@ -56,17 +58,17 @@ def parseFactors(num, position, outputDraft):
         factor = (factorLength, factorType, factorPos-1)
         factors.append(factor)
         window+=factorLength
+        print(factor)
     return factors, position
 
 def decodeFactors(factors, outputDraft):
     for factor in factors:
         print(factor)
-        print(len(outputDraft))
+        # print(len(outputDraft))
         if(factor[1]=="0"):
             for i in range(factor[0]):
                 outputDraft+=outputDraft[factor[2]+i]
         if(factor[1]=="1"):
-            temp = ""
             length = len(outputDraft)
             table = str.maketrans("ACTG", "TGAC")
             for i in range(factor[0]):

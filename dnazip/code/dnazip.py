@@ -1,7 +1,14 @@
-import huffman, bitfile, dbsnp, dels, snp, insr, os
 import pandas as pd
 import numpy as np
+import os
 from constants import *
+from huffman import *
+from bitfile import *
+from dbsnp import *
+from dels import *
+from snp import *
+from insr import *
+from decode import *
 
 def encode_file(input_file_path, dbSNP_path, k_mer_size):
     
@@ -134,6 +141,9 @@ def main():
     remove_file_if_exists(INS_SEQ_CONCAT)
     
     encode_file(INPUT_FILE_PATH, DBSNP_PATH, K_MER_SIZE)    
+
+    bit_string = readBinFile(ENC_FILE_PATH)
+    decode(bit_string)
 
 
 if __name__ == "__main__":

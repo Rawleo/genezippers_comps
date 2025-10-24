@@ -85,7 +85,7 @@ def encodeFactor(factor, i):
         string = CONTENT[factor[0][0]:factor[0][0]+factor[1]]
         if(type=="palindrome"):
             table = str.maketrans("ACTG", "TGAC")
-            string.translate(table)
+            string = string.translate(table)
         binary = ""
         for base in string:
             binary+=baseToBinary(base)

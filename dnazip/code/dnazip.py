@@ -64,6 +64,15 @@ def encode_file(input_file_path, dbSNP_path, k_mer_size):
         insertion_bitstring = ins_size_vint + ins_pos_bitstr + ins_len_bitstr + ins_bitstr_len_vint + ins_seq_bitstr
         export_as_binary(OUTPUT_BIN_PATH, insertion_bitstring)
 
+'''
+Decoding of a compressed binary file into a variant file, 
+processing the data chromosome by chromosome.
+
+@params: 
+ * bit_string - the encoded bit_string of 1's and 0's.
+@return:
+ * None, writes the encoded outout to 'OUTPUT_DEC_PATH'.
+'''
 def decode_file(bit_string):
     
         encoding_map = load_map_from_file(TREE_PATH)
@@ -84,39 +93,8 @@ def decode_file(bit_string):
 
             ### Find INS
             bit_string = add_padding(bit_string)
-            ins_size, bits_shifted = readBitVINT(bit_string)
-            bit_string = bit_string[bits_shifted:]
-            # print("Ins Size: " + str(ins_size))
+            ins_df, bit_string = decode_ins(bit_string, huffman_root, chr)
 
-            ### All INS positions
-            ins_pos, ins_pos_bits = parse_vints(bit_string, ins_size)
-            bit_string = bit_string[ins_pos_bits:]
-            # print("Insertion Positions Decoded")
-
-            ### All INS lengths
-            ins_lens, ins_len_bits = parse_vints(bit_string, ins_size)
-            bit_string = bit_string[ins_len_bits:]
-
-            ### Length of INS bitstring
-            bitstr_len, bits_shifted = readBitVINT(bit_string)
-            bit_string = bit_string[bits_shifted:]
-            # print("Bitstr Len: " + str(bitstr_len))
-
-            ### Process INS bitstring
-            huffman_bitmap = bit_string[:bitstr_len]
-            bit_string = bit_string[bitstr_len:]
-        
-            ### Final insertion sequence
-            ins_seq, buffer  = decode_huffman(huffman_bitmap, huffman_root) 
-            
-            # Process non-Huffman encoded nucleotides
-            extra_nucs = ''.join([TWO_BIT_ENCODING[buffer[(i*2):((i*2)+2)]] for i in range(len(buffer) // 2)])
-
-            # Append Huffman portion with non-Huffman 
-            ins_seq += extra_nucs
-            
-            # Export decoded insertion sequences for each chr
-            create_insertion_dec_file(chr, ins_seq)
 
 def remove_file_if_exists(filepath):
     if os.path.exists(filepath):
@@ -126,18 +104,14 @@ def remove_file_if_exists(filepath):
         print("This file does not exist:", filepath)
         print("Continuing...") 
 
+
 def main(): 
-    
     # remove_file_if_exists(OUTPUT_BIN_PATH)
     # remove_file_if_exists(INS_SEQ_CONCAT)
-    
-    # remove_file_if_exists(INS_DEC_CONCAT)
-
-    
-    # encode_file(INPUT_FILE_PATH, DBSNP_PATH, K_MER_SIZE)    
-
+    # encode_file(INPUT_FILE_PATH, DBSNP_PATH, K_MER_SIZE)
+        
     bit_string = readBinFile(ENC_FILE_PATH)
-
+    remove_file_if_exists(INS_DEC_CONCAT)
     decode_file(bit_string)
 
 

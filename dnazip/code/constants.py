@@ -32,6 +32,7 @@ DBSNP_PATH      = "../data/dbSNP/"
 CHR_FILE_PATH   = '../data/chr/'
 INPUT_FILE_PATH = f"../data/variants/{VARIANT_NAME}_sorted_variants.txt"
 OUTPUT_BIN_PATH = f"../data/output/{VARIANT_NAME}_Encoded.bin"
+OUTPUT_DEC_PATH = f"../data/output/{VARIANT_NAME}_Decoded.txt"
 INS_SEQ_CONCAT  = f"../data/output/{VARIANT_NAME}_INS_SEQ.txt"
 INS_DEC_CONCAT  = f"../data/output/{VARIANT_NAME}_INS_DEC.txt"
 ENC_FILE_PATH   = f"../data/output/{VARIANT_NAME}_Encoded.bin"

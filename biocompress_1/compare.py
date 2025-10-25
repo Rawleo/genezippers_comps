@@ -14,6 +14,10 @@ def main():
             print("Error:")
             print(original[i:i+COMPARE_LENGTH])
             print(decoded[i:i+COMPARE_LENGTH])
+            # index = original.find("GTCCGGTA")
+            # index2 = original.find("CAGGCCAT")
+            # print("Error string found at:", index)
+            # print("Palindrome error string found at:", index2)
             sys.exit()
     print("MATCHING")
             

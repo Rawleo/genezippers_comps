@@ -70,7 +70,8 @@ def longestFactorPalindrome(i: int) -> tuple[Optional[list[int]], Optional[int],
                     positionNum = positionNumTemp
                 positionNumTemp +=1
             palindromePos=([i-palindromePos[0][positionNum]], palindromePos[1]+addLength)
-    
+    elif(palindromePos[1]):
+        palindromePos=([i-palindromePos[0][0]],palindromePos[1])
     if(factorPos[1] and palindromePos[1]):
         if factorPos[1] >= palindromePos[1]:
             return (factorPos[0], factorPos[1], "factor")
@@ -90,7 +91,7 @@ def process(i: int):
         return (baseToBinary(CONTENT[i]), "base", 1)
     
 def printBuf(buffer):
-    print(buffer)
+    # print(buffer)
     if(buffer[0][1]=="base"):
         length=0
         for item in buffer:

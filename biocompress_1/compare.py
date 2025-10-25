@@ -1,4 +1,4 @@
-from config import DNA_FILE, DNA_FILE_PATH
+from config import DNA_FILE, DNA_FILE_PATH, COMPARE_LENGTH
 import sys
 
 with open(DNA_FILE_PATH+DNA_FILE + ".txt", "r") as file:
@@ -10,6 +10,10 @@ def main():
     for i in range(len(decoded)):
         if(decoded[i]!=original[i]):
             print("NOT MATCHING")
+            print("Location:", i)
+            print("Error:")
+            print(original[i:i+COMPARE_LENGTH])
+            print(decoded[i:i+COMPARE_LENGTH])
             sys.exit()
     print("MATCHING")
             

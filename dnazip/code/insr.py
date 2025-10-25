@@ -208,6 +208,7 @@ def decode_ins(bit_string, huffman_root, chr):
         
     return ins_df, bit_string
 
+
 def main():
     return
     

@@ -145,7 +145,7 @@ Decodes the insertion data for a given chromosome into its respective bitstring 
  * huffman_root - the Huffman tree necessary for decoding traversal.
  * chr - the current chromosome.
 @return:
- * ins_df - insertion dataframe with the sorted and decoded information.
+ * ins_df - insertion dataframe with the sorted and decoded nucleotide information.
  * bit_string - the rest of the bit_string to decode further.
 '''
 def decode_ins(bit_string, huffman_root, chr):
@@ -184,19 +184,27 @@ def decode_ins(bit_string, huffman_root, chr):
     # Export decoded insertion sequences for each chr
     create_insertion_dec_file(chr, ins_seq)
     
-    # ins_data = {
-    #     "ins_pos" : None,
-    #     "ins_lens" : None,
-    # }
+    # Create dictionary to pass into the data frame
+    ins_data = {
+        "chr" : chr,
+        "ins_pos" : ins_pos,
+        "ins_lens" : ins_lens,
+        "start_pos" : None,
+        "end_pos" : None,
+        "ins_nucs" : None,
+    }
 
-    # ins_data["ins_pos"] = ins_pos
-    # ins_data["ins_lens"] = ins_lens
-    # # ins_data["ins_lens"] = ins_lens
+    # Create data frame with the above information
+    ins_df = pd.DataFrame(ins_data)
     
-    # ins_df = pd.DataFrame(ins_data)
-    # ins_df['chr'] = chr
+    # Get the end position for indexing the insertion sequence
+    ins_df['end_pos'] = ins_df.ins_lens.cumsum()
     
-    ins_df = []
+    # Get the start position for indexing the insertion sequence
+    ins_df['start_pos'] = ins_df.end_pos - ins_df.ins_lens
+    
+    # Apply row-wise the respective nucleotides given the range
+    ins_df['ins_nucs'] = ins_df.apply(lambda x: ins_seq[x.start_pos : x.end_pos], axis=1)
         
     return ins_df, bit_string
 

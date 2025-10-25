@@ -22,7 +22,7 @@ dnazip/
 ###
 # DEFAULTS
 ###
-VARIANT_NAME = 'HG004_GRCh38'
+VARIANT_NAME = 'HG002_GRCh38'
 K_MER_SIZE   = 4
 
 ###
@@ -33,6 +33,7 @@ CHR_FILE_PATH   = '../data/chr/'
 INPUT_FILE_PATH = f"../data/variants/{VARIANT_NAME}_sorted_variants.txt"
 OUTPUT_BIN_PATH = f"../data/output/{VARIANT_NAME}_Encoded.bin"
 INS_SEQ_CONCAT  = f"../data/output/{VARIANT_NAME}_INS_SEQ.txt"
+INS_DEC_CONCAT  = f"../data/output/{VARIANT_NAME}_INS_DEC.txt"
 ENC_FILE_PATH   = f"../data/output/{VARIANT_NAME}_Encoded.bin"
 TREE_PATH       = f"../data/huffman_trees/{VARIANT_NAME}.txt"
 

@@ -71,53 +71,52 @@ def decode_file(bit_string):
         
         for chr in CHROMOSOMES:
 
+            ### Find SNPs
             bit_string = add_padding(bit_string)
             bitmap_df, bit_string = decode_dbsnp(bit_string, DBSNP_PATH, chr)
             snp_df, bit_string = decode_SNPs(bit_string, chr)
             # print("Bitmap Size: " + str(bitmap_size))
-            
 
+            ### Find DELs
             bit_string = add_padding(bit_string)
             del_df, bit_string = decode_dels(bit_string, chr)
             # print("Deletion Sizes Decoded")
 
+            ### Find INS
             bit_string = add_padding(bit_string)
             ins_size, bits_shifted = readBitVINT(bit_string)
             bit_string = bit_string[bits_shifted:]
-
             # print("Ins Size: " + str(ins_size))
 
+            ### All INS positions
             ins_pos, ins_pos_bits = parse_vints(bit_string, ins_size)
             bit_string = bit_string[ins_pos_bits:]
-
             # print("Insertion Positions Decoded")
 
+            ### All INS lengths
             ins_lens, ins_len_bits = parse_vints(bit_string, ins_size)
             bit_string = bit_string[ins_len_bits:]
 
+            ### Length of INS bitstring
             bitstr_len, bits_shifted = readBitVINT(bit_string)
             bit_string = bit_string[bits_shifted:]
-
             # print("Bitstr Len: " + str(bitstr_len))
 
-            ins_bitstring = bit_string[:bitstr_len]
+            ### Process INS bitstring
+            huffman_bitmap = bit_string[:bitstr_len]
             bit_string = bit_string[bitstr_len:]
+        
+            ### Final insertion sequence
+            ins_seq, buffer  = decode_huffman(huffman_bitmap, huffman_root) 
             
-            # Nucleotides after mod 16
-            extra_nuc_bit_len = len(ins_bitstring) % 16
-            extra_nuc_bitmap = ins_bitstring[:extra_nuc_bit_len]
-            extra_nuc = []
-            
-            huffman_bitmap = ins_bitstring[:len(ins_bitstring) - extra_nuc_bit_len] 
-            
-            for i in range(len(extra_nuc_bitmap) // 2):
-                extra_nuc.append(TWO_BIT_ENCODING[extra_nuc_bitmap[i:i+2]])
+            # Process non-Huffman encoded nucleotides
+            extra_nucs = ''.join([TWO_BIT_ENCODING[buffer[(i*2):((i*2)+2)]] for i in range(len(buffer) // 2)])
 
-            # Final insertion sequence
-            ins_seq  = decode_huffman(huffman_bitmap, huffman_root)
+            # Append Huffman portion with non-Huffman 
+            ins_seq += extra_nucs
             
-            print(chr, "Insertion Sequence:", ins_seq)
-
+            # Export decoded insertion sequences for each chr
+            create_insertion_dec_file(chr, ins_seq)
 
 def remove_file_if_exists(filepath):
     if os.path.exists(filepath):
@@ -129,13 +128,17 @@ def remove_file_if_exists(filepath):
 
 def main(): 
     
-    remove_file_if_exists(OUTPUT_BIN_PATH)
-    remove_file_if_exists(INS_SEQ_CONCAT)
+    # remove_file_if_exists(OUTPUT_BIN_PATH)
+    # remove_file_if_exists(INS_SEQ_CONCAT)
     
-    encode_file(INPUT_FILE_PATH, DBSNP_PATH, K_MER_SIZE)    
+    # remove_file_if_exists(INS_DEC_CONCAT)
+
+    
+    # encode_file(INPUT_FILE_PATH, DBSNP_PATH, K_MER_SIZE)    
 
     bit_string = readBinFile(ENC_FILE_PATH)
-    decode(bit_string)
+
+    decode_file(bit_string)
 
 
 if __name__ == "__main__":

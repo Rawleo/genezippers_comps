@@ -60,6 +60,19 @@ def create_insertion_seq_file(chr, ins_seq):
     result = f"{chr} Insertion Sequence: " + ins_seq + '\n'
     append_as_txt(INS_SEQ_CONCAT, result)
     
+    
+'''
+Append the whole insertion sequence of each chromosome to a file.
+@params: 
+ * chr - the current chromosome.
+ * ins_seq - the insertion sequence of the given chromosome to export. 
+@return:
+ * None, but appends the original insertion sequences of each chromosome to the file.
+'''
+def create_insertion_dec_file(chr, ins_seq):
+    result = f"{chr} Insertion Sequence: " + ins_seq + '\n'
+    append_as_txt(INS_DEC_CONCAT, result)
+    
 
 '''
 Encodes the insertion data for a given chromosome into its respective bitstring and VINTs.
@@ -98,9 +111,21 @@ def encode_ins(insr_df, encoding_map, k_mer_size):
     
     # Concatenate all position length VINTs
     len_bitstr = ''.join(insr_df["var_length"].astype(str).tolist())
+    
+    # Encode remainder bits
+    # remainder_bits = ins_seq[:]
+    # print("Extra:", len(ins_seq) % k_mer_size)
+    remainder_nuc_len = len(ins_seq) % k_mer_size
+    
+    remainder_nucs = ins_seq[len(ins_seq) - remainder_nuc_len:]
+    # print(chr, ", extra Nucs:", remainder_nucs)
+    
+    remainder_bitstr = ''.join([(NUC_ENCODING[x]) for x in remainder_nucs])
+    # print(remainder_bitstr)
 
     # Huffman encoding of the current chromosome's insertion sequences
     ins_seq_bitstr  = ins_seq_to_bitstr(ins_seq, encoding_map, k_mer_size)
+    ins_seq_bitstr += remainder_bitstr
 
     # Create file with before encoding output
     create_insertion_seq_file(chr, ins_seq)

@@ -58,7 +58,6 @@ def longestFactorPalindrome(i: int) -> tuple[Optional[list[int]], Optional[int],
             factorPos=([factorPos[0][positionNum]], factorPos[1]+addLength)
 
     palindromePos = findFactor(palindrome, TREE)
-    print(palindromePos)
     if (palindromePos[1]==HEIGHT):
         addLength = 0
         positionNum = 0

@@ -9,6 +9,7 @@ from dels import *
 from snp import *
 from insr import *
 from decode import *
+from plot import *
 
 
 '''
@@ -105,6 +106,9 @@ def decode_file(bit_string):
     decode_df.sort_values(by=['var_type', 'chr', 'pos']).to_csv(OUTPUT_DEC_PATH,
                      index=False,
                      header=None)
+    
+    # Create Figures
+    compression_comparison(INPUT_FILE_PATH, ENC_FILE_PATH, VARIANT_NAME, FIGURE_PATH)
     
 
 

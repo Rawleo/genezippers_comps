@@ -37,6 +37,7 @@ INS_SEQ_CONCAT  = f"../data/output/{VARIANT_NAME}_INS_SEQ.txt"
 INS_DEC_CONCAT  = f"../data/output/{VARIANT_NAME}_INS_DEC.txt"
 ENC_FILE_PATH   = f"../data/output/{VARIANT_NAME}_Encoded.bin"
 TREE_PATH       = f"../data/huffman_trees/{VARIANT_NAME}.txt"
+FIGURE_PATH     = f"../figures/{VARIANT_NAME}_Figure.png"
 
 ###
 # Array of Chromosomes

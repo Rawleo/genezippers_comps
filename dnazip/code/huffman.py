@@ -143,19 +143,24 @@ Decode a string of 1's and 0's by traversing a Huffman tree.
  * root - Huffman tree root to traverse.
 @return:
  * result - the decoded string.
+ * buffer - extra bits to process as regular NUC encodings. 
 '''
 def decode_huffman(encoded_text, root):
     result = ""
+    buffer = ""
     curr = root
     for char in encoded_text:
         if char == "0":
             curr = curr.leftChild
+            buffer += "0"
         else:
             curr = curr.rightChild
+            buffer += "1"
         if curr.leftChild is None and curr.rightChild is None:
             result += curr.symbol
+            buffer = ""
             curr = root
-    return result
+    return result, buffer
 
 
 '''

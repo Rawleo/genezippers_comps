@@ -186,12 +186,14 @@ def decode_ins(bit_string, huffman_root, chr):
     
     # Create dictionary to pass into the data frame
     ins_data = {
+        "var_type": None,
         "chr" : chr,
-        "ins_pos" : ins_pos,
+        "pos" : ins_pos,
         "ins_lens" : ins_lens,
         "start_pos" : None,
         "end_pos" : None,
         "ins_nucs" : None,
+        "var_info":None
     }
 
     # Create data frame with the above information
@@ -205,8 +207,14 @@ def decode_ins(bit_string, huffman_root, chr):
     
     # Apply row-wise the respective nucleotides given the range
     ins_df['ins_nucs'] = ins_df.apply(lambda x: ins_seq[x.start_pos : x.end_pos], axis=1)
+
+    # Assign each variation as insertion type
+    ins_df['var_type'] = 2
+
+    # Add '-' to match original formatting
+    ins_df['var_info'] = ins_df.apply(lambda row: ('-' * row['ins_lens']) + '/' + row['ins_nucs'],axis=1)
         
-    return ins_df, bit_string
+    return ins_df[['var_type', 'chr', 'pos', 'var_info']], bit_string
 
 
 def main():

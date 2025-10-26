@@ -75,25 +75,37 @@ processing the data chromosome by chromosome.
 '''
 def decode_file(bit_string):
     
-        encoding_map = load_map_from_file(TREE_PATH)
-        huffman_root = reconstruct_huffman_tree(encoding_map)
-        
-        for chr in CHROMOSOMES:
+    encoding_map = load_map_from_file(TREE_PATH)
+    huffman_root = reconstruct_huffman_tree(encoding_map)
+    decode_df = pd.DataFrame()
+    
+    for chr in CHROMOSOMES:
 
-            ### Find SNPs
-            bit_string = add_padding(bit_string)
-            bitmap_df, bit_string = decode_dbsnp(bit_string, DBSNP_PATH, chr)
-            snp_df, bit_string = decode_SNPs(bit_string, chr)
-            # print("Bitmap Size: " + str(bitmap_size))
+        ### Find SNPs
+        bit_string = add_padding(bit_string)
+        bitmap_df, bit_string = decode_dbsnp(bit_string, DBSNP_PATH, chr)
+        snp_df, bit_string = decode_SNPs(bit_string, chr)
+        # print("Bitmap Size: " + str(bitmap_size))
 
-            ### Find DELs
-            bit_string = add_padding(bit_string)
-            del_df, bit_string = decode_dels(bit_string, chr)
-            # print("Deletion Sizes Decoded")
+        ### Find DELs
+        bit_string = add_padding(bit_string)
+        del_df, bit_string = decode_dels(bit_string, chr)
+        # print("Deletion Sizes Decoded")
 
-            ### Find INS
-            bit_string = add_padding(bit_string)
-            ins_df, bit_string = decode_ins(bit_string, huffman_root, chr)
+        ### Find INS
+        bit_string = add_padding(bit_string)
+        ins_df, bit_string = decode_ins(bit_string, huffman_root, chr)
+
+        decode_df = pd.concat([decode_df, bitmap_df, snp_df, del_df, ins_df])
+    
+    # Formatting
+    decode_df['pos'] = decode_df['pos'].astype(int)
+
+    # Output Decoded File
+    decode_df.sort_values(by=['var_type', 'chr', 'pos']).to_csv(OUTPUT_DEC_PATH,
+                     index=False,
+                     header=None)
+    
 
 
 def remove_file_if_exists(filepath):
@@ -108,7 +120,9 @@ def remove_file_if_exists(filepath):
 def main(): 
     # remove_file_if_exists(OUTPUT_BIN_PATH)
     # remove_file_if_exists(INS_SEQ_CONCAT)
+    # remove_file_if_exists(OUTPUT_BIN_PATH)
     # encode_file(INPUT_FILE_PATH, DBSNP_PATH, K_MER_SIZE)
+
         
     bit_string = readBinFile(ENC_FILE_PATH)
     remove_file_if_exists(INS_DEC_CONCAT)

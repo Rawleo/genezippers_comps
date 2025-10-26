@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 from vint import *
 from decode import *
+from reader import *
 
 def encode_dels(dels_df):
     # Calculate number of DELs
@@ -32,14 +33,18 @@ def decode_dels(bit_string, chr):
     del_sizes, del_size_bits = parse_vints(bit_string, del_size)
     bit_string = bit_string[del_size_bits:]
 
-    del_data = {"del_pos":None,
-                "del_sizes":None
+    del_data = {"var_type":None,
+                "chr":None,
+                "pos":del_pos,
+                "del_sizes":del_sizes,
+                "var_info":None
     }
-
-    del_data["del_pos"] = del_pos
-    del_data["del_sizes"] = del_sizes
     
     del_df = pd.DataFrame(del_data)
+    
     del_df['chr'] = chr
+    del_df['var_type'] = 1
+    del_df['ref_seq'] = get_del_nucs(del_pos, del_sizes, chr)
+    del_df['var_info'] = del_df.apply(lambda row: row['ref_seq'] + '/' + ('-' * row['del_sizes']),axis=1)
 
-    return del_df, bit_string
+    return del_df[['var_type', 'chr', 'pos', 'var_info']], bit_string

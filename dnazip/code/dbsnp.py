@@ -34,10 +34,11 @@ def decode_dbsnp(bit_string, dbsnp_folder_path, chr):
     bitmap = bit_string[:bitmap_size]
     bit_string = bit_string[bitmap_size:]
 
-    bitmap_df = pd.read_csv(dbsnp_file_path, header=None)
+    bitmap_df = pd.read_csv(dbsnp_file_path, header=None,names=['chr', 'pos', 'var_info'])
     bitmap_df["Found_in_Vars"] = list(bitmap)
     bitmap_df = bitmap_df.where(bitmap_df['Found_in_Vars'] == '1').dropna()
+    bitmap_df['var_type'] = 0
 
-    return bitmap_df, bit_string
+    return bitmap_df[['var_type', 'chr', 'pos', 'var_info']], bit_string
 
     

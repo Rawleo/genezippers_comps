@@ -7,17 +7,13 @@ with open(DNA_FILE_PATH+DNA_FILE + "_dencoded.txt", "r") as file:
     decoded = file.read()
 
 def main():
-    for i in range(len(decoded)):
+    for i in range(len(original)):
         if(decoded[i]!=original[i]):
             print("NOT MATCHING")
             print("Location:", i)
             print("Error:")
-            print(original[i:i+COMPARE_LENGTH])
-            print(decoded[i:i+COMPARE_LENGTH])
-            # index = original.find("GTCCGGTA")
-            # index2 = original.find("CAGGCCAT")
-            # print("Error string found at:", index)
-            # print("Palindrome error string found at:", index2)
+            print(original[i-5:i+COMPARE_LENGTH])
+            print(decoded[i-5:i+COMPARE_LENGTH])
             sys.exit()
     print("MATCHING")
             

@@ -1,13 +1,12 @@
 from config import CONTENT
 import math
 
+
 def encodeFibonacci(num):
     fibNumbers = [1,2]
     while(fibNumbers[len(fibNumbers)-1]<=num):
         fibNumbers.append(fibNumbers[len(fibNumbers)-1]+fibNumbers[len(fibNumbers)-2])
     del fibNumbers[len(fibNumbers)-1]
-
-    
     code = []
     for val in reversed(fibNumbers):
         if(num>=val):
@@ -17,8 +16,8 @@ def encodeFibonacci(num):
             code.insert(0,"0")
     code.append("1")
     binaryCode = "".join(code)
-
     return binaryCode
+
 
 def decodeFibonacci(num):
     decoded = 0
@@ -41,11 +40,13 @@ def encodeBinary(num, i):
         binary = binary[:index + 2] + '1' + binary[index + 2:]
     return binary
 
+
 def decodeBinary(num):
     index = num.find("111")
     if(index != -1):
         num = num[:index]+num[index+1:]
     return int(num,2)
+
 
 def baseToBinary(base: str):
     mapping = {
@@ -56,6 +57,7 @@ def baseToBinary(base: str):
         }
     return mapping.get(base, "11")
 
+
 def binaryToBase(base):
     mapping = {
             "11": "A",
@@ -64,6 +66,7 @@ def binaryToBase(base):
             "00": "G",
         }
     return mapping.get(base, "A")
+
 
 def encodeFactor(factor, i):
     length = factor[1]
@@ -80,7 +83,6 @@ def encodeFactor(factor, i):
     else:
         positionEncoded=posFib
     lengthEncoded=encodeFibonacci(length)
-
     if((factor[1]*2)<=len(lengthEncoded+typeEncoded+positionEncoded)):
         if(type=="factor"):
             string = CONTENT[factor[0][0]:factor[0][0]+length]  
@@ -97,9 +99,3 @@ def encodeFactor(factor, i):
         encoded = lengthEncoded+typeEncoded+positionEncoded
     return (encoded, type, length)
 
-
-def main():
-    print(encodeFibonacci(8))
-
-if __name__ == "__main__":
-    main()

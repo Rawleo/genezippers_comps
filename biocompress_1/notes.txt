@@ -1,5 +1,6 @@
 ToDo:
 length encoded starting at 7 endding at 38, sometimes more efficient to do factor with length under 7
+remove outputDraft parameter from parseNumPos
 
 note:
 encoding - factor=0

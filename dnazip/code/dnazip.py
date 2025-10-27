@@ -107,9 +107,6 @@ def decode_file(bit_string):
                      index=False,
                      header=None)
     
-    # Create Figures
-    compression_comparison(INPUT_FILE_PATH, ENC_FILE_PATH, VARIANT_NAME, FIGURE_PATH)
-    
 
 
 def remove_file_if_exists(filepath):
@@ -128,9 +125,12 @@ def main():
     # encode_file(INPUT_FILE_PATH, DBSNP_PATH, K_MER_SIZE)
 
         
-    bit_string = readBinFile(ENC_FILE_PATH)
-    remove_file_if_exists(INS_DEC_CONCAT)
-    decode_file(bit_string)
+    # bit_string = readBinFile(ENC_FILE_PATH)
+    # remove_file_if_exists(INS_DEC_CONCAT)
+    # decode_file(bit_string)
+
+    # Create Figures
+    compression_comparison(INPUT_FILE_PATH, ENC_FILE_PATH, VARIANT_NAME, FIGURE_PATH)
 
 
 if __name__ == "__main__":

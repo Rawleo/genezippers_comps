@@ -1,4 +1,3 @@
-from vint import *
 from bitfile import *
 from decode import *
 from huffman import *

@@ -122,9 +122,6 @@ def decode_file(bit_string):
                      index=False,
                      header=None) # type: ignore
     
-    # Create Figures
-    compression_comparison(INPUT_FILE_PATH, ENC_FILE_PATH, VARIANT_NAME, FIGURE_PATH)
-    
 
 '''
 Deletes a file if it exists. Useful for files that are
@@ -167,6 +164,9 @@ def main():
 
     print("CPU Time Decode:", time_difference(end_cpu_time_decode, start_cpu_time_decode), "seconds")
     print("Wall Time Decode:", time_difference(end_wall_time_decode, start_wall_time_decode), "seconds")
+
+    # Create Figures
+    compression_comparison(INPUT_FILE_PATH, ENC_FILE_PATH, VARIANT_NAME, FIGURE_PATH)
 
 
 if __name__ == "__main__":

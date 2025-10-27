@@ -1,6 +1,5 @@
 import pandas as pd
 import numpy as np
-from vint import *
 from constants import *
 from decode import *
 from reader import *

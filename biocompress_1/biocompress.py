@@ -2,7 +2,7 @@ from AGCT_tree import createTree, findFactor
 from config import HEIGHT, DNA_FILE, CONTENT,DNA_FILE_PATH
 from converter import baseToBinary, encodeFactor, encodeFibonacci, binaryToBase
 from typing import Optional
-import sys
+from tqdm import tqdm
 
 
 open(DNA_FILE_PATH + DNA_FILE + "_encoded.txt", "w").close()
@@ -120,12 +120,16 @@ def encode(processed, buffer):
                 
 
 def main():
+    length = len(CONTENT)
     position = 0
     buffer=[]
-    while(position<len(CONTENT)):
-        processed = process(position)
-        buffer = encode(processed, buffer)
-        position+=processed[2]
+    with tqdm(total=length, desc="Processing", unit="bytes") as pbar:
+        while(position<len(CONTENT)):
+            processed = process(position)
+            buffer = encode(processed, buffer)
+            position+=processed[2]
+            # print(str(position)+ " / "+ str(length) + "     " + str(round(position/length*100,4)) + "%") #7:13
+            pbar.update(processed[2])
     printBuf(buffer)
     outputFile.close()
 

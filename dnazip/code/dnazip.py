@@ -137,7 +137,7 @@ def remove_file_if_exists(filepath):
         os.remove(filepath)
     else:
         print("This file does not exist:", filepath)
-        print("Continuing...") 
+        print("This file does exist. Continuing...") 
 
 
 def main(): 

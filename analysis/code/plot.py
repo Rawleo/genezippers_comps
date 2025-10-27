@@ -1,4 +1,5 @@
-from constants import *
+# from constants import *
+# from dnazip.code.metrics import space_saving
 from metrics import *
 import matplotlib.pyplot as plt
 
@@ -8,7 +9,7 @@ def compression_comparison(original_file_path, bin_file_path, file_name, output_
     bin_size = file_size(bin_file_path)
 
     comp_ratio = compression_ratio(original_file_path, bin_file_path)
-    space_savings = space_savings(original_file_path, bin_file_path)
+    space_savings = space_saving(original_file_path, bin_file_path)
 
     plt.figure(figsize=(6, 7))
     plt.bar(['Compressed File', 'Raw File'],

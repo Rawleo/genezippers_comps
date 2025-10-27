@@ -67,10 +67,10 @@ def longestFactorPalindrome(i: int) -> tuple[Optional[list[int]], Optional[int],
                     addLength = addLengthTemp
                     positionNum = positionNumTemp
                 positionNumTemp +=1
-            palindromePos=([i-palindromePos[0][positionNum]], palindromePos[1]+addLength)
+            palindromePos=([i-palindromePos[0][positionNum]], palindromePos[1]+addLength) #relative positioning
     #niche case for short palindromes
     elif(palindromePos[1]):
-        palindromePos=([i-palindromePos[0][0]],palindromePos[1])
+        palindromePos=([i-palindromePos[0][0]],palindromePos[1]) #relative positioning
     #if both a factor and palindrome were found, compare their lengths and return longest
     if(factorPos[1] and palindromePos[1]):
         if factorPos[1] >= palindromePos[1]:

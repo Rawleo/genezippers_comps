@@ -2,6 +2,7 @@ from config import CONTENT
 import math
 
 
+#encodes a number with fibonaci encoding. Like binary but instead of 1248, its 12358, and ends with 1
 def encodeFibonacci(num):
     fibNumbers = [1,2]
     while(fibNumbers[len(fibNumbers)-1]<=num):
@@ -19,6 +20,7 @@ def encodeFibonacci(num):
     return binaryCode
 
 
+#decodes input fibonacci number and returns int
 def decodeFibonacci(num):
     decoded = 0
     num = num[:-1]
@@ -31,6 +33,7 @@ def decodeFibonacci(num):
     return decoded
 
 
+#encodes a number into binary, adds a 1 after the first 11 if it exists
 def encodeBinary(num, i):
     binary = str(bin(num)[2:])
     k =  math.ceil(math.log2(i))
@@ -41,6 +44,7 @@ def encodeBinary(num, i):
     return binary
 
 
+#decodes input binary string into an int, removes added 1 if it exists
 def decodeBinary(num):
     index = num.find("111")
     if(index != -1):
@@ -48,6 +52,7 @@ def decodeBinary(num):
     return int(num,2)
 
 
+#converts a base to 2 bit encoding
 def baseToBinary(base: str):
     mapping = {
             "A": "11",
@@ -58,6 +63,7 @@ def baseToBinary(base: str):
     return mapping.get(base, "11")
 
 
+#converts 2 bit encoding to base
 def binaryToBase(base):
     mapping = {
             "11": "A",
@@ -68,26 +74,27 @@ def binaryToBase(base):
     return mapping.get(base, "A")
 
 
+#converts factor into binary encoding. Returns encoding, type, length
 def encodeFactor(factor, i):
     length = factor[1]
     type = factor[2]
     position = factor[0][0]+1
-    if(type=="factor"):
+    if(type=="factor"): #encoding type bit
         typeEncoded="0"
     else:
         typeEncoded="1"
     posFib=encodeFibonacci(position)+"0"
     posBin=encodeBinary(position, i)
-    if(len(posBin)<len(posFib)):
+    if(len(posBin)<len(posFib)): #determines if binary or fibonnaci encoding is more efficient
         positionEncoded=posBin
     else:
         positionEncoded=posFib
     lengthEncoded=encodeFibonacci(length)
-    if((factor[1]*2)<=len(lengthEncoded+typeEncoded+positionEncoded)):
+    if((factor[1]*2)<=len(lengthEncoded+typeEncoded+positionEncoded)): #determines if more efficient to encode as bases instead of factor
         if(type=="factor"):
             string = CONTENT[factor[0][0]:factor[0][0]+length]  
         elif(type=="palindrome"):
-            string = CONTENT[i-factor[0][0]:i-factor[0][0]+length]
+            string = CONTENT[i-factor[0][0]:i-factor[0][0]+length] #relative positioning
             table = str.maketrans("ACTG", "TGAC")
             string = string.translate(table)
         binary = ""

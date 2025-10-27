@@ -123,6 +123,7 @@ Function used to create the Huffman encoding map for encoding.
  * k_mer_size - the integer size of the k-mer.
 @return: 
  * encoding_map - the Huffman encoding dictionary to encode the array.
+ * len(k_mer_array) - number of k_mers encoded.
 '''
 def run_insr_huffman(ins_seq, k_mer_size):
     encoding_map    = {}
@@ -133,7 +134,7 @@ def run_insr_huffman(ins_seq, k_mer_size):
     
     map_encodings(huffman_root, encoding_map, "")
         
-    return encoding_map
+    return encoding_map, len(k_mer_array)
         
 
 '''
@@ -145,9 +146,10 @@ Decode a string of 1's and 0's by traversing a Huffman tree.
  * result - the decoded string.
  * buffer - extra bits to process as regular NUC encodings. 
 '''
-def decode_huffman(encoded_text, root):
+def decode_huffman(encoded_text, root, number_of_kmers):
     result = ""
     buffer = ""
+    count  = 0
     curr = root
     for char in encoded_text:
         if char == "0":
@@ -157,7 +159,9 @@ def decode_huffman(encoded_text, root):
             curr = curr.rightChild
             buffer += "1"
         if curr.leftChild is None and curr.rightChild is None:
+            if count == number_of_kmers: return result, buffer
             result += curr.symbol
+            count += 1
             buffer = ""
             curr = root
     return result, buffer
@@ -171,13 +175,14 @@ actual Python dictionary to recreate a Huffman tree.
 @return:
  * encoding_map - the Huffman encoding dictionary to recreate a Huffman tree.
 '''
-def load_map_from_file(filepath):
+def load_dict_from_file(filepath):
     with open(filepath, 'r') as f:
         file_content = f.read()
         
     encoding_map = ast.literal_eval(file_content)
     
     return encoding_map
+
 
 '''
 Transform a Huffman encoding map into a Huffman tree used for decoding.

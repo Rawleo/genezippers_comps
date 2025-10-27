@@ -3,6 +3,7 @@ import numpy as np
 from vint import *
 from constants import *
 from decode import *
+from reader import *
 
 
 def encode_SNPs(snps_df):
@@ -31,26 +32,29 @@ def decode_SNPs(bit_string, chr):
 
     # print("SNP Positions Decoded")
 
-    snp_nucs = []
+    alt_nucs = []
 
     for i in range(0, snp_size * 2, 2):
 
         two_bits = bit_string[i:i+2]
         nuc = TWO_BIT_ENCODING[two_bits]
-        snp_nucs.append(nuc)
+        alt_nucs.append(nuc)
 
     # print("SNP Nucleotides Decoded")
 
     bit_string = bit_string[snp_size * 2:]
 
-    snp_data = {"snp_pos":None,
-                "snp_nucs":None
+    snp_data = {"var_type":None,
+                "chr":None,
+                "pos":snp_pos,
+                "alt_nucs":alt_nucs,
+                "ref_nucs":get_snp_nuc(snp_pos, chr),
+                "var_info":None
     }
 
-    snp_data["snp_pos"] = snp_pos
-    snp_data["snp_nucs"] = snp_nucs
-    
     snp_df = pd.DataFrame(snp_data)
     snp_df['chr'] = chr
+    snp_df['var_type'] = 0
+    snp_df['var_info'] = snp_df['ref_nucs'] + "/" + snp_df['alt_nucs']
 
-    return snp_df, bit_string
+    return snp_df[['var_type', 'chr', 'pos', 'var_info']], bit_string

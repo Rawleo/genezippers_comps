@@ -8,7 +8,7 @@ def compression_comparison(original_file_path, bin_file_path, file_name, output_
     bin_size = file_size(bin_file_path)
 
     comp_ratio = compression_ratio(original_file_path, bin_file_path)
-    space_savings = space_savings(original_file_path, bin_file_path)
+    space_savings = space_saving(original_file_path, bin_file_path)
 
     plt.figure(figsize=(6, 7))
     plt.bar(['Compressed File', 'Raw File'],
@@ -24,7 +24,7 @@ def compression_comparison(original_file_path, bin_file_path, file_name, output_
     plt.xticks(fontsize=12)
     plt.yticks(fontsize=12)
     plt.xlabel("File Type", fontsize=14, labelpad=10)
-    plt.ylabel("Bytes Used", fontsize=14, labelpad=15)
+    plt.ylabel("File Size (MB)", fontsize=14, labelpad=15)
     plt.tight_layout()
 
     plt.savefig(output_file_path, dpi=600)

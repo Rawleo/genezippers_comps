@@ -93,6 +93,15 @@ def encode_ins(insr_df, k_mer_size):
     # Calculate size of insertions and convert to VINT
     insr_size_vint = writeBitVINT(insr_df.shape[0])
     
+    # Prepare df to get relative (DELTA) positions
+    insr_df = insr_df.sort_values(by='pos') 
+    insr_df = insr_df.reset_index(drop=True) 
+
+    # Set DELTA positions 
+    first_pos = insr_df['pos'].iloc[0]
+    insr_df['pos'] = insr_df['pos'].diff() 
+    insr_df.loc[0, 'pos'] = first_pos
+    
     # Convert positions to VINTs
     insr_df["pos"] = insr_df["pos"].astype(int).apply(writeBitVINT)
     
@@ -168,20 +177,13 @@ def decode_ins(bit_string, huffman_root, number_of_kmers, chr):
 
     ### Final insertion sequence
     ins_seq, buffer  = decode_huffman(huffman_bitmap, huffman_root, number_of_kmers) 
-    
-    # print(ins_seq)
-    # print(huffman_bitmap)
         
     # Process non-Huffman encoded nucleotides
     extra_nucs = ''.join([TWO_BIT_ENCODING[buffer[(i*2):((i*2)+2)]] for i in range(len(buffer) // 2)])
     
-    # if (chr == "chr1"): print(extra_nucs); print(buffer); print(number_of_kmers)
-
     # Append Huffman portion with non-Huffman 
     ins_seq += extra_nucs
-    
-    # if (chr == "chr1"): print(ins_seq)
-    
+        
     # Export decoded insertion sequences for each chr
     create_insertion_dec_file(chr, ins_seq)
     
@@ -199,6 +201,9 @@ def decode_ins(bit_string, huffman_root, number_of_kmers, chr):
 
     # Create data frame with the above information
     ins_df = pd.DataFrame(ins_data)
+    
+    # Decode DELTA positions
+    ins_df['pos'] = ins_df['pos'].cumsum()
     
     # Get the end position for indexing the insertion sequence
     ins_df['end_pos'] = ins_df.ins_lens.cumsum()

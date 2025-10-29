@@ -153,8 +153,8 @@ def main():
     print("CPU Time Encode:", time_difference(end_cpu_time_encode, start_cpu_time_encode), "seconds")
     print("Wall Time Encode:", time_difference(end_wall_time_encode, start_wall_time_encode), "seconds")
     
-    append_plot_points(0, 0, time_difference(end_cpu_time_encode, start_cpu_time_encode), K_MER_SIZE, TIME_CSV_PATH)
-    append_plot_points(0, 1, time_difference(end_wall_time_encode, start_wall_time_encode), K_MER_SIZE, TIME_CSV_PATH)
+    append_plot_points(0, 0, time_difference(end_cpu_time_encode, start_cpu_time_encode), TIME_CSV_PATH)
+    append_plot_points(0, 1, time_difference(end_wall_time_encode, start_wall_time_encode), TIME_CSV_PATH)
     
     start_cpu_time_decode, start_wall_time_decode = record_current_times()
         
@@ -170,8 +170,8 @@ def main():
     # Create Figures
     compression_comparison(INPUT_FILE_PATH, ENC_FILE_PATH, VARIANT_NAME, FIGURE_PATH)
     
-    append_plot_points(1, 0, time_difference(end_cpu_time_decode, start_cpu_time_decode), K_MER_SIZE, TIME_CSV_PATH)
-    append_plot_points(1, 1, time_difference(end_wall_time_decode, start_wall_time_decode), K_MER_SIZE, TIME_CSV_PATH)
+    append_plot_points(1, 0, time_difference(end_cpu_time_decode, start_cpu_time_decode), TIME_CSV_PATH)
+    append_plot_points(1, 1, time_difference(end_wall_time_decode, start_wall_time_decode), TIME_CSV_PATH)
 
 
 if __name__ == "__main__":

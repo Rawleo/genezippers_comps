@@ -24,7 +24,8 @@ dnazip/
 ###
 VARIANT_NAME = 'HG004_GRCh38'
 K_MER_SIZE   = 4
-DELTA_POS = False 
+DELTA_POS = False
+DBSNP_ON = False 
 
 ###
 # FILEPATHS

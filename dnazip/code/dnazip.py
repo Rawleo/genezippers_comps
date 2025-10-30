@@ -142,26 +142,32 @@ def remove_file_if_exists(filepath):
 
 def main(): 
     
+    remove_file_if_exists(OUTPUT_BIN_PATH)
+
+    # Recording Start Times
     start_cpu_time_encode, start_wall_time_encode = record_current_times()
     
-    remove_file_if_exists(OUTPUT_BIN_PATH)
-    # remove_file_if_exists(INS_SEQ_CONCAT)
+    ### Encode
     encode_file(INPUT_FILE_PATH, DBSNP_PATH, K_MER_SIZE)
     
+    # Recording End Times
     end_cpu_time_encode, end_wall_time_encode = record_current_times()
     
     print("CPU Time Encode:", time_difference(end_cpu_time_encode, start_cpu_time_encode), "seconds")
     print("Wall Time Encode:", time_difference(end_wall_time_encode, start_wall_time_encode), "seconds")
     
-    append_plot_points(0, 0, time_difference(end_cpu_time_encode, start_cpu_time_encode), TIME_CSV_PATH)
-    append_plot_points(0, 1, time_difference(end_wall_time_encode, start_wall_time_encode), TIME_CSV_PATH)
+    # Record ENCODE Start and End Timings
+    record_timings(0, 0, time_difference(end_cpu_time_encode, start_cpu_time_encode), TIME_CSV_PATH)
+    record_timings(0, 1, time_difference(end_wall_time_encode, start_wall_time_encode), TIME_CSV_PATH)
     
+    # Recording Start Times
     start_cpu_time_decode, start_wall_time_decode = record_current_times()
         
+    ### Decode
     bit_string = readBinFile(ENC_FILE_PATH)
-    # remove_file_if_exists(INS_DEC_CONCAT)
     decode_file(bit_string)
     
+    # Recording End Times
     end_cpu_time_decode, end_wall_time_decode = record_current_times()
 
     print("CPU Time Decode:", time_difference(end_cpu_time_decode, start_cpu_time_decode), "seconds")
@@ -170,8 +176,9 @@ def main():
     # Create Figures
     compression_comparison(INPUT_FILE_PATH, ENC_FILE_PATH, VARIANT_NAME, FIGURE_PATH)
     
-    append_plot_points(1, 0, time_difference(end_cpu_time_decode, start_cpu_time_decode), TIME_CSV_PATH)
-    append_plot_points(1, 1, time_difference(end_wall_time_decode, start_wall_time_decode), TIME_CSV_PATH)
+    # Record DECODE Start and End Timings
+    record_timings(1, 0, time_difference(end_cpu_time_decode, start_cpu_time_decode), TIME_CSV_PATH)
+    record_timings(1, 1, time_difference(end_wall_time_decode, start_wall_time_decode), TIME_CSV_PATH)
 
 
 if __name__ == "__main__":

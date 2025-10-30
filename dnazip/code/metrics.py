@@ -48,7 +48,7 @@ Returns the difference between the two values
  * difference - between the two inputs
 '''
 def time_difference(end_time, start_time):
-    return end_time - start_time
+    return round(end_time - start_time, 4)
 
 
 '''
@@ -59,9 +59,10 @@ Appends data to a csv if it exists, otherwise creates one.
 @return:
  * difference - between the two inputs
 '''
-def append_plot_points(type, time_type, total_time, csv_path):
+def record_timings(type, time_type, total_time, csv_path):
     
-    enc_file_size = file_size(ENC_FILE_PATH)
+    enc_file_size  = file_size(ENC_FILE_PATH)
+    tree_file_size = file_size(TREE_PATH)
     
     # Determine type string (0=ENCODE, 1=DECODE)
     if (type == 0):
@@ -81,14 +82,12 @@ def append_plot_points(type, time_type, total_time, csv_path):
         'k_mer_size' : [K_MER_SIZE],
         'type' : [op_type_str],     
         'time_type' : [time_type_str],
-        'time' : [round(total_time, 4)],
-        'file_size' : [round(enc_file_size, 4)],
+        'time (sec)' : [round(total_time, 4)],
+        'file_size (MB)' : [round(enc_file_size, 4)],
+        'tree_size (MB)' : [round(tree_file_size, 4)],
     }
      
     time_row_df = pd.DataFrame(time_data)
-    
-    time_row_df['time'] = pd.to_numeric(time_row_df['time'])
-    time_row_df['file_size'] = pd.to_numeric(time_row_df['file_size'])
     
     file_exists = os.path.exists(csv_path)
     

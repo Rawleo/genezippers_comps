@@ -4,6 +4,18 @@ from decode import *
 from reader import *
 
 def encode_dels(dels_df):
+
+    if DELTA_POS:
+
+        # Prepare df to get relative (DELTA) positions
+        dels_df = dels_df.sort_values(by='pos') 
+        dels_df = dels_df.reset_index(drop=True) 
+
+        # Set DELTA positions 
+        first_pos = dels_df['pos'].iloc[0]
+        dels_df['pos'] = dels_df['pos'].diff() 
+        dels_df.loc[0, 'pos'] = first_pos
+
     # Calculate number of DELs
     del_size_vint = writeBitVINT(dels_df.shape[0])
     
@@ -43,7 +55,13 @@ def decode_dels(bit_string, chr):
     
     del_df['chr'] = chr
     del_df['var_type'] = 1
-    del_df['ref_seq'] = get_del_nucs(del_pos, del_sizes, chr)
+
+    if DELTA_POS:
+
+        del_df['pos'] = del_df['pos'].cumsum()
+
+    del_df['ref_seq'] = get_del_nucs(list(del_df['pos']), del_sizes, chr)
+
     del_df['var_info'] = del_df.apply(lambda row: row['ref_seq'] + '/' + ('-' * row['del_sizes']),axis=1)
 
     return del_df[['var_type', 'chr', 'pos', 'var_info']], bit_string

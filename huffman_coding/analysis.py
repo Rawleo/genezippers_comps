@@ -8,7 +8,7 @@
             in the HuffmanCoding.docx file. 
 '''
 
-from huffman_coding import read_in_file
+import huffman_orig as h
 
 '''
 Counting the total number of characters in the input string.
@@ -35,11 +35,11 @@ def main():
     file_list = ["DNA", "Emma", "random", "sample_text"]
     
     for filename in file_list:
-        input_text   = read_in_file("input_files/" + filename + ".txt")
-        encoded_text = read_in_file("export_files/" + filename + "_encoded.txt")
+        input_text   = h.read_in_file("input_files/" + filename + ".txt")
+        encoded_text = h.read_in_file("export_files/" + filename + "_encoded.txt")
         size_in_bits = count_char(input_text) * 8
         size_in_bits_encoded = count_char(encoded_text)
-        
+                
         size_in_bytes = size_in_bits / 8
         size_in_bytes_encoded = size_in_bits_encoded / 8
         

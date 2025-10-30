@@ -9,7 +9,7 @@
 
 
 import re, ast
-from constants import *
+from dnazip.code import *
 
 
 '''

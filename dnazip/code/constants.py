@@ -22,8 +22,10 @@ dnazip/
 ###
 # DEFAULTS
 ###
-VARIANT_NAME = 'HG002_GRCh38'
+VARIANT_NAME = 'HG004_GRCh38'
 K_MER_SIZE   = 4
+DELTA_POS = False
+DBSNP_ON = False 
 
 ###
 # FILEPATHS
@@ -39,6 +41,7 @@ ENC_FILE_PATH               = f"../data/output/{VARIANT_NAME}_Encoded.bin"
 TREE_PATH                   = f"../data/huffman_trees/{VARIANT_NAME}.txt"
 FIGURE_PATH                 = f"../figures/{VARIANT_NAME}_Figure.png"
 FIGURE_REMDBSNP_PATH        = f"../figures/{VARIANT_NAME}_removed_dbSNP.png"
+TIME_CSV_PATH               = f"../figures/csv/{VARIANT_NAME}_times.csv"
 
 ###
 # Array of Chromosomes

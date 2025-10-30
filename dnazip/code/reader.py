@@ -58,3 +58,12 @@ def get_del_nucs(positions, del_sizes, chr_name):
         del_nucs.append(str(ref_seq[pos-1:pos+size-1]).upper())
 
     return del_nucs
+
+def fa_to_txt(input_fasta_file, output_txt_file):
+
+    for seq_record in SeqIO.parse(input_fasta_file, "fasta"):
+        clean_seq = sequence_cleaner(seq_record.seq).upper()
+
+
+        with open(output_txt_file, "w") as f:
+            f.write(clean_seq)

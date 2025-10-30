@@ -133,7 +133,7 @@ def encode_ins(insr_df, k_mer_size):
     ins_seq_bitstr += remainder_bitstr
     
     # Create file with before encoding output
-    create_insertion_seq_file(chr, ins_seq)
+    # create_insertion_seq_file(chr, ins_seq)
 
     # VINT for bitstring length
     bitstr_len_vint = writeBitVINT(len(ins_seq_bitstr))
@@ -185,7 +185,7 @@ def decode_ins(bit_string, huffman_root, number_of_kmers, chr):
     ins_seq += extra_nucs
         
     # Export decoded insertion sequences for each chr
-    create_insertion_dec_file(chr, ins_seq)
+    # create_insertion_dec_file(chr, ins_seq)
     
     # Create dictionary to pass into the data frame
     ins_data = {

@@ -145,8 +145,7 @@ def main():
     start_cpu_time_encode, start_wall_time_encode = record_current_times()
     
     remove_file_if_exists(OUTPUT_BIN_PATH)
-    remove_file_if_exists(INS_SEQ_CONCAT)
-    remove_file_if_exists(OUTPUT_BIN_PATH)
+    # remove_file_if_exists(INS_SEQ_CONCAT)
     encode_file(INPUT_FILE_PATH, DBSNP_PATH, K_MER_SIZE)
     
     end_cpu_time_encode, end_wall_time_encode = record_current_times()
@@ -154,10 +153,13 @@ def main():
     print("CPU Time Encode:", time_difference(end_cpu_time_encode, start_cpu_time_encode), "seconds")
     print("Wall Time Encode:", time_difference(end_wall_time_encode, start_wall_time_encode), "seconds")
     
+    append_plot_points(0, 0, time_difference(end_cpu_time_encode, start_cpu_time_encode), TIME_CSV_PATH)
+    append_plot_points(0, 1, time_difference(end_wall_time_encode, start_wall_time_encode), TIME_CSV_PATH)
+    
     start_cpu_time_decode, start_wall_time_decode = record_current_times()
         
     bit_string = readBinFile(ENC_FILE_PATH)
-    remove_file_if_exists(INS_DEC_CONCAT)
+    # remove_file_if_exists(INS_DEC_CONCAT)
     decode_file(bit_string)
     
     end_cpu_time_decode, end_wall_time_decode = record_current_times()
@@ -167,6 +169,9 @@ def main():
 
     # Create Figures
     compression_comparison(INPUT_FILE_PATH, ENC_FILE_PATH, VARIANT_NAME, FIGURE_PATH)
+    
+    append_plot_points(1, 0, time_difference(end_cpu_time_decode, start_cpu_time_decode), TIME_CSV_PATH)
+    append_plot_points(1, 1, time_difference(end_wall_time_decode, start_wall_time_decode), TIME_CSV_PATH)
 
 
 if __name__ == "__main__":

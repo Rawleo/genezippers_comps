@@ -43,11 +43,20 @@ def encode_file(input_file_path, dbSNP_path, k_mer_size):
         
         ### Start of SNPs
         # Encoding of Mapped SNPs
-        bitmap, bitmap_size_vint, unmapped_df = compares_dbsnp(snps_df, dbSNP_path, chr)
 
-        # Encoding of Unmapped SNPs
-        snp_size_vint, unmapped_pos_bitstr, unmapped_nuc_bitstr = encode_SNPs(unmapped_df)
-        snp_bitstring = bitmap_size_vint + bitmap + snp_size_vint + unmapped_pos_bitstr + unmapped_nuc_bitstr
+        if DBSNP_ON:
+
+            bitmap, bitmap_size_vint, unmapped_df = compares_dbsnp(snps_df, dbSNP_path, chr)
+
+            # Encoding of Unmapped SNPs
+            snp_size_vint, unmapped_pos_bitstr, unmapped_nuc_bitstr = encode_SNPs(unmapped_df)
+            snp_bitstring = bitmap_size_vint + bitmap + snp_size_vint + unmapped_pos_bitstr + unmapped_nuc_bitstr
+
+        else:
+
+            snp_size_vint, unmapped_pos_bitstr, unmapped_nuc_bitstr = encode_SNPs(snps_df)
+            snp_bitstring = snp_size_vint + unmapped_pos_bitstr + unmapped_nuc_bitstr
+
         export_as_binary(OUTPUT_BIN_PATH, snp_bitstring)
                     
         ### Start of DELs
@@ -98,7 +107,10 @@ def decode_file(bit_string):
 
         ### Find SNPs
         bit_string = add_padding(bit_string)
-        bitmap_df, bit_string = decode_dbsnp(bit_string, DBSNP_PATH, chr)
+
+        if DBSNP_ON:
+            bitmap_df, bit_string = decode_dbsnp(bit_string, DBSNP_PATH, chr)
+
         snp_df, bit_string = decode_SNPs(bit_string, chr)
         # print("Bitmap Size: " + str(bitmap_size))
 
@@ -112,7 +124,14 @@ def decode_file(bit_string):
         ins_df, bit_string = decode_ins(bit_string, huffman_root, number_of_kmers, chr)
 
         ### Adding everything into the decode_df
-        decode_df = pd.concat([decode_df, bitmap_df, snp_df, del_df, ins_df])
+
+        if DBSNP_ON:
+
+            decode_df = pd.concat([decode_df, bitmap_df, snp_df, del_df, ins_df])
+        
+        else:
+
+            decode_df = pd.concat([decode_df, snp_df, del_df, ins_df])
     
     # Formatting
     decode_df['pos'] = decode_df['pos'].astype(int)

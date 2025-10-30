@@ -1,6 +1,6 @@
-from bitfile import *
-from decode import *
-from huffman import *
+from helper.bitfile import *
+from helper.decode import *
+from helper.huffman import *
 from constants import *
 import pandas as pd
 
@@ -122,16 +122,21 @@ def encode_ins(insr_df, k_mer_size):
     len_bitstr = ''.join(insr_df["var_length"].astype(str).tolist())
     
     # Encode remainder bits
-    remainder_nuc_len = len(ins_seq) % k_mer_size
-    remainder_nucs = ins_seq[len(ins_seq) - remainder_nuc_len:]
-    remainder_bitstr = ''.join([(NUC_ENCODING[x]) for x in remainder_nucs])
-    
-    # Huffman encoding of the current chromosome's insertion sequences
-    encoding_map, number_of_kmers = run_insr_huffman(ins_seq, k_mer_size)
-    ins_seq_bitstr  = ins_seq_to_bitstr(ins_seq, encoding_map, k_mer_size)
-    
-    # Add remainder bits to the whole bitstring sequence
-    ins_seq_bitstr += remainder_bitstr
+    if (HUFFMAN_ON): 
+        remainder_nuc_len = len(ins_seq) % k_mer_size
+        remainder_nucs = ins_seq[len(ins_seq) - remainder_nuc_len:]
+        remainder_bitstr = ''.join([(NUC_ENCODING[x]) for x in remainder_nucs])
+        
+        # Huffman encoding of the current chromosome's insertion sequences
+        encoding_map, number_of_kmers = run_insr_huffman(ins_seq, k_mer_size)
+        ins_seq_bitstr  = ins_seq_to_bitstr(ins_seq, encoding_map, k_mer_size)
+        
+        # Add remainder bits to the whole bitstring sequence
+        ins_seq_bitstr += remainder_bitstr
+    else: 
+        encoding_map = {}
+        number_of_kmers = 0
+        ins_seq_bitstr = ''.join([(NUC_ENCODING[x]) for x in ins_seq])
     
     # Create file with before encoding output
     # create_insertion_seq_file(chr, ins_seq)
@@ -177,13 +182,16 @@ def decode_ins(bit_string, huffman_root, number_of_kmers, chr):
     bit_string = bit_string[bitstr_len:]
 
     ### Final insertion sequence
-    ins_seq, buffer  = decode_huffman(huffman_bitmap, huffman_root, number_of_kmers) 
+    if (HUFFMAN_ON):
+        ins_seq, buffer  = decode_huffman(huffman_bitmap, huffman_root, number_of_kmers) 
+            
+        # Process non-Huffman encoded nucleotides
+        extra_nucs = ''.join([TWO_BIT_ENCODING[buffer[(i*2):((i*2)+2)]] for i in range(len(buffer) // 2)])
         
-    # Process non-Huffman encoded nucleotides
-    extra_nucs = ''.join([TWO_BIT_ENCODING[buffer[(i*2):((i*2)+2)]] for i in range(len(buffer) // 2)])
-    
-    # Append Huffman portion with non-Huffman 
-    ins_seq += extra_nucs
+        # Append Huffman portion with non-Huffman 
+        ins_seq += extra_nucs
+    else: 
+        ins_seq = ''.join([TWO_BIT_ENCODING[huffman_bitmap[(i*2):((i*2)+2)]] for i in range(len(huffman_bitmap) // 2)])
         
     # Export decoded insertion sequences for each chr
     # create_insertion_dec_file(chr, ins_seq)

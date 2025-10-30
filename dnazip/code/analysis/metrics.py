@@ -85,6 +85,9 @@ def record_timings(type, time_type, total_time, csv_path):
         'time (sec)' : [round(total_time, 4)],
         'file_size (MB)' : [round(enc_file_size, 4)],
         'tree_size (MB)' : [round(tree_file_size, 4)],
+        'DELTA_POS' : DELTA_POS,
+        'DBSNP_ON' : DBSNP_ON,
+        'HUFFMAN_ON' : HUFFMAN_ON,
     }
      
     time_row_df = pd.DataFrame(time_data)

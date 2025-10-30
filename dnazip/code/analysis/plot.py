@@ -1,5 +1,5 @@
 from constants import *
-from metrics import *
+from analysis.metrics import *
 import matplotlib.pyplot as plt
 import numpy as np
 

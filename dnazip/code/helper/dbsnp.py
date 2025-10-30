@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import sys
-from decode import *
+from helper.decode import *
 
 def compares_dbsnp(snps_df, dbsnp_path, chr):
 

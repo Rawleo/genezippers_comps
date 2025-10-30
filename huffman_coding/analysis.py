@@ -9,6 +9,7 @@
 '''
 
 import huffman_orig as h
+import dnazip.code.constants as c
 
 '''
 Counting the total number of characters in the input string.

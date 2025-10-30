@@ -1,10 +1,12 @@
-from config import DNA_FILE, DNA_FILE_PATH
+from config import DNA_FILE, DNA_FILE_PATH, HEIGHT
 from converter import decodeFibonacci, binaryToBase, decodeBinary
 import math
+from tqdm import tqdm
 
-open(DNA_FILE_PATH+ DNA_FILE + "_dencoded.txt", "w").close()
-outputFile = open(DNA_FILE_PATH+DNA_FILE + "_dencoded.txt", "a", encoding="utf-8")
-with open(DNA_FILE_PATH+DNA_FILE + "_encoded.txt", "r") as file:
+
+open(DNA_FILE_PATH+ DNA_FILE + "_" + str(HEIGHT) + "_decoded.txt", "w").close()
+outputFile = open(DNA_FILE_PATH+DNA_FILE + "_" + str(HEIGHT) + "_decoded.txt", "a", encoding="utf-8")
+with open(DNA_FILE_PATH+DNA_FILE + "_" + str(HEIGHT) + "_encoded.txt", "r") as file:
     inputFile = file.read()
 
 #reads chars from i until it hits 11 and returns decoded number
@@ -82,19 +84,23 @@ def main():
     outputDraft = ""
     type = "bases"
     i=0
-    while(i<len(inputFile)): #alternates between bases and factors
-        num, length = parseNum(i)
-        i+=length
-        if (type == "bases"):
-            bases = parseBases(num, i)
-            i+=num*2
-            type="factors"
-            outputDraft+=bases
-        elif(type == "factors"):
-            factors, i = parseFactors(num, i, outputDraft)
-            outputDraft=decodeFactors(factors, outputDraft)
-            type= "bases"
-    outputFile.write(outputDraft)
+    lengthInput = len(inputFile)
+    with tqdm(total=lengthInput, desc="Decompressing", unit="bytes") as pbar:
+        while(i<len(inputFile)): #alternates between bases and factors
+            num, length = parseNum(i)
+            i+=length
+            if (type == "bases"):
+                bases = parseBases(num, i)
+                i+=num*2
+                type="factors"
+                outputDraft+=bases
+            elif(type == "factors"):
+                factors, i = parseFactors(num, i, outputDraft)
+                outputDraft=decodeFactors(factors, outputDraft)
+                type= "bases"
+            pbar.n=i
+            pbar.refresh()
+        outputFile.write(outputDraft)
 
 
 if __name__ == "__main__":

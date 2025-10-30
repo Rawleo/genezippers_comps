@@ -1,13 +1,13 @@
 import pandas as pd
 import numpy as np
 from constants import *
-from decode import *
-from reader import *
+from helper.decode import *
+from helper.reader import *
 
 
 def encode_SNPs(snps_df):
 
-    if DELTA_POS:
+    if (DELTA_POS):
 
         # Prepare df to get relative (DELTA) positions
         snps_df = snps_df.sort_values(by='pos') 

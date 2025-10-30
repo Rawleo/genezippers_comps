@@ -24,8 +24,13 @@ dnazip/
 ###
 VARIANT_NAME = 'HG004_GRCh38'
 K_MER_SIZE   = 4
-DELTA_POS = False
-DBSNP_ON = False 
+DELTA_POS   = True
+DBSNP_ON    = True
+HUFFMAN_ON  = False
+
+# K_MER OVERRIDE
+if (not HUFFMAN_ON):
+    K_MER_SIZE = 0
 
 ###
 # FILEPATHS
@@ -41,7 +46,7 @@ ENC_FILE_PATH               = f"../data/output/{VARIANT_NAME}_Encoded.bin"
 TREE_PATH                   = f"../data/huffman_trees/{VARIANT_NAME}.txt"
 FIGURE_PATH                 = f"../figures/{VARIANT_NAME}_Figure.png"
 FIGURE_REMDBSNP_PATH        = f"../figures/{VARIANT_NAME}_removed_dbSNP.png"
-TIME_CSV_PATH               = f"../figures/csv/{VARIANT_NAME}_times.csv"
+TIME_CSV_PATH               = f"../data/output/csv/{VARIANT_NAME}_times.csv"
 
 ###
 # Array of Chromosomes

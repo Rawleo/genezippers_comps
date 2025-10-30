@@ -7,14 +7,16 @@ from reader import *
 
 def encode_SNPs(snps_df):
 
-    # Prepare df to get relative (DELTA) positions
-    snps_df = snps_df.sort_values(by='pos') 
-    snps_df = snps_df.reset_index(drop=True) 
+    if DELTA_POS:
 
-    # Set DELTA positions 
-    first_pos = snps_df['pos'].iloc[0]
-    snps_df['pos'] = snps_df['pos'].diff() 
-    snps_df.loc[0, 'pos'] = first_pos
+        # Prepare df to get relative (DELTA) positions
+        snps_df = snps_df.sort_values(by='pos') 
+        snps_df = snps_df.reset_index(drop=True) 
+
+        # Set DELTA positions 
+        first_pos = snps_df['pos'].iloc[0]
+        snps_df['pos'] = snps_df['pos'].diff() 
+        snps_df.loc[0, 'pos'] = first_pos
 
     # Convert positions to VINTs
     snps_df['pos'] = snps_df['pos'].astype(int).apply(writeBitVINT)
@@ -62,7 +64,11 @@ def decode_SNPs(bit_string, chr):
 
     snp_df = pd.DataFrame(snp_data)
     snp_df['chr'] = chr
-    snp_df['pos'] = snp_df['pos'].cumsum()
+
+    if DELTA_POS: 
+        
+        snp_df['pos'] = snp_df['pos'].cumsum()
+    
     snp_df['ref_nucs'] = get_snp_nuc(list(snp_df['pos']), chr)
     snp_df['var_type'] = 0
     snp_df['var_info'] = snp_df['ref_nucs'] + "/" + snp_df['alt_nucs']

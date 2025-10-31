@@ -125,7 +125,7 @@ Function used to create the Huffman encoding map for encoding.
  * encoding_map - the Huffman encoding dictionary to encode the array.
  * len(k_mer_array) - number of k_mers encoded.
 '''
-def run_insr_huffman(ins_seq, k_mer_size):
+def run_k_mer_huffman(ins_seq, k_mer_size):
     encoding_map    = {}
     k               = k_mer_size
     k_mer_array     = insertions_to_kmers(ins_seq, k)

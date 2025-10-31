@@ -121,23 +121,6 @@ def decode_file(bit_string):
     decode_df.sort_values(by=['var_type', 'chr', 'pos']).to_csv(OUTPUT_DEC_PATH,
                      index=False,
                      header=None) # type: ignore
-    
-
-'''
-Deletes a file if it exists. Useful for files that are
-appended to.
-@params: 
- * filepath - file path (str) to the file to delete. 
-@return:
- * None, deletes the file if it exists.
-'''
-def remove_file_if_exists(filepath):
-    if os.path.exists(filepath):
-        print("Removing:", filepath)
-        os.remove(filepath)
-    else:
-        print("This file does not exist:", filepath)
-        print("Continuing...") 
 
 
 def main(): 

@@ -96,15 +96,3 @@ def time_scale_comparison(x_range):
        plt.ylabel('Size ')
        plt.title('Plot with Logarithmic X-axis')
        plt.show()
-
-
-def main():
-
-        original_file_path = '../data/chr/genome.txt'
-        bin_13_path = '../data/chr/genome_13.bin'
-        bin_14_path = '../data/chr/genome_13.bin'
-
-        compression_comparison(original_file_path, bin_13_path, 'biocompress', 'plot_13.png')
-        compression_comparison(original_file_path, bin_14_path, 'biocompress', 'plot_14.png')
-
-main()

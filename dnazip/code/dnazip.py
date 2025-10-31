@@ -2,14 +2,14 @@ import pandas as pd
 import numpy as np
 import os
 from constants import *
-from huffman import *
-from bitfile import *
-from dbsnp import *
-from dels import *
-from snp import *
-from insr import *
-from decode import *
-from plot import *
+from helper.huffman import *
+from helper.bitfile import *
+from helper.dbsnp import *
+from helper.dels import *
+from helper.snp import *
+from helper.insr import *
+from helper.decode import *
+from analysis.plot import *
 
 
 '''
@@ -28,8 +28,8 @@ def encode_file(input_file_path, dbSNP_path, k_mer_size):
                               names = ['var_type', 'chr', 'pos', 'var_info'],
                               header = None)
     
-    # Will contain the Huffman encoding maps for each chromosome
-    # and the number of k_mers that were encoded    
+    # Will contain the Huffman encoding maps for each 
+    # chromosome and the number of k_mers that were encoded    
     encoding_dict = {}
 
     for chr in CHROMOSOMES:
@@ -142,12 +142,15 @@ def remove_file_if_exists(filepath):
 
 def main(): 
     
+    ##### ENCODE #####
     remove_file_if_exists(OUTPUT_BIN_PATH)
+    remove_file_if_exists(INS_DEC_CONCAT)
+    remove_file_if_exists(INS_SEQ_CONCAT)
 
     # Recording Start Times
     start_cpu_time_encode, start_wall_time_encode = record_current_times()
     
-    ### Encode
+    ## Encode Start
     encode_file(INPUT_FILE_PATH, DBSNP_PATH, K_MER_SIZE)
     
     # Recording End Times
@@ -160,10 +163,11 @@ def main():
     record_timings(0, 0, time_difference(end_cpu_time_encode, start_cpu_time_encode), TIME_CSV_PATH)
     record_timings(0, 1, time_difference(end_wall_time_encode, start_wall_time_encode), TIME_CSV_PATH)
     
+    ##### DECODE #####
     # Recording Start Times
     start_cpu_time_decode, start_wall_time_decode = record_current_times()
         
-    ### Decode
+    ## Decode Start
     bit_string = readBinFile(ENC_FILE_PATH)
     decode_file(bit_string)
     

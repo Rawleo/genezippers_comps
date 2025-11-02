@@ -8,7 +8,7 @@ with open(DNA_FILE_PATH+DNA_FILE + "_dencoded.txt", "r") as file:
 
 def main():
     for i in range(len(original)):
-        if(decoded[i]!=original[i]):
+        if decoded[i]!=original[i]:
             print("NOT MATCHING")
             print("Location:", i)
             print("Error:")

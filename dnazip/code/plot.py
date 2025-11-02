@@ -2,6 +2,9 @@ from constants import *
 from analysis.metrics import *
 import matplotlib.pyplot as plt
 import numpy as np
+from pathlib import Path
+
+base_dir = Path(__file__).resolve().parent
 
 def compression_comparison(original_file_path, bin_file_path, file_name, output_file_path):
 

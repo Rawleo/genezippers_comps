@@ -1,5 +1,5 @@
 from constants import *
-from analysis.metrics import *
+from metrics import *
 import matplotlib.pyplot as plt
 import numpy as np
 from pathlib import Path
@@ -110,4 +110,6 @@ def main():
         compression_comparison(original_file_path, bin_13_path, 'biocompress', 'plot_13.png')
         compression_comparison(original_file_path, bin_14_path, 'biocompress', 'plot_14.png')
 
-main()
+
+if __name__ == "__main__":
+        main()

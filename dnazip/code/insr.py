@@ -1,6 +1,6 @@
-from helper.bitfile import *
-from helper.decode import *
-from helper.huffman import *
+from bitfile import *
+from decode import *
+from huffman import *
 from constants import *
 import pandas as pd
 

@@ -1,19 +1,16 @@
-import code.helper.reader
+import reader
+from constants import *
 from pathlib import Path  
-
-BASE_DIR     = Path(__file__).resolve().parent
-OUTPUT_DIR   = BASE_DIR / 'data' / 'output'
 
 
 def main():
     
-    FOLDER_PATH = 'comps_f25_rgj/dnazip/data/chr/'
-    OUTPUT_PATH = '/Users/ryanson/Documents/Comps/comps_repo_venvs/comps_f25_rgj/dnazip/data/chr/FULL_GENOME.TXT'
-    # OUTPUT_DIR  = BASE_DIR / 'data' / 'chr'
+    CHR_DIR    = BASE_DIR / 'data' / 'chr' 
+    OUTPUT_DIR = BASE_DIR / 'data' / 'chr' / 'genome.txt'
     
-    # reader.combine_chrs(FOLDER_PATH, OUTPUT_PATH)
+    reader.combine_chrs(CHR_DIR, OUTPUT_DIR)
     
-    # print(constants.BASE_DIR)
+    # print(CHR_DIR)
     # print(__init__)
     
     pass

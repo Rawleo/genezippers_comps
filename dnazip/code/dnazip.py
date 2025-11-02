@@ -2,14 +2,14 @@ import pandas as pd
 import numpy as np
 import os
 from constants import *
-from helper.huffman import *
-from helper.bitfile import *
-from helper.dbsnp import *
-from helper.dels import *
-from helper.snp import *
-from helper.insr import *
-from helper.decode import *
-from analysis.plot import *
+from huffman import *
+from bitfile import *
+from dbsnp import *
+from dels import *
+from snp import *
+from insr import *
+from decode import *
+from plot import *
 
 
 '''

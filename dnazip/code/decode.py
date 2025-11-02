@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 from constants import *
-from helper.bitfile import *
+from bitfile import *
 
 
 def add_padding(bit_string):

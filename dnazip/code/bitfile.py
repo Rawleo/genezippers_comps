@@ -1,3 +1,5 @@
+import os
+
 def writeBitVINT(num):
 
     bit_string = ''
@@ -119,6 +121,23 @@ def export_as_binary(export_name_with_extension, bitstr):
     
     with open(export_name_with_extension, "ab") as file:
         file.write(byte_value)
+        
+
+'''
+Deletes a file if it exists. Useful for files that are
+appended to.
+@params: 
+ * filepath - file path (str) to the file to delete. 
+@return:
+ * None, deletes the file if it exists.
+'''
+def remove_file_if_exists(filepath):
+    if os.path.exists(filepath):
+        print("Removing:", filepath)
+        os.remove(filepath)
+    else:
+        print("This file does not exist:", filepath)
+        print("Continuing...") 
 
 
 def main():

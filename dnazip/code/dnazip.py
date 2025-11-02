@@ -2,14 +2,14 @@ import pandas as pd
 import numpy as np
 import os
 from constants import *
-from helper.huffman import *
-from helper.bitfile import *
-from helper.dbsnp import *
-from helper.dels import *
-from helper.snp import *
-from helper.insr import *
-from helper.decode import *
-from analysis.plot import *
+from huffman import *
+from bitfile import *
+from dbsnp import *
+from dels import *
+from snp import *
+from insr import *
+from decode import *
+from plot import *
 
 
 '''
@@ -121,23 +121,6 @@ def decode_file(bit_string):
     decode_df.sort_values(by=['var_type', 'chr', 'pos']).to_csv(OUTPUT_DEC_PATH,
                      index=False,
                      header=None) # type: ignore
-    
-
-'''
-Deletes a file if it exists. Useful for files that are
-appended to.
-@params: 
- * filepath - file path (str) to the file to delete. 
-@return:
- * None, deletes the file if it exists.
-'''
-def remove_file_if_exists(filepath):
-    if os.path.exists(filepath):
-        print("Removing:", filepath)
-        os.remove(filepath)
-    else:
-        print("This file does not exist:", filepath)
-        print("Continuing...") 
 
 
 def main(): 

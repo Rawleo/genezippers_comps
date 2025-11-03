@@ -1,5 +1,5 @@
 from config import DNA_FILE, DNA_FILE_PATH, HEIGHT, COMPLEMENT_TABLE
-from converter import decode_fibonacci, binary_to_base, decode_binary
+from converter import decode_fibonacci, decode_binary
 import math
 from tqdm import tqdm
 

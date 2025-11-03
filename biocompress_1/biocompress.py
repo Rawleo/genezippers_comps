@@ -2,7 +2,7 @@ import subprocess
 import sys
 from pathlib import Path
 sys.path.append(str(Path(__file__).resolve().parent.parent))
-from dnazip.code.helper.bitfile import export_as_binary
+from dnazip.code.bitfile import export_as_binary
 from config import DNA_FILE_PATH, DNA_FILE, HEIGHT
 import time
 

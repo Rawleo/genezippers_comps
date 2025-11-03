@@ -3,11 +3,23 @@ from config import HEIGHT, DNA_FILE, CONTENT,DNA_FILE_PATH, COMPLEMENT_TABLE
 from converter import base_to_binary, encode_factor, encode_fibonacci
 from typing import Optional
 from tqdm import tqdm
+import json, sys, time, psutil, os
 
 
 open(DNA_FILE_PATH + DNA_FILE + "_" + str(HEIGHT) + "_encoded.txt", "w").close()
 output_file = open(DNA_FILE_PATH + DNA_FILE + "_" + str(HEIGHT) + "_encoded.txt", "a", encoding="utf-8")
+start_time = time.time()
 TREE = create_tree(HEIGHT)
+tree_created_time=time.time()
+
+
+def get_memory_usage():
+    process = psutil.Process(os.getpid())
+    mem_bytes = process.memory_info().rss  # Resident Set Size: actual RAM used
+    mem_mb = mem_bytes / (1024 ** 2)
+    return round(mem_mb, 2)
+
+tree_memory = get_memory_usage()
 
 #for searching for factors beyond tree, compare input postion and factor postion and count how many bases match
 def extended_search(i, position, kind):
@@ -121,7 +133,7 @@ def main():
     length = len(CONTENT)
     position = 0
     buffer=[]
-    with tqdm(total=length, desc="Compressing", unit="bytes") as pbar:
+    with tqdm(total=length, desc="Compressing", unit="bytes", file=sys.stderr, leave=True, disable=not sys.stderr.isatty()) as pbar:
         while(position<len(CONTENT)):
             processed = process(position)
             buffer = encode(processed, buffer)
@@ -130,6 +142,14 @@ def main():
             pbar.update(processed[2])
     write_buffer(buffer)
     output_file.close()
+
+    finished_time=time.time()
+    print(json.dumps({
+    "total_compression_time": round(finished_time - start_time, 3),
+    "tree_creation_time": round(tree_created_time - start_time, 3),
+    "compressor_time": round(finished_time - tree_created_time, 3),
+    "tree_memory":tree_memory,
+}))
 
 if __name__ == "__main__":
     main()

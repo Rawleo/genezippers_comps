@@ -1,5 +1,6 @@
 from huffman import *
 from config import *
+from metrics import *
 
 
 ONE_MER = "_Regular"
@@ -87,8 +88,19 @@ def run_decode():
 Run the program.
 '''
 def main():
+    
+    k = 0
+    
+    cpu_start, wall_start = record_current_times()
     run_encode()
-    run_decode()
+    cpu_end, wall_end = record_current_times()
+    record_timings(0, 0, time_difference(cpu_end, cpu_start), TIME_CSV_PATH, k)
+    record_timings(0, 1, time_difference(wall_end, wall_start), TIME_CSV_PATH, k)
+    cpu_start, wall_start = record_current_times()
+    run_encode()
+    cpu_end, wall_end = record_current_times()
+    record_timings(1, 0, time_difference(cpu_end, cpu_start), TIME_CSV_PATH, k)
+    record_timings(1, 1, time_difference(wall_end, wall_start), TIME_CSV_PATH, k)
     
 
 if __name__ == "__main__":

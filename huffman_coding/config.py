@@ -1,7 +1,7 @@
 from pathlib import Path  
 
 FULL          = True
-K_MER_SIZE    = 4
+K_MER_SIZE    = 8
 BASE_PATH     = Path(__file__).resolve().parent.parent
 OUTPUT_DIR    = BASE_PATH / 'huffman_coding' / 'output'
 GENOME_DIR    = BASE_PATH / 'dnazip' / 'data' /'chr'

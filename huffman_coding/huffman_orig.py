@@ -10,7 +10,8 @@
             to create the encoded .bin files. 
 '''
 
-import constants as c
+from config import *
+
 '''
 Node Class for implementing a binary tree.
 '''
@@ -213,7 +214,7 @@ Run the program.
 
 def main():
 
-    for chr in c.CHROMOSOMES:
+    for chr in CHROMOSOMES:
 
         PATH = '/Users/ryanson/Documents/Comps/comps_repo_venvs/comps_f25_rgj/dnazip/data/'
 

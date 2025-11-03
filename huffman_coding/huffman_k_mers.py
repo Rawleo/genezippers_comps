@@ -7,23 +7,11 @@
             encoding dictionary.
 '''
 
-import re, ast
-import constants as c
 
-FULL = True
-K_MER_SIZE = 4
-PATH = '/Users/ryanson/Documents/Comps/comps_repo_venvs/comps_f25_rgj/dnazip/data/chr/'
-CHR = 'chr1'
-if (FULL):
-    GENOME_BIN = PATH + 'FULL_GENOME' + '.bin'
-    GENOME_FILE = PATH + 'FULL_GENOME' + '.txt'
-    DECODED_FILE = PATH + 'DECODED_GENOME' + '.txt'
-    HUFFMAN_TREE = PATH + 'HUFFMAN_TREE' + '.txt'
-else:
-    GENOME_BIN = PATH + CHR + '.bin'
-    GENOME_FILE = PATH + CHR + '.txt'
-    DECODED_FILE = PATH + 'DECODED_' + CHR + '.txt'
-    HUFFMAN_TREE = PATH + 'HUFFMAN_TREE' + '.txt'
+import re, ast
+from config import *
+import huffman_orig as h
+    
 '''
 Node Class for implementing a binary tree.
 '''
@@ -178,33 +166,31 @@ def run_k_mer_huffman(ins_seq, k_mer_size):
     encoding_map = {}
     k = k_mer_size
 
-    print("Making k-mer array")
+    print("Constructing the k-mer array.")
 
     k_mer_array = insertions_to_kmers(ins_seq, k)
 
-    print("Building frequency data")
+    print("Building frequency data.")
 
     ins_frq_dict = build_frequency_dict(k_mer_array)
 
-    print("Building tree data")
+    print("Building tree data.")
 
     huffman_root = build_huffman_tree(ins_frq_dict)
 
-    print("Mapping tree data")
+    print("Mapping tree data.")
 
     map_encodings(huffman_root, encoding_map, "")
 
-    print("Exporting tree data")
+    print("Exporting tree data.")
 
     export_as_txt(HUFFMAN_TREE, (encoding_map, len(k_mer_array)))
 
-    print("Encoding")
+    print("Encoding the bitstring.")
 
-    # ins_seq_bitstr  = encode_insertions(encoding_map, k_mer_array)
+    ins_seq_bitstr  = encode_insertions(encoding_map, k_mer_array)
 
-    ins_seq_bitstr = ''
-
-    print("Done")
+    print("Done encoding.")
 
     return ins_seq_bitstr, encoding_map, len(k_mer_array)
 
@@ -361,48 +347,53 @@ def read_in_file(input_file):
 def huff_encoding():
 
     sequence_data = read_in_file(GENOME_FILE)
-    bitstr, encoding_map, k_mer_array_len = run_k_mer_huffman(
-        sequence_data, K_MER_SIZE)
+    
+    bitstr, encoding_map, k_mer_array_len = run_k_mer_huffman(sequence_data, K_MER_SIZE)
 
-    # export_as_txt(HUFFMAN_TREE, (encoding_map, k_mer_array_len))
+    remainder_nuc_len = len(sequence_data) % K_MER_SIZE
+    remainder_nucs = sequence_data[len(sequence_data) - remainder_nuc_len:]
+    remainder_bitstr = ''.join([(NUC_ENCODING[x]) for x in remainder_nucs])
 
-    # remainder_nuc_len = len(sequence_data) % k
-    # remainder_nucs = sequence_data[len(sequence_data) - remainder_nuc_len:]
-    # remainder_bitstr = ''.join([(c.NUC_ENCODING[x]) for x in remainder_nucs])
+    # Append Huffman portion with non-Huffman
+    bitstr += remainder_bitstr
 
-    # # Append Huffman portion with non-Huffman
-    # bitstr += remainder_bitstr
-
-    # h.export_as_binary(GENOME_BIN, bitstr)
+    h.export_as_binary(str(GENOME_BIN), bitstr)
 
 
 def huff_decoding():
+    
+    
 
-    bin_file = read_bin(GENOME_BIN)
+    bin_file = read_bin(str(GENOME_BIN))
 
-    encoding_dict = load_dict_from_file(HUFFMAN_TREE[0])
-    number_of_kmers = encoding_dict[chr][1]
+    encoding_dict = load_dict_from_file(str(HUFFMAN_TREE))
+    
+    print(encoding_dict)
+    number_of_kmers = encoding_dict[1]
+    print(number_of_kmers)
 
-    huffman_root = reconstruct_huffman_tree(encoding_dict)
+    # huffman_root = reconstruct_huffman_tree(encoding_dict)
 
-    sequence, buffer = decode_huffman(bin_file, huffman_root, number_of_kmers)
+    # sequence, buffer = decode_huffman(bin_file, huffman_root, number_of_kmers)
 
-    # Process non-Huffman encoded nucleotides
-    extra_nucs = ''.join([
-        c.TWO_BIT_ENCODING[buffer[(i * 2):((i * 2) + 2)]]
-        for i in range(len(buffer) // 2)
-    ])
+    # # Process non-Huffman encoded nucleotides
+    # extra_nucs = ''.join([
+    #     TWO_BIT_ENCODING[buffer[(i * 2):((i * 2) + 2)]]
+    #     for i in range(len(buffer) // 2)
+    # ])
 
-    # Append Huffman portion with non-Huffman
-    sequence += extra_nucs
+    # # Append Huffman portion with non-Huffman
+    # sequence += extra_nucs
 
-    export_as_txt(DECODED_FILE, sequence)
+    # h.export_as_txt(DECODED_FILE, sequence)
 
 
 def main():
+    
+    # print(BASE_PATH)
 
-    huff_encoding()
-    # huff_decoding()
+    # huff_encoding()
+    huff_decoding()
 
     pass
 

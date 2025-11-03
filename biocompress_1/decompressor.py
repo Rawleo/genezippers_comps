@@ -85,6 +85,7 @@ def main():
     i=0
     length_input = len(input_file)
     with tqdm(total=length_input, desc="Decompressing", unit="bytes") as pbar:
+        prev_i = 0
         while(i<len(input_file)): #alternates between bases and factors
             num, length = parse_number(i)
             i+=length
@@ -97,8 +98,8 @@ def main():
                 factors, i = parse_factors(num, i, output_draft)
                 output_draft=decode_factors(factors, output_draft)
                 kind= "bases"
-            pbar.n=i
-            pbar.refresh()
+            pbar.update(i - prev_i)
+            prev_i = i
         output_file.write(output_draft)
 
 

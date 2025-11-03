@@ -1,9 +1,9 @@
-from config import DNA_FILE, DNA_FILE_PATH, COMPARE_LENGTH
+from config import DNA_FILE, DNA_FILE_PATH, COMPARE_LENGTH, HEIGHT
 import sys
 
 with open(DNA_FILE_PATH+DNA_FILE + ".txt", "r") as file:
     original = file.read()
-with open(DNA_FILE_PATH+DNA_FILE + "_dencoded.txt", "r") as file:
+with open(DNA_FILE_PATH+DNA_FILE + "_" + str(HEIGHT) + "_decoded.txt", "r") as file:
     decoded = file.read()
 
 def main():

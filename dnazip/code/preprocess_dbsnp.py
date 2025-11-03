@@ -3,17 +3,14 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import os
+from constants import *
 
-# Define file path to dbSNP database
-dbSNP_folder_path = "../data/dbSNP/"
-
-for file in os.listdir(dbSNP_folder_path):
+for file in os.listdir(DBSNP_PATH):
 
     #Only look at chromosomes
     if (file.split(".")[-1] == "txt"):
 
-
-        path = f"~/Desktop/comps_f25_rgj/dnazip/data/dbSNP/{file}"
+        path = f"{DBSNP_PATH}/{file}"
 
         chr_vars = pd.read_csv(path,
                                sep='\t',

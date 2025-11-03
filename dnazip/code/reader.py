@@ -7,7 +7,8 @@ OUT_GENOME_FILE_PATH = 'full_genome.txt'
 def sequence_cleaner(sequence):
 
     # Remove all 'N' characters using the replace() method
-    clean_seq = str(sequence).replace("N", "")
+    clean_seq = sequence.replace("N", "")
+    clean_seq = clean_seq.replace("n", "")
 
     return clean_seq
 
@@ -21,7 +22,25 @@ def combine_chrs(chr_folder, output_file):
             chr_path = os.path.join(chr_folder, chr_file)
 
             for seq_record in SeqIO.parse(chr_path, "fasta"):
-                clean_seq = sequence_cleaner(seq_record.seq).upper()
+                seq = str(seq_record.seq).upper()
+                clean_seq = sequence_cleaner(seq)
+                genome += clean_seq
+
+    with open(output_file, "w") as f:
+        f.write(genome)
+        
+        
+def clean_chr(chr_folder, output_file, chr):
+    genome = ''
+
+    for chr_file in os.listdir(chr_folder):
+        #CAN PROBABLY REMOVE I just have other stuff in my folder
+        if chr_file.endswith(f"{chr}.fa"):
+            chr_path = os.path.join(chr_folder, chr_file)
+
+            for seq_record in SeqIO.parse(chr_path, "fasta"):
+                seq = str(seq_record.seq).upper()
+                clean_seq = sequence_cleaner(seq)
                 genome += clean_seq
 
     with open(output_file, "w") as f:
@@ -67,3 +86,13 @@ def fa_to_txt(input_fasta_file, output_txt_file):
 
         with open(output_txt_file, "w") as f:
             f.write(clean_seq)
+
+def main():
+    input = "../../data/chr/ecoli.fna"
+    output = "../../data/chr/ecoli.txt"
+
+    fa_to_txt(input,output)
+
+
+if __file__ == "__main__":
+    main()

@@ -22,3 +22,7 @@ dnazip/data/huffman_trees/*
 dnazip/tools/*
 
 biocompress_1/data
+
+
+huffman_coding/__pycache__
+huffman_coding/output

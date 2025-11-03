@@ -59,7 +59,7 @@ Appends data to a csv if it exists, otherwise creates one.
 @return:
  * difference - between the two inputs
 '''
-def record_timings(type, time_type, total_time, csv_path):
+def record_timings(type, time_type, total_time, csv_path, actual_k_mer_size):
     
     enc_file_size  = file_size(str(GENOME_BIN) + '.bin')
     tree_file_size = file_size(str(HUFFMAN_TREE) + '.txt')
@@ -82,7 +82,7 @@ def record_timings(type, time_type, total_time, csv_path):
     time_data = {
         'variant_name' : str(GENOME_FILE).split("/")[-1],
         'datetime' : [dt.datetime.now()],
-        'k_mer_size' : [K_MER_SIZE],
+        'k_mer_size' : [actual_k_mer_size],
         'type' : [op_type_str],     
         'time_type' : [time_type_str],
         'time (sec)' : [round(total_time, 4)],

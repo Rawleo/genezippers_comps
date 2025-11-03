@@ -133,13 +133,13 @@ def main():
     cpu_start, wall_start = record_current_times()
     huff_encoding()
     cpu_end, wall_end = record_current_times()
-    record_timings(0, 0, time_difference(cpu_end, cpu_start), TIME_CSV_PATH)
-    record_timings(0, 1, time_difference(wall_end, wall_start), TIME_CSV_PATH)
+    record_timings(0, 0, time_difference(cpu_end, cpu_start), TIME_CSV_PATH, K_MER_SIZE)
+    record_timings(0, 1, time_difference(wall_end, wall_start), TIME_CSV_PATH, K_MER_SIZE)
     cpu_start, wall_start = record_current_times()
     huff_decoding()
     cpu_end, wall_end = record_current_times()
-    record_timings(1, 0, time_difference(cpu_start, cpu_start), TIME_CSV_PATH)
-    record_timings(1, 1, time_difference(wall_end, wall_end), TIME_CSV_PATH)
+    record_timings(1, 0, time_difference(cpu_end, cpu_start), TIME_CSV_PATH, K_MER_SIZE)
+    record_timings(1, 1, time_difference(wall_end, wall_start), TIME_CSV_PATH, K_MER_SIZE)
 
 
 

@@ -13,10 +13,22 @@ if (FULL):
     HUFFMAN_TREE = OUTPUT_DIR / 'HUFFMAN_TREE_GENOME.txt'
 else:
     CHR = 'chr21'
-    GENOME_BIN = OUTPUT_DIR / f'ENCODED_{CHR}.bin'
-    GENOME_FILE = GENOME_DIR / f'{CHR}.fa'
+    GENOME_BIN = OUTPUT_DIR / f'ENCODED_{CHR}'
+    GENOME_FILE = GENOME_DIR / f'{CHR}.txt'
     DECODED_FILE = OUTPUT_DIR / f'DECODED_{CHR}.txt'
     HUFFMAN_TREE = OUTPUT_DIR / f'HUFFMAN_TREE_{CHR}.txt'
+    
+###
+# Array of Chromosomes
+###
+
+CHROMOSOMES = [
+    'chr1', 'chr2', 'chr3', 'chr4', 'chr5',
+    'chr6', 'chr7', 'chr8', 'chr9', 'chr10',
+    'chr11', 'chr12', 'chr13', 'chr14', 'chr15', 
+    'chr16', 'chr17', 'chr18', 'chr19', 'chr20', 
+    'chr21', 'chr22'
+]
     
 ###
 # Dictionaries

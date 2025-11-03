@@ -10,6 +10,7 @@
 
 import re, ast
 from config import *
+import huffman_orig as h
     
 '''
 Node Class for implementing a binary tree.
@@ -356,38 +357,43 @@ def huff_encoding():
     # Append Huffman portion with non-Huffman
     bitstr += remainder_bitstr
 
-    export_as_binary(GENOME_BIN, bitstr)
+    h.export_as_binary(str(GENOME_BIN), bitstr)
 
 
 def huff_decoding():
+    
+    
 
-    bin_file = read_bin(GENOME_BIN)
+    bin_file = read_bin(str(GENOME_BIN))
 
-    encoding_dict = load_dict_from_file(HUFFMAN_TREE[0])
-    number_of_kmers = encoding_dict[chr][1]
+    encoding_dict = load_dict_from_file(str(HUFFMAN_TREE))
+    
+    print(encoding_dict)
+    number_of_kmers = encoding_dict[1]
+    print(number_of_kmers)
 
-    huffman_root = reconstruct_huffman_tree(encoding_dict)
+    # huffman_root = reconstruct_huffman_tree(encoding_dict)
 
-    sequence, buffer = decode_huffman(bin_file, huffman_root, number_of_kmers)
+    # sequence, buffer = decode_huffman(bin_file, huffman_root, number_of_kmers)
 
-    # Process non-Huffman encoded nucleotides
-    extra_nucs = ''.join([
-        TWO_BIT_ENCODING[buffer[(i * 2):((i * 2) + 2)]]
-        for i in range(len(buffer) // 2)
-    ])
+    # # Process non-Huffman encoded nucleotides
+    # extra_nucs = ''.join([
+    #     TWO_BIT_ENCODING[buffer[(i * 2):((i * 2) + 2)]]
+    #     for i in range(len(buffer) // 2)
+    # ])
 
-    # Append Huffman portion with non-Huffman
-    sequence += extra_nucs
+    # # Append Huffman portion with non-Huffman
+    # sequence += extra_nucs
 
-    export_as_txt(DECODED_FILE, sequence)
+    # h.export_as_txt(DECODED_FILE, sequence)
 
 
 def main():
     
     # print(BASE_PATH)
 
-    huff_encoding()
-    # huff_decoding()
+    # huff_encoding()
+    huff_decoding()
 
     pass
 

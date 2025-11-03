@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
-from helper.decode import *
-from helper.reader import *
+from decode import *
+from reader import *
 
 def encode_dels(dels_df):
 

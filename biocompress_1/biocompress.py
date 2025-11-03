@@ -15,17 +15,17 @@ def main():
     start=time.time()
     subprocess.run(["python", "compressor.py"], check=True)
     end=time.time()
-    print(f"Elapsed time: {end - start:.2f} seconds")
+    print(f"Total Compression Time: {end - start:.2f} seconds")
 
     with open(DNA_FILE_PATH+DNA_FILE + "_" + str(HEIGHT) + "_encoded.txt", "r") as file:
-        textFile = file.read()
-    export_as_binary(DNA_FILE_PATH + DNA_FILE  + "_" + str(HEIGHT) + ".bin", textFile)
+        text_file = file.read()
+    export_as_binary(DNA_FILE_PATH + DNA_FILE  + "_" + str(HEIGHT) + ".bin", text_file)
 
     print("Step 2: Running decompress.py")
     start=time.time()
     subprocess.run(["python", "decompressor.py"], check=True)
     end=time.time()
-    print(f"Elapsed time: {end - start:.2f} seconds")
+    print(f"Total Decompression Time: {end - start:.2f} seconds")
 
     print("=== Pipeline complete ===")
 

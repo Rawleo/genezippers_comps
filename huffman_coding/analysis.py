@@ -32,14 +32,12 @@ Compute the compression ratio between the compressed file and the original file
 def compression_ratio(encoded_size, original_size):
     return round(encoded_size/original_size, 2)
 
-def main():
-    file_list = ["DNA", "Emma", "random", "sample_text"]
-    
-    for filename in file_list:
+def main():  
+    for chr in c.CHROMOSOMES:
         input_text   = h.read_in_file("input_files/" + filename + ".txt")
-        encoded_text = h.read_in_file("export_files/" + filename + "_encoded.txt")
+        # encoded_text = h.read_in_file("export_files/" + filename + "_encoded.txt")
         size_in_bits = count_char(input_text) * 8
-        size_in_bits_encoded = count_char(encoded_text)
+        # size_in_bits_encoded = count_char(encoded_text)
                 
         size_in_bytes = size_in_bits / 8
         size_in_bytes_encoded = size_in_bits_encoded / 8
@@ -47,7 +45,7 @@ def main():
         ratio = compression_ratio(size_in_bits_encoded, size_in_bits)
         savings = round(1 - ratio, 2)
 
-        print(filename)
+        # print(filename)
         print("original", size_in_bits, "bits")
         print("encoded", size_in_bits_encoded, "bits")
         print("original", size_in_bytes, "bytes")

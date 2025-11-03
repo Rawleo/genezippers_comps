@@ -1,8 +1,8 @@
 import pandas as pd
 import numpy as np
 from constants import *
-from helper.decode import *
-from helper.reader import *
+from decode import *
+from reader import *
 
 
 def encode_SNPs(snps_df):

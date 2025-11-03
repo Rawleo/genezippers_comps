@@ -26,6 +26,22 @@ def combine_chrs(chr_folder, output_file):
 
     with open(output_file, "w") as f:
         f.write(genome)
+        
+        
+def clean_chr(chr_folder, output_file, chr):
+    genome = ''
+
+    for chr_file in os.listdir(chr_folder):
+        #CAN PROBABLY REMOVE I just have other stuff in my folder
+        if chr_file.endswith(f"{chr}.fa"):
+            chr_path = os.path.join(chr_folder, chr_file)
+
+            for seq_record in SeqIO.parse(chr_path, "fasta"):
+                clean_seq = sequence_cleaner(seq_record.seq).upper()
+                genome += clean_seq
+
+    with open(output_file, "w") as f:
+        f.write(genome)
 
 
 def get_snp_nuc(positions, chr_name):
@@ -67,3 +83,11 @@ def fa_to_txt(input_fasta_file, output_txt_file):
 
         with open(output_txt_file, "w") as f:
             f.write(clean_seq)
+
+def main():
+    input = "../../data/chr/ecoli.fna"
+    output = "../../data/chr/ecoli.txt"
+
+    fa_to_txt(input,output)
+
+main()

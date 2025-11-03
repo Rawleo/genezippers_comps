@@ -1,10 +1,12 @@
 from pathlib import Path  
 
-FULL          = False
+FULL          = True
 K_MER_SIZE    = 4
 BASE_PATH     = Path(__file__).resolve().parent.parent
 OUTPUT_DIR    = BASE_PATH / 'huffman_coding' / 'output'
 GENOME_DIR    = BASE_PATH / 'dnazip' / 'data' /'chr'
+TIME_CSV_PATH = OUTPUT_DIR / 'csv' / 'huffman_times.csv'
+
 
 if (FULL):
     GENOME_BIN    = OUTPUT_DIR / 'ENCODED_GENOME'

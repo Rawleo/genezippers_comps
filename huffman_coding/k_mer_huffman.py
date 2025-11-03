@@ -1,6 +1,7 @@
 import re
 from config import *
 from huffman import *
+from metrics import *
 
 
 '''
@@ -25,6 +26,11 @@ def seq_to_kmers(seq, k_mer_size):
     k_mer_array = re.findall(regex_k, seq)
 
     return k_mer_array
+
+
+def faster_seq_to_kmer(seq, k_mer_size):
+    num_kmers = len(seq) // k_mer_size
+    return [seq[i*k_mer_size : (i+1)*k_mer_size] for i in range(num_kmers)]
 
 
 '''
@@ -73,8 +79,8 @@ Function used to create the Huffman encoding map for encoding.
 '''
 def run_k_mer_huffman(seq, k):
     encoding_map = {}
-    k_mer_array  = seq_to_kmers(seq, k)
-    frq_dict = build_frequency_dict(k_mer_array)
+    k_mer_array  = faster_seq_to_kmer(seq, k)
+    frq_dict = faster_build_frequency_dict(k_mer_array)
     huffman_root = build_huffman_tree(frq_dict)
 
     map_encodings(huffman_root, encoding_map, "")
@@ -123,8 +129,18 @@ def huff_decoding():
 
 
 def main():
+    
+    cpu_start, wall_start = record_current_times()
     huff_encoding()
+    cpu_end, wall_end = record_current_times()
+    record_timings(0, 0, time_difference(cpu_end, cpu_start), TIME_CSV_PATH)
+    record_timings(0, 1, time_difference(wall_end, wall_start), TIME_CSV_PATH)
+    cpu_start, wall_start = record_current_times()
     huff_decoding()
+    cpu_end, wall_end = record_current_times()
+    record_timings(1, 0, time_difference(cpu_start, cpu_start), TIME_CSV_PATH)
+    record_timings(1, 1, time_difference(wall_end, wall_end), TIME_CSV_PATH)
+
 
 
 if __name__ == "__main__":

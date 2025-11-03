@@ -1,5 +1,6 @@
 import ast
 from config import *
+from collections import Counter
 
 
 '''
@@ -29,6 +30,10 @@ def build_frequency_dict(input_text):
         else:
             freq_dict[char] += 1
     return freq_dict
+
+
+def faster_build_frequency_dict(input_list):
+    return Counter(input_list)
 
 
 '''

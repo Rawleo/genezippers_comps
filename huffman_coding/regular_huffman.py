@@ -1,6 +1,7 @@
 from huffman import *
 from config import *
 
+
 ONE_MER = "_Regular"
 
 

@@ -89,7 +89,7 @@ def record_timings(type, time_type, total_time, csv_path):
         'file_size (MB)' : [round(enc_file_size, 4)],
         'tree_size (MB)' : [round(tree_file_size, 4)],
         'space_savings' : [round(savings, 4)],
-        'comperssion_ratio' : [round(ratio, 4)],
+        'compression_ratio' : [round(ratio, 4)],
     }
      
     time_row_df = pd.DataFrame(time_data)

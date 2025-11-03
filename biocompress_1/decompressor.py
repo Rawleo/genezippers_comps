@@ -8,21 +8,18 @@ open(DNA_FILE_PATH+ DNA_FILE + "_" + str(HEIGHT) + "_decoded.txt", "w").close()
 output_file = open(DNA_FILE_PATH+DNA_FILE + "_" + str(HEIGHT) + "_decoded.txt", "a", encoding="utf-8")
 with open(DNA_FILE_PATH+DNA_FILE + "_" + str(HEIGHT) + "_encoded.txt", "r") as file:
     input_file = file.read()
+PAIR_TO_BASE = {"00":"A","01":"C","10":"T","11":"G"}
 
 #reads chars from i until it hits 11 and returns decoded number
 def parse_number(i): 
-    num = ""
-    while(num[-2:] != "11"):
-        num+=input_file[i]
-        i+=1
+    end = input_file.find("11", i)
+    num = input_file[i : end + 2]
     return decode_fibonacci(num), len(num)
 
 #reads bits from i, determines whether binary or fibonacci and returns number
-def parse_number_position(i, window, output_draft):
-    num=""
+def parse_number_position(i, window):
     k =  math.ceil(math.log2(window)) #max length of binary number
-    for x in range(k):
-        num+=input_file[i+x]
+    num = input_file[i : i + k]
     index = num.find("11")
     if index==-1: #if no 11, then must be binary
         kind="binary"
@@ -42,11 +39,8 @@ def parse_number_position(i, window, output_draft):
 
 #reads in num*2 bits starting at position and converts to bases
 def parse_bases(num, position):
-    bases=""
-    for i in range(num):
-        bases+=(binary_to_base(input_file[position:position+2]))
-        position+=2
-    return bases
+    chunk = input_file[position : position + 2*num]
+    return ''.join(PAIR_TO_BASE[chunk[i:i+2]] for i in range(0, len(chunk), 2))
 
 
 #reads in num factors and processes them, returns length kind and position as ints
@@ -58,7 +52,7 @@ def parse_factors(num, position, output_draft):
         position+=length
         factor_kind = input_file[position]
         position+=1 #only 1 bit for the kind
-        factor_position, length = parse_number_position(position, window, output_draft)
+        factor_position, length = parse_number_position(position, window)
         position+=length
         factor = (factor_length, factor_kind, factor_position-1)
         factors.append(factor)

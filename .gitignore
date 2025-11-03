@@ -19,5 +19,6 @@ dnazip/data/output/*
 !dnazip/data/output/csv/
 dnazip/data/output/csv/*
 dnazip/data/huffman_trees/*
+dnazip/tools/*
 
 biocompress_1/data

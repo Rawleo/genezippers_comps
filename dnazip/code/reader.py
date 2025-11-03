@@ -67,3 +67,11 @@ def fa_to_txt(input_fasta_file, output_txt_file):
 
         with open(output_txt_file, "w") as f:
             f.write(clean_seq)
+
+def main():
+    input = "../../data/chr/ecoli.fna"
+    output = "../../data/chr/ecoli.txt"
+
+    fa_to_txt(input,output)
+
+main()

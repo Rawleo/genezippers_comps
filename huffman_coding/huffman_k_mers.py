@@ -7,21 +7,36 @@
             encoding dictionary.
 '''
 
-
 import re, ast
-from dnazip.code import *
+import constants as c
 
-
+FULL = True
+K_MER_SIZE = 4
+PATH = '/Users/ryanson/Documents/Comps/comps_repo_venvs/comps_f25_rgj/dnazip/data/chr/'
+CHR = 'chr1'
+if (FULL):
+    GENOME_BIN = PATH + 'FULL_GENOME' + '.bin'
+    GENOME_FILE = PATH + 'FULL_GENOME' + '.txt'
+    DECODED_FILE = PATH + 'DECODED_GENOME' + '.txt'
+    HUFFMAN_TREE = PATH + 'HUFFMAN_TREE' + '.txt'
+else:
+    GENOME_BIN = PATH + CHR + '.bin'
+    GENOME_FILE = PATH + CHR + '.txt'
+    DECODED_FILE = PATH + 'DECODED_' + CHR + '.txt'
+    HUFFMAN_TREE = PATH + 'HUFFMAN_TREE' + '.txt'
 '''
 Node Class for implementing a binary tree.
 '''
+
+
 class Node:
+
     def __init__(self, symbol, frequency, leftChild=None, rightChild=None):
         self.symbol = symbol
         self.frequency = frequency
         self.leftChild = leftChild
         self.rightChild = rightChild
-        
+
 
 '''
 Build the required dictionary, mapping each symbol to their frequency.
@@ -30,6 +45,8 @@ Build the required dictionary, mapping each symbol to their frequency.
 @return:
  * freq_dict - a dictionary containing unique symbols with their corresponding frequency.
 '''
+
+
 def build_frequency_dict(input_text):
     freq_dict = {}
     for char in input_text:
@@ -47,6 +64,8 @@ Build the huffman tree according to their frequencies.
 @return:
  * nodes - the binary Huffman Tree beginning at the root.
 '''
+
+
 def build_huffman_tree(freq_dict):
     nodes = []
     for symbol, freq in freq_dict.items():
@@ -72,6 +91,8 @@ Assign correct binary tree mapping to each unique symbol using recursion.
 @return:
  * encoding_map - a dictionary for each unique symbol corresponding to their unique encoding.
 '''
+
+
 def map_encodings(root, encoding_map, current):
     if root is None:
         return
@@ -91,12 +112,33 @@ Transform input text into an array of k-mers, or k-symbol items.
 @return:
  * k_mer_array - an array of k-mers that will be used for Huffman encoding.
 '''
+
+
 def insertions_to_kmers(ins_seq, k_mer_size):
-    k             = k_mer_size
-    regex_k       = k * '.'
-    k_mer_array   = re.findall(regex_k, ins_seq)
-    
-    return k_mer_array  
+    k = k_mer_size
+    regex_k = k * '.'
+    k_mer_array = re.findall(regex_k, ins_seq)
+
+    return k_mer_array
+
+
+'''
+Encode an insertion sequence into its bitstring representation with a 
+Huffman encoding map dictionary.
+@params: 
+ * ins_seq - string to be processed to into an array of k-mers and then bitstring.
+ * encoding_map - the Huffman encoding map dictionary.
+ * k_mer_size - the size of the k-mers.
+@return:
+ * ins_seq_bitstr - the final encoded bitstring represented as 1's and 0's.
+'''
+
+
+def ins_seq_to_bitstr(ins_seq, encoding_map, k_mer_size):
+    ins_seq_kmer = insertions_to_kmers(ins_seq, k_mer_size)
+    ins_seq_bitstr = encode_insertions(encoding_map, ins_seq_kmer)
+
+    return ins_seq_bitstr
 
 
 '''
@@ -107,12 +149,17 @@ Encode the k_mer_array into a string of bits using Huffman encoding.
 @return:
  * ins_bitstr - Python string containing 1's and 0's.
 '''
+
+
 def encode_insertions(encoding_map, k_mer_array):
     ins_bitstr = ""
+
+    # print(k_mer_array)
+
     for k_mer in k_mer_array:
-        
+
         ins_bitstr += encoding_map[k_mer]
-        
+
     return ins_bitstr
 
 
@@ -125,17 +172,42 @@ Function used to create the Huffman encoding map for encoding.
  * encoding_map - the Huffman encoding dictionary to encode the array.
  * len(k_mer_array) - number of k_mers encoded.
 '''
-def run_insr_huffman(ins_seq, k_mer_size):
-    encoding_map    = {}
-    k               = k_mer_size
-    k_mer_array     = insertions_to_kmers(ins_seq, k)
-    ins_frq_dict    = build_frequency_dict(k_mer_array)
-    huffman_root    = build_huffman_tree(ins_frq_dict)
-    
+
+
+def run_k_mer_huffman(ins_seq, k_mer_size):
+    encoding_map = {}
+    k = k_mer_size
+
+    print("Making k-mer array")
+
+    k_mer_array = insertions_to_kmers(ins_seq, k)
+
+    print("Building frequency data")
+
+    ins_frq_dict = build_frequency_dict(k_mer_array)
+
+    print("Building tree data")
+
+    huffman_root = build_huffman_tree(ins_frq_dict)
+
+    print("Mapping tree data")
+
     map_encodings(huffman_root, encoding_map, "")
-        
-    return encoding_map, len(k_mer_array)
-        
+
+    print("Exporting tree data")
+
+    export_as_txt(HUFFMAN_TREE, (encoding_map, len(k_mer_array)))
+
+    print("Encoding")
+
+    # ins_seq_bitstr  = encode_insertions(encoding_map, k_mer_array)
+
+    ins_seq_bitstr = ''
+
+    print("Done")
+
+    return ins_seq_bitstr, encoding_map, len(k_mer_array)
+
 
 '''
 Decode a string of 1's and 0's by traversing a Huffman tree.
@@ -146,10 +218,12 @@ Decode a string of 1's and 0's by traversing a Huffman tree.
  * result - the decoded string.
  * buffer - extra bits to process as regular NUC encodings. 
 '''
+
+
 def decode_huffman(encoded_text, root, number_of_kmers):
     result = ""
     buffer = ""
-    count  = 0
+    count = 0
     curr = root
     for char in encoded_text:
         if char == "0":
@@ -175,12 +249,14 @@ actual Python dictionary to recreate a Huffman tree.
 @return:
  * encoding_map - the Huffman encoding dictionary to recreate a Huffman tree.
 '''
+
+
 def load_dict_from_file(filepath):
     with open(filepath, 'r') as f:
         file_content = f.read()
-        
+
     encoding_map = ast.literal_eval(file_content)
-    
+
     return encoding_map
 
 
@@ -191,6 +267,8 @@ Transform a Huffman encoding map into a Huffman tree used for decoding.
 @return:
  * root - the binary Huffman Tree beginning at the root.
 '''
+
+
 def reconstruct_huffman_tree(encoding_map):
     root = Node(symbol=None, frequency=None)
 
@@ -212,7 +290,7 @@ def reconstruct_huffman_tree(encoding_map):
             current_node.leftChild = Node(symbol=symbol, frequency=None)
         else:
             current_node.rightChild = Node(symbol=symbol, frequency=None)
-            
+
     return root
 
 
@@ -224,10 +302,12 @@ Output a text file given the input file path and the input text.
 @return:
  * None, but outputs a text file.
 '''
+
+
 def export_as_txt(export_name_with_extension, text):
     with open(export_name_with_extension, "w") as file:
         file.write(str(text))
- 
+
 
 '''
 Append to a text file given the input file path and the input text.
@@ -236,7 +316,96 @@ Append to a text file given the input file path and the input text.
  * text - input to text to append to.
 @return:
  * None, but outputs a text file.
-'''       
+'''
+
+
 def append_as_txt(export_name, text):
     with open(export_name, "a") as file:
         file.write(str(text))
+
+
+'''
+Read in binary file from bytes to bits to string. For some reason it adds a leading zero....
+@params: 
+ * filename - filename of .bin file
+@return:
+ * bits - the original huffman encoded bits
+'''
+
+
+def read_bin(filename):
+    with open(filename + '.bin', 'rb') as file:
+        data = file.read()
+        # print(data)
+        bits = ''.join(format(byte, '08b') for byte in data)
+        # print(bits)
+    # Remove leading zero
+    return bits[1:]
+
+
+'''
+Read in an input file.
+@params: 
+ * input_file - text file to be read
+@return:
+ * text - the contents of the file as a string
+'''
+
+
+def read_in_file(input_file):
+    file_in = open(input_file, "r")
+    text = (file_in.read())
+    return text
+
+
+def huff_encoding():
+
+    sequence_data = read_in_file(GENOME_FILE)
+    bitstr, encoding_map, k_mer_array_len = run_k_mer_huffman(
+        sequence_data, K_MER_SIZE)
+
+    # export_as_txt(HUFFMAN_TREE, (encoding_map, k_mer_array_len))
+
+    # remainder_nuc_len = len(sequence_data) % k
+    # remainder_nucs = sequence_data[len(sequence_data) - remainder_nuc_len:]
+    # remainder_bitstr = ''.join([(c.NUC_ENCODING[x]) for x in remainder_nucs])
+
+    # # Append Huffman portion with non-Huffman
+    # bitstr += remainder_bitstr
+
+    # h.export_as_binary(GENOME_BIN, bitstr)
+
+
+def huff_decoding():
+
+    bin_file = read_bin(GENOME_BIN)
+
+    encoding_dict = load_dict_from_file(HUFFMAN_TREE[0])
+    number_of_kmers = encoding_dict[chr][1]
+
+    huffman_root = reconstruct_huffman_tree(encoding_dict)
+
+    sequence, buffer = decode_huffman(bin_file, huffman_root, number_of_kmers)
+
+    # Process non-Huffman encoded nucleotides
+    extra_nucs = ''.join([
+        c.TWO_BIT_ENCODING[buffer[(i * 2):((i * 2) + 2)]]
+        for i in range(len(buffer) // 2)
+    ])
+
+    # Append Huffman portion with non-Huffman
+    sequence += extra_nucs
+
+    export_as_txt(DECODED_FILE, sequence)
+
+
+def main():
+
+    huff_encoding()
+    # huff_decoding()
+
+    pass
+
+
+if __name__ == "__main__":
+    main()

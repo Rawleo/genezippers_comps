@@ -1,6 +1,6 @@
-from helper.bitfile import *
-from helper.decode import *
-from helper.huffman import *
+from bitfile import *
+from decode import *
+from huffman import *
 from constants import *
 import pandas as pd
 
@@ -25,7 +25,7 @@ def create_and_export_huffman_map(variants_df):
     ins_seq = ''.join(insr_df["var_info"].astype(str).tolist())
 
     # Produce encoding_map
-    encoding_map = run_insr_huffman(ins_seq, K_MER_SIZE)
+    encoding_map = run_k_mer_huffman(ins_seq, K_MER_SIZE)
     
     return encoding_map
 
@@ -128,7 +128,7 @@ def encode_ins(insr_df, k_mer_size):
         remainder_bitstr = ''.join([(NUC_ENCODING[x]) for x in remainder_nucs])
         
         # Huffman encoding of the current chromosome's insertion sequences
-        encoding_map, number_of_kmers = run_insr_huffman(ins_seq, k_mer_size)
+        encoding_map, number_of_kmers = run_k_mer_huffman(ins_seq, k_mer_size)
         ins_seq_bitstr  = ins_seq_to_bitstr(ins_seq, encoding_map, k_mer_size)
         
         # Add remainder bits to the whole bitstring sequence

@@ -8,6 +8,7 @@ def sequence_cleaner(sequence):
 
     # Remove all 'N' characters using the replace() method
     clean_seq = sequence.replace("N", "")
+    clean_seq = clean_seq.replace("n", "")
 
     return clean_seq
 

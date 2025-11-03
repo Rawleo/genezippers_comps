@@ -1,4 +1,4 @@
-import re, ast
+import ast
 from config import *
 
 
@@ -167,8 +167,7 @@ in big-endian order.
 def export_as_binary(export_name, binary_str):
     byte_value = int(binary_str, 2).to_bytes((len(binary_str) + 7) // 8,
                                              byteorder='big')
-    # print(byte_value)
-    with open(export_name, "wb") as file:
+    with open(export_name + '.bin', "wb") as file:
         file.write(byte_value)
         
         
@@ -181,7 +180,7 @@ actual Python dictionary to recreate a Huffman tree.
  * encoding_map - the Huffman encoding dictionary to recreate a Huffman tree.
 '''
 def load_dict_from_file(filepath):
-    with open(filepath, 'r') as f:
+    with open(filepath + '.txt', 'r') as f:
         file_content = f.read()
 
     encoding_map = ast.literal_eval(file_content)
@@ -197,8 +196,8 @@ Output a text file given the input file path and the input text.
 @return:
  * None, but outputs a text file.
 '''
-def export_as_txt(export_name_with_extension, text):
-    with open(export_name_with_extension, "w") as file:
+def export_as_txt(export_name, text):
+    with open(export_name + '.txt', "w") as file:
         file.write(str(text))
 
 
@@ -223,11 +222,9 @@ Read in binary file from bytes to bits to string. For some reason it adds a lead
  * bits - the original huffman encoded bits
 '''
 def read_bin(filename):
-    with open(filename, 'rb') as file:
+    with open(filename + ".bin", 'rb') as file:
         data = file.read()
-        # print(data)
         bits = ''.join(format(byte, '08b') for byte in data)
-        # print(bits)
     # Remove leading zero
     return bits[1:]        
 

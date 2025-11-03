@@ -1,4 +1,4 @@
-import re, ast
+import re
 from config import *
 from huffman import *
 
@@ -38,8 +38,8 @@ Huffman encoding map dictionary.
  * seq_bitstr - the final encoded bitstring represented as 1's and 0's.
 '''
 def seq_to_bitstr(seq, encoding_map, k_mer_size):
-    seq_kmer = insertions_to_kmers(seq, k_mer_size)
-    seq_bitstr = encode_insertions(encoding_map, seq_kmer)
+    seq_kmer = seq_to_kmers(seq, k_mer_size)
+    seq_bitstr = encode_k_mer_array(encoding_map, seq_kmer)
 
     return seq_bitstr
 
@@ -78,7 +78,7 @@ def run_k_mer_huffman(seq, k):
     huffman_root = build_huffman_tree(frq_dict)
 
     map_encodings(huffman_root, encoding_map, "")
-    export_as_txt(HUFFMAN_TREE, encoding_map)
+    export_as_txt(str(HUFFMAN_TREE), encoding_map)
 
     seq_bitstr = encode_k_mer_array(encoding_map, k_mer_array)
 
@@ -107,8 +107,7 @@ def huff_decoding():
     bit_string                      = add_padding(bit_string)
     number_of_kmers, bits_shifted   = readBitVINT(bit_string)
     bit_string                      = bit_string[bits_shifted:]
-    encoding_dict                   = load_dict_from_file(str(HUFFMAN_TREE))
-    encoding_map                    = encoding_dict
+    encoding_map                    = load_dict_from_file(str(HUFFMAN_TREE))
     huffman_root                    = reconstruct_huffman_tree(encoding_map)
     sequence, buffer                = decode_huffman(bit_string, huffman_root, number_of_kmers)
 

@@ -16,7 +16,7 @@ set -e
 
 # Check for command-line arguments
 if [ "$#" -gt 2 ]; then
-    echo "❌ Error: Invalid number of arguments."
+    echo "Error: Invalid number of arguments."
     echo "Usage: $0 [Start Chrom] [End Chrom]"
     exit 1
 fi

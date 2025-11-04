@@ -3,8 +3,7 @@
 ./venv
 
 alignment/files/*
-alignment/all2vcf*
-alignment/*
+alignment/tools/*
 !alignment/*.sh
 !alignment/requirements.txt
 !alignment/*.md

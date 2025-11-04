@@ -3,8 +3,7 @@
 ./venv
 
 alignment/files/*
-alignment/all2vcf*
-alignment/*
+alignment/tools/*
 !alignment/*.sh
 !alignment/requirements.txt
 !alignment/*.md
@@ -22,3 +21,8 @@ dnazip/data/huffman_trees/*
 dnazip/tools/*
 
 biocompress_1/data
+biocompress_1/__pycache__
+
+
+huffman_coding/__pycache__
+huffman_coding/output

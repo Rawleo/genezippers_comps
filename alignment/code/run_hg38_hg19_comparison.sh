@@ -16,7 +16,7 @@ set -e
 
 # Check for command-line arguments
 if [ "$#" -gt 2 ]; then
-    echo "❌ Error: Invalid number of arguments."
+    echo "Error: Invalid number of arguments."
     echo "Usage: $0 [Start Chrom] [End Chrom]"
     exit 1
 fi
@@ -73,8 +73,8 @@ progress_bar() {
 
 # --- 1. Acquire and Prepare FASTA Files from UCSC ---
 echo "--- 1. Acquiring and Preparing FASTA files from UCSC ---"
-REF_CHROM_DIR="$GENOME_DIR/${REF_CODENAME}_chroms"
-TARGET_CHROM_DIR="$GENOME_DIR/${TARGET_CODENAME}_chroms"
+REF_CHROM_DIR="$GENOME_DIR/${REF_CODENAME}"
+TARGET_CHROM_DIR="$GENOME_DIR/${TARGET_CODENAME}"
 
 # Function to download chromosomes one-by-one based on the user's selected range
 download_chromosomes_selectively() {

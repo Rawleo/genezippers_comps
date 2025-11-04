@@ -22,7 +22,7 @@ set -e
 
 # Check for command-line arguments
 if [ "$#" -ne 2 ]; then
-    echo "❌ Error: Invalid number of arguments."
+    echo "Error: Invalid number of arguments."
     echo "Usage: $0 \"<Reference Taxon Name>\" \"<Target Taxon Name>\""
     echo "Example: $0 \"Escherichia coli\" \"Salmonella enterica\""
     exit 1
@@ -35,7 +35,7 @@ TARGET_TAXON="$2"
 REF_NAME=$(echo "$REF_TAXON" | tr ' ' '_' | tr '[:upper:]' '[:lower:]')
 TARGET_NAME=$(echo "$TARGET_TAXON" | tr ' ' '_' | tr '[:upper:]' '[:lower:]')
 
-echo "🚀 Starting per-chromosome pipeline..."
+echo "  Starting per-chromosome pipeline..."
 echo "  Reference: $REF_TAXON (as ${REF_NAME})"
 echo "  Target:    $TARGET_TAXON (as ${TARGET_NAME})"
 echo ""
@@ -60,7 +60,7 @@ for cmd in "${COMMANDS[@]}"; do
         exit 1
     fi
 done
-echo "✅ All dependencies found."
+echo "All dependencies found."
 echo ""
 
 # --- 1. Acquire and Prepare FASTA Files ---
@@ -191,7 +191,7 @@ for ref_chrom_file in "$REF_CHROM_DIR"/*.fna; do
 
         # Add the generated VCF file to our list for merging
         VCF_FILES_TO_MERGE+=("$VCF_FILE")
-        echo "  ✅ VCF for $CHROM_BASENAME created at $VCF_FILE"
+        echo "VCF for $CHROM_BASENAME created at $VCF_FILE"
         echo ""
     fi
 done
@@ -204,7 +204,7 @@ echo ""
 echo "--- 4. Merging Per-Chromosome VCFs ---"
 
 if [ ${#VCF_FILES_TO_MERGE[@]} -eq 0 ]; then
-    echo "❌ Error: No VCF files were generated. Nothing to merge."
+    echo "Error: No VCF files were generated. Nothing to merge."
     exit 1
 fi
 
@@ -221,10 +221,10 @@ for vcf in "${VCF_FILES_TO_MERGE[@]}"; do
     chrom_prefix=${vcf%.vcf}
     rm -f "${chrom_prefix}.delta" "${chrom_prefix}.filtered.delta" "${chrom_prefix}.snps" "${chrom_prefix}.vcf"
 done
-echo "✅ Cleanup complete."
+echo "Cleanup complete."
 echo ""
 
 # --- 5. Output ---
 echo "--- Pipeline Complete ---"
-echo "✅ Success! The final merged pseudo-VCF file has been created at: $FINAL_VCF_FILE"
+echo "Success! The final merged pseudo-VCF file has been created at: $FINAL_VCF_FILE"
 ls -lh "$FINAL_VCF_FILE"

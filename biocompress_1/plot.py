@@ -1,6 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import sys
+import numpy as np
 
 def height_vs_memory_and_time(csv_path: str = "./data.csv"):
     # Load the CSV
@@ -99,10 +100,51 @@ def height_vs_time(csv_path: str = "./data.csv"):
     plt.savefig("tree_time_stacked_bar.png", dpi=300)
     plt.show()
 
+def compression_comparison(csv_path="./data.csv"):
+    # Read CSV
+    df = pd.read_csv(csv_path)
+
+    # Assuming one row (or taking the last if multiple)
+    row = df.iloc[-1]
+
+    genome = row["genome"]
+    height = int(row["tree_height"])
+    orig_size = row["original_file_size"]
+    enc_size = row["encoded_file_size"]
+    ratio = row["compression_ratio"]
+    savings = row["space_savings"]
+    file_name = row["genome"]
+
+    # Bar chart setup
+    labels = [f"{genome} (height={height})"]
+    x = np.arange(len(labels))
+    width = 0.35
+
+    fig, ax = plt.subplots(figsize=(7, 5))
+
+    plt.figure(figsize=(7, 7))
+    plt.bar(['Compressed File', 'Raw File'],
+            height=[enc_size, orig_size],
+            width=0.7,
+            color=['#004D40', '#D81B60'],
+            edgecolor='black',
+            linewidth=3
+    )
+
+    plt.suptitle(f"Megabytes Used Per File Type ({file_name})", weight='bold', fontsize=16, linespacing=400)
+    plt.title(f"Compression Ratio: {ratio} | Space Savings: {savings}", pad=20, fontsize=14)
+    plt.xticks(fontsize=12)
+    plt.yticks(fontsize=12)
+    plt.xlabel("File Type", fontsize=14, labelpad=10)
+    plt.ylabel("File Size (MB)", fontsize=14, labelpad=15)
+    plt.tight_layout()
+    plt.savefig("tree_time_stacked_bar.png", dpi=300)
+    plt.show()
 
 def main():
     # height_vs_memory_and_time()
-    height_vs_time()
+    # height_vs_time()
+    compression_comparison()
 
 
 

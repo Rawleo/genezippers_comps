@@ -73,8 +73,8 @@ progress_bar() {
 
 # --- 1. Acquire and Prepare FASTA Files from UCSC ---
 echo "--- 1. Acquiring and Preparing FASTA files from UCSC ---"
-REF_CHROM_DIR="$GENOME_DIR/${REF_CODENAME}_chroms"
-TARGET_CHROM_DIR="$GENOME_DIR/${TARGET_CODENAME}_chroms"
+REF_CHROM_DIR="$GENOME_DIR/${REF_CODENAME}"
+TARGET_CHROM_DIR="$GENOME_DIR/${TARGET_CODENAME}"
 
 # Function to download chromosomes one-by-one based on the user's selected range
 download_chromosomes_selectively() {

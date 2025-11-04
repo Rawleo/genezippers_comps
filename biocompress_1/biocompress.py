@@ -31,7 +31,7 @@ def compression_ratio(orig_file_path, enc_file_path):
     orig_file_size = file_size(orig_file_path)
     enc_file_size = file_size(enc_file_path)
 
-    return round(enc_file_size / orig_file_size, 4), orig_file_size, enc_file_path
+    return round(enc_file_size / orig_file_size, 4), orig_file_size, enc_file_size
 
 def print_metrics(data):
     csv_filepath = "./data.csv"

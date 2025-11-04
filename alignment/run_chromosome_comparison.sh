@@ -17,7 +17,7 @@ fi
 
 # Genome assemblies
 REF_CODENAME="hg38"
-TARGET_CODENAME="hg19"
+TARGET_CODENAME="ash1_v2.2"
 START_CHROM="$1"
 END_CHROM="$2"
 
@@ -47,10 +47,10 @@ echo ""
 echo "Checking for required dependencies..."
 
 # Tool Pathing if in $PATH.
-COMMANDS=("wget" "gunzip" "git" "python3" "nucmer" "delta-filter" "show-snps" "bcftools")
+# COMMANDS=("wget" "gunzip" "git" "python3" "nucmer" "delta-filter" "show-snps" "bcftools")
 
 # Tool Pathing if locally installed.
-# COMMANDS=("wget" "gunzip" "git" "python3" "./tools/mummer/bin/nucmer" "./tools/mummer/bin/delta-filter" "./tools/mummer/bin/show-snps" "bcftools")
+COMMANDS=("wget" "gunzip" "git" "python3" "./tools/mummer/bin/nucmer" "./tools/mummer/bin/delta-filter" "./tools/mummer/bin/show-snps" "bcftools")
 
 for cmd in "${COMMANDS[@]}"; do
 	if ! command -v "$cmd" &>/dev/null; then
@@ -132,10 +132,10 @@ declare -a files_to_process
 # Selects files for processing based on the user's range
 # or defaults to all available fasta files if no range was given.
 if [ -z "$START_CHROM" ]; then
-	files_to_process=($(ls -v "$REF_CHROM_DIR"/chr*.fna))
+	files_to_process=($(ls -v "$REF_CHROM_DIR"/chr*.fa))
 else
 	for i in $(seq "$START_CHROM" "$END_CHROM"); do
-		found_file="$REF_CHROM_DIR/chr${i}.fna"
+		found_file="$REF_CHROM_DIR/chr${i}.fa"
 		if [ -f "$found_file" ]; then files_to_process+=("$found_file"); fi
 	done
 fi
@@ -145,30 +145,30 @@ CURRENT_FILE=0
 echo "Found $TOTAL_FILES chromosomes to process."
 
 # Activate Python Environment (if necessary).
-source all2vcf/all_to_vcf/bin/activate
+# source all2vcf/all_to_vcf/bin/activate
 
 # --- Process Each Chromosome With Parallelization ---
 for ref_chrom_file in "${files_to_process[@]}"; do (
 	CURRENT_FILE=$((CURRENT_FILE + 1))
-	CHROM_BASENAME=$(basename "$ref_chrom_file" .fna)
+	CHROM_BASENAME=$(basename "$ref_chrom_file" .fa)
 
-	target_chrom_file="$TARGET_CHROM_DIR/${CHROM_BASENAME}.fna"
+	target_chrom_file="$TARGET_CHROM_DIR/${CHROM_BASENAME}.fasta"
 
 	if [ ! -f "$target_chrom_file" ]; then continue; fi
 
 	PREFIX="$OUTPUT_DIR/${REF_CODENAME}_vs_${TARGET_CODENAME}.${CHROM_BASENAME}"
 
 	# Tool Pathing if installed in $PATH.
-	nucmer -p "$PREFIX" "$ref_chrom_file" "$target_chrom_file" &>/dev/null
-	delta-filter -1 "${PREFIX}.delta" >"${PREFIX}.filtered.delta" 2>/dev/null
-	show-snps -H -T "${PREFIX}.filtered.delta" >"${PREFIX}.snps" 2>/dev/null
-	python3 all2vcf/all2vcf mummer --snps "${PREFIX}.snps" --reference "$ref_chrom_file" >"${PREFIX}.vcf" 2>/dev/null
+	# nucmer -p "$PREFIX" "$ref_chrom_file" "$target_chrom_file" &>/dev/null
+	# delta-filter -1 "${PREFIX}.delta" >"${PREFIX}.filtered.delta" 2>/dev/null
+	# show-snps -H -T "${PREFIX}.filtered.delta" >"${PREFIX}.snps" 2>/dev/null
+	# python3 all2vcf/all2vcf mummer --snps "${PREFIX}.snps" --reference "$ref_chrom_file" >"${PREFIX}.vcf" 2>/dev/null
 
 	# Tool Pathing if locally installed.
-	# ./tools/mummer/bin/nucmer -p "$PREFIX" "$ref_chrom_file" "$target_chrom_file" &> /dev/null
-	# ./tools/mummer/bin/delta-filter -1 "${PREFIX}.delta" > "${PREFIX}.filtered.delta" 2>/dev/null
-	# ./tools/mummer/bin/show-snps -H -T "${PREFIX}.filtered.delta" > "${PREFIX}.snps" 2>/dev/null
-	# python3 tools/all2vcf/all2vcf mummer --snps "${PREFIX}.snps" --reference "$ref_chrom_file" > "${PREFIX}.vcf" 2>/dev/null
+	./tools/mummer/bin/nucmer -p "$PREFIX" "$ref_chrom_file" "$target_chrom_file" &> /dev/null
+	./tools/mummer/bin/delta-filter -1 "${PREFIX}.delta" > "${PREFIX}.filtered.delta" 2>/dev/null
+	./tools/mummer/bin/show-snps -H -T "${PREFIX}.filtered.delta" > "${PREFIX}.snps" 2>/dev/null
+	python3 tools/all2vcf/all2vcf mummer --snps "${PREFIX}.snps" --reference "$ref_chrom_file" > "${PREFIX}.vcf" 2>/dev/null
 
 ) & done
 
@@ -176,19 +176,17 @@ for ref_chrom_file in "${files_to_process[@]}"; do (
 wait
 
 # Deactivate Python Environment (if necessary).
-deactivate
+# deactivate
 
 # --- Locating VCF Files ---
 unset VCF_FILES_TO_MERGE
 declare -a VCF_FILES_TO_MERGE
 
 if [ -z "$START_CHROM" ]; then
-	OUTPUT_DIR="files/output"
 	VCF_FILES_TO_MERGE=($(ls -v "$OUTPUT_DIR"/*.chr*.vcf))
 else
 	for i in $(seq "$START_CHROM" "$END_CHROM"); do
-		OUTPUT_DIR="files/output"
-		found_file=$(ls -v "${OUTPUT_DIR}/"*.chr${i}.vcf)
+		found_file=($(ls -v "${OUTPUT_DIR}/"*.chr${i}.vcf))
 		if [ -f "$found_file" ]; then VCF_FILES_TO_MERGE+=("$found_file"); fi
 	done
 fi
@@ -214,8 +212,9 @@ rm $FINAL_VCF_FILE 2>/dev/null || true
 for vcf_file in "${VCF_FILES_TO_MERGE[@]}"; do cat $vcf_file >>$FINAL_VCF_FILE; done
 
 # --- Output ---
+format_to_vcf $FINAL_VCF_FILE $FINAL_FORMATTED_VCF
 echo " Success! The final merged pseudo-VCF file is located at:"
-ls -lh "$FINAL_VCF_FILE"
+ls -lh "$FINAL_FORMATTED_VCF"
 
 echo ""
 echo "=========== END CHROMOSOME COMPARISON ==========="

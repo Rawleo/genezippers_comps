@@ -1,5 +1,12 @@
 import os
 
+'''
+Turns an integer value into a variable integer (VINT).
+@params: 
+ * num - number (int) which should be transformed into a VINT 
+@return:
+ * bit_string - (str) binary representation of VINT
+'''
 def writeBitVINT(num):
 
     bit_string = ''
@@ -35,10 +42,6 @@ def writeBitVINT(num):
         mask = mask >> 1
     
     return bit_string
-
-def BitStringToBytes(bit_string):
-
-    return int(bit_string, 2).to_bytes(len(bit_string) // 8, 'big')
 
 def BytesToBitString(bytes_obj):
 

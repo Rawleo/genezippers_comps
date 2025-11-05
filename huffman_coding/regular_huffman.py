@@ -91,13 +91,15 @@ def main():
     
     k = 0
     
+    print("Encoding:", GENOME_CHOICE)
     cpu_start, wall_start = record_current_times()
     run_encode()
     cpu_end, wall_end = record_current_times()
     record_timings(0, 0, time_difference(cpu_end, cpu_start), TIME_CSV_PATH, k)
     record_timings(0, 1, time_difference(wall_end, wall_start), TIME_CSV_PATH, k)
     cpu_start, wall_start = record_current_times()
-    run_encode()
+    print("Decoding:", GENOME_CHOICE)
+    run_decode()
     cpu_end, wall_end = record_current_times()
     record_timings(1, 0, time_difference(cpu_end, cpu_start), TIME_CSV_PATH, k)
     record_timings(1, 1, time_difference(wall_end, wall_start), TIME_CSV_PATH, k)

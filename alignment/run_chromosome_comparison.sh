@@ -17,13 +17,13 @@ fi
 
 # Genome assemblies
 REF_CODENAME="hg38"
-TARGET_CODENAME="ash1_v2.2"
+TARGET_CODENAME="PAN027"
 START_CHROM="$1"
 END_CHROM="$2"
 
 REF_CHROM_DIR="files/genomes/$REF_CODENAME"
 TARGET_CHROM_DIR="files/genomes/$TARGET_CODENAME"
-FINAL_FORMATTED_VCF="files/output/${REF_CODENAME}_${TARGET_CODENAME}_sorted_variants.txt"
+FINAL_FORMATTED_VCF="files/output_${TARGET_CODENAME}/${REF_CODENAME}_${TARGET_CODENAME}_sorted_variants.txt"
 
 if [ -n "$START_CHROM" ] && [ -z "$END_CHROM" ]; then
 	END_CHROM="$START_CHROM"
@@ -40,7 +40,7 @@ echo ""
 
 echo "Setting up directory structure..."
 GENOME_DIR="files/genomes"
-OUTPUT_DIR="files/output"
+OUTPUT_DIR="files/output_${TARGET_CODENAME}"
 mkdir -p "$GENOME_DIR" "$OUTPUT_DIR"
 echo ""
 
@@ -129,15 +129,36 @@ echo ""
 
 declare -a files_to_process
 
-# Selects files for processing based on the user's range
-# or defaults to all available fasta files if no range was given.
-if [ -z "$START_CHROM" ]; then
-	files_to_process=($(ls -v "$REF_CHROM_DIR"/chr*.fa))
+# Selects files for processing based on the user's arguments
+# or defaults to all available fasta files if no arguments were given.
+if [ "$#" -eq 0 ]; then
+    # No arguments provided, process all chromosomes
+    echo "No specific chromosomes given, processing all..."
+    files_to_process=($(ls -v "$REF_CHROM_DIR"/chr*.fa))
 else
-	for i in $(seq "$START_CHROM" "$END_CHROM"); do
-		found_file="$REF_CHROM_DIR/chr${i}.fa"
-		if [ -f "$found_file" ]; then files_to_process+=("$found_file"); fi
-	done
+    # Process only the chromosomes given as arguments
+    echo "Looking for specified chromosomes: $@"
+    for chrom_id in "$@"; do
+        # User provides "1", "5", "X", "Y", "M", etc.
+        found_file="$REF_CHROM_DIR/chr${chrom_id}.fa"
+        
+        if [ -f "$found_file" ]; then 
+            files_to_process+=("$found_file")
+        else
+            # Handle common M -> MT mapping
+            if [[ "$chrom_id" == "M" || "$chrom_id" == "m" ]]; then
+                found_file_mt="$REF_CHROM_DIR/chrMT.fa"
+                if [ -f "$found_file_mt" ]; then
+                    files_to_process+=("$found_file_mt")
+                    echo "Note: Mapping input 'M' to 'chrMT.fa'"
+                else
+                    echo "Warning: Chromosome file not found for '$chrom_id' (checked $found_file and $found_file_mt)"
+                fi
+            else
+                 echo "Warning: Chromosome file not found for '$chrom_id' (looked for $found_file)"
+            fi
+        fi
+    done
 fi
 
 TOTAL_FILES=${#files_to_process[@]}
@@ -182,13 +203,32 @@ wait
 unset VCF_FILES_TO_MERGE
 declare -a VCF_FILES_TO_MERGE
 
-if [ -z "$START_CHROM" ]; then
-	VCF_FILES_TO_MERGE=($(ls -v "$OUTPUT_DIR"/*.chr*.vcf))
+if [ "$#" -eq 0 ]; then
+    # No arguments, merge all found VCFs
+    VCF_FILES_TO_MERGE=($(ls -v "$OUTPUT_DIR"/*.chr*.vcf))
 else
-	for i in $(seq "$START_CHROM" "$END_CHROM"); do
-		found_file=($(ls -v "${OUTPUT_DIR}/"*.chr${i}.vcf))
-		if [ -f "$found_file" ]; then VCF_FILES_TO_MERGE+=("$found_file"); fi
-	done
+    # Arguments provided, merge VCFs for specified chromosomes
+    for chrom_id in "$@"; do
+        # Find VCF files matching the chromosome ID, e.g., *.chrX.vcf
+        # Use find to handle "no match" gracefully and find multiple files if they exist
+        found_files_list=($(find "$OUTPUT_DIR" -maxdepth 1 -type f -name "*.chr${chrom_id}.vcf"))
+        
+        if [ ${#found_files_list[@]} -gt 0 ]; then 
+            VCF_FILES_TO_MERGE+=("${found_files_list[@]}")
+        else
+            # Handle common M -> MT mapping
+            if [[ "$chrom_id" == "M" || "$chrom_id" == "m" ]]; then
+                found_files_mt_list=($(find "$OUTPUT_DIR" -maxdepth 1 -type f -name "*.chrMT.vcf"))
+                if [ ${#found_files_mt_list[@]} -gt 0 ]; then
+                    VCF_FILES_TO_MERGE+=("${found_files_mt_list[@]}")
+                else
+                    echo "Warning: VCF file not found for '$chrom_id' (checked for *.chr${chrom_id}.vcf and *.chrMT.vcf)"
+                fi
+            else
+                echo "Warning: VCF file not found for '$chrom_id' (checked for *.chr${chrom_id}.vcf)"
+            fi
+        fi
+    done
 fi
 
 echo "Found VCF Files: ${VCF_FILES_TO_MERGE[@]}"

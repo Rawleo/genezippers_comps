@@ -6,7 +6,7 @@ OUT_GENOME_FILE_PATH = 'full_genome.txt'
 
 def sequence_cleaner(sequence):
 
-    # Remove all 'N' characters using the replace() method
+    # Remove all 'N' and 'n' characters using the replace() method
     clean_seq = sequence.replace("N", "")
     clean_seq = clean_seq.replace("n", "")
 
@@ -17,8 +17,7 @@ def combine_chrs(chr_folder, output_file):
     genome = ''
 
     for chr_file in os.listdir(chr_folder):
-        #CAN PROBABLY REMOVE I just have other stuff in my folder
-        if chr_file.endswith(".fa"):
+        if chr_file.endswith(f"{chr}.fa") or chr_file.endswith(f"{chr}.fasta")::
             chr_path = os.path.join(chr_folder, chr_file)
 
             for seq_record in SeqIO.parse(chr_path, "fasta"):
@@ -34,8 +33,7 @@ def clean_chr(chr_folder, output_file, chr):
     genome = ''
 
     for chr_file in os.listdir(chr_folder):
-        #CAN PROBABLY REMOVE I just have other stuff in my folder
-        if chr_file.endswith(f"{chr}.fa"):
+        if chr_file.endswith(f"{chr}.fa") or chr_file.endswith(f"{chr}.fasta"):
             chr_path = os.path.join(chr_folder, chr_file)
 
             for seq_record in SeqIO.parse(chr_path, "fasta"):

@@ -1,18 +1,20 @@
 from pathlib import Path  
 
 FULL          = True
-K_MER_SIZE    = 8
+K_MER_SIZE    = 16
 BASE_PATH     = Path(__file__).resolve().parent.parent
 OUTPUT_DIR    = BASE_PATH / 'huffman_coding' / 'output'
 GENOME_DIR    = BASE_PATH / 'dnazip' / 'data' /'chr'
 TIME_CSV_PATH = OUTPUT_DIR / 'csv' / 'huffman_times.csv'
+GENOME_CHOICE = "Ash1_v2_Genome.txt"
+K_MER_TAG     = f"K_MER_{K_MER_SIZE}"
 
 
 if (FULL):
-    GENOME_BIN    = OUTPUT_DIR / 'ENCODED_GENOME'
-    GENOME_FILE   = GENOME_DIR / 'genome.txt'
-    DECODED_FILE  = OUTPUT_DIR / 'DECODED_GENOME'
-    HUFFMAN_TREE  = OUTPUT_DIR / 'HUFFMAN_TREE_GENOME'
+    GENOME_BIN    = OUTPUT_DIR / f'ENCODED_{GENOME_CHOICE}{K_MER_TAG}'
+    GENOME_FILE   = GENOME_DIR / GENOME_CHOICE
+    DECODED_FILE  = OUTPUT_DIR / f'DECODED_GENOME_{GENOME_CHOICE}{K_MER_TAG}'
+    HUFFMAN_TREE  = OUTPUT_DIR / f'HUFFMAN_TREE_GENOME_{GENOME_CHOICE}{K_MER_TAG}'
 else:
     CHR           = 'chr21'
     GENOME_BIN    = OUTPUT_DIR / f'ENCODED_{CHR}'

@@ -154,7 +154,7 @@ for ref_chrom_file in "${files_to_process[@]}"; do (
 
 	target_chrom_file="$TARGET_CHROM_DIR/${CHROM_BASENAME}.fasta"
 
-	if [ ! -f "$target_chrom_file" ]; then continue; fi
+	# if [ ! -f "$target_chrom_file" ]; then continue; fi
 
 	PREFIX="$OUTPUT_DIR/${REF_CODENAME}_vs_${TARGET_CODENAME}.${CHROM_BASENAME}"
 
@@ -207,14 +207,14 @@ fi
 echo ""
 echo "--- Merging Per-Chromosome VCFs ---"
 echo ""
-FINAL_VCF_FILE="$OUTPUT_DIR/${REF_CODENAME}_vs_${TARGET_CODENAME}.merged.vcf"
+FINAL_VCF_FILE="$OUTPUT_DIR/${REF_CODENAME}_vs_${TARGET_CODENAME}_chromosomes_${START_CHROM}_${END_CHROM}.merged.vcf"
 rm $FINAL_VCF_FILE 2>/dev/null || true
 for vcf_file in "${VCF_FILES_TO_MERGE[@]}"; do cat $vcf_file >>$FINAL_VCF_FILE; done
 
 # --- Output ---
-format_to_vcf $FINAL_VCF_FILE $FINAL_FORMATTED_VCF
+# format_to_vcf $FINAL_VCF_FILE $FINAL_FORMATTED_VCF
 echo " Success! The final merged pseudo-VCF file is located at:"
-ls -lh "$FINAL_FORMATTED_VCF"
+# ls -lh "$FINAL_FORMATTED_VCF"
 
 echo ""
 echo "=========== END CHROMOSOME COMPARISON ==========="

@@ -37,10 +37,10 @@ def parse_number_position(i, window):
         return decode_fibonacci(num), len(num)+1
     
 
-#reads in num*2 bits starting at position and converts to bases
+#reads in num*2 bits starting at position and converts to bases (returns a list of bases)
 def parse_bases(num, position):
     chunk = input_file[position : position + 2*num]
-    return ''.join(PAIR_TO_BASE[chunk[i:i+2]] for i in range(0, len(chunk), 2))
+    return [PAIR_TO_BASE[chunk[i:i+2]] for i in range(0, len(chunk), 2)]
 
 
 #reads in num factors and processes them, returns length kind and position as ints
@@ -65,16 +65,16 @@ def decode_factors(factors, output_draft):
     for factor in factors:
         if factor[1]=="0": #factor
             for i in range(factor[0]):
-                output_draft+=output_draft[factor[2]+i]
+                output_draft.append(output_draft[factor[2]+i])
         if factor[1]=="1": #palindrome
             length = len(output_draft)
             for i in range(factor[0]):
-                output_draft+=output_draft[length-factor[2]+i].translate(COMPLEMENT_TABLE) #relative positioning
+                output_draft.append(output_draft[length-factor[2]+i].translate(COMPLEMENT_TABLE)) #relative positioning
     return output_draft
 
 
 def main():
-    output_draft = ""
+    output_draft = []
     kind = "bases"
     i=0
     length_input = len(input_file)
@@ -87,14 +87,16 @@ def main():
                 bases = parse_bases(num, i)
                 i+=num*2
                 kind="factors"
-                output_draft+=bases
+                output_draft.extend(bases)
             elif kind == "factors":
                 factors, i = parse_factors(num, i, output_draft)
                 output_draft=decode_factors(factors, output_draft)
                 kind= "bases"
             pbar.update(i - prev_i)
             prev_i = i
-        output_file.write(output_draft)
+        # write list of bases to file as a single string and close the file
+        output_file.write("".join(output_draft))
+        output_file.close()
 
 
 if __name__ == "__main__":

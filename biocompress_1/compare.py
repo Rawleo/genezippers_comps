@@ -7,13 +7,15 @@ with open(DNA_FILE_PATH+DNA_FILE + "_" + str(HEIGHT) + "_decoded.txt", "r") as f
     decoded = file.read()
 
 def main():
+    print(DNA_FILE_PATH+DNA_FILE + ".txt")
+    print(DNA_FILE_PATH+DNA_FILE + "_" + str(HEIGHT) + "_decoded.txt")
     for i in range(len(original)):
         if decoded[i]!=original[i]:
             print("NOT MATCHING")
             print("Location:", i)
             print("Error:")
-            print(original[i-5:i+COMPARE_LENGTH])
-            print(decoded[i-5:i+COMPARE_LENGTH])
+            print(original[i:i+COMPARE_LENGTH])
+            print(decoded[i:i+COMPARE_LENGTH])
             sys.exit()
     print("MATCHING")
             

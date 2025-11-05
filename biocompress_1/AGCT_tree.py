@@ -14,7 +14,7 @@ class Node:
     positions: list[int] = field(default_factory=list)
 
 
-    def _child_for_base(self, base: str) -> Optional["Node"]:
+    def _child_for_base(self, base):
         mapping = {
             "A": self.a_branch,
             "C": self.c_branch,
@@ -22,8 +22,17 @@ class Node:
             "G": self.g_branch,
         }
         return mapping.get(base)
+    
 
-    def create_positions(self, string: str, position: int, i: int = 0):
+    def create_positions(self, string, position, i = 0):
+        """
+        Recursively adds the given position to the appropriate child node for each base in the string.
+        
+        Args:
+            string (str): The DNA sequence to traverse.
+            position (int): The position to record in the leaf node.
+            i (int, optional): The current index in the string being processed. Defaults to 0.
+        """
         if not string or i >= len(string):
             return
 
@@ -37,13 +46,22 @@ class Node:
             child.positions.append(position)
 
         self._recurse_child(child, string, position, i + 1)
+        
 
-    def _recurse_child(self, child: "Node", s: str, position: int, i: int):
-        if i < len(s):
-            child.create_positions(s, position, i)
+    def _recurse_child(self, child, string, position, i):
+        if i < len(string):
+            child.create_positions(string, position, i)
 
 
-def create_children(node: Node, height: int):
+def create_children(node, height):
+    """
+    Recursively builds a tree of Nodes up to the specified height, 
+    setting leaf nodes and creating branches for each DNA base.
+    
+    Args:
+        node (Node): The current node to expand.
+        height (int): The maximum depth of the tree.
+    """
     if node.level >= height:
         node.is_leaf = True
         return
@@ -53,21 +71,46 @@ def create_children(node: Node, height: int):
     node.a_branch = Node(level=node.level + 1)
     node.c_branch = Node(level=node.level + 1)
     node.t_branch = Node(level=node.level + 1)
-    node.g_branch = Node(level=node.level + 1)
-
-    create_children(node.a_branch, height)
-    create_children(node.c_branch, height)
-    create_children(node.t_branch, height)
-    create_children(node.g_branch, height)
 
 
-def create_tree(height: int) -> Node:
+def create_tree(height):
+    """
+    Creates an AGCT tree of the specified height.
+
+    Args:
+        height (int): The height of the tree to create.
+
+    Returns:
+        Node: The root node of the constructed tree.
+    """
     root = Node(level=0)
     create_children(root, height)
     return root
+    create_children(node.t_branch, height)
 
 
-def find_factor(string: str, tree: Node):
+def find_factor(string, tree):
+    """
+    Traverses the tree using the bases in the given string up to HEIGHT or the string's length,
+    and returns the positions and level of the deepest node encountered that contains positions.
+
+    Args:
+        string (str): The DNA sequence to search for in the tree.
+        tree (Node): The root node of the AGCT tree.
+
+    Returns:
+        tuple: (positions, level) where positions is a list of integers from the deepest node with positions,
+               and level is the corresponding node's level. If no such node is found, returns (None, None).
+    """
+    curr = tree
+    last_pos: Optional[list[int]] = None
+    last_level: Optional[int] = None
+    root = Node(level=0)
+    create_children(root, HEIGHT)
+    return root
+
+
+def find_factor(string, tree):
     curr = tree
     last_pos: Optional[list[int]] = None
     last_level: Optional[int] = None

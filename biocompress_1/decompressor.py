@@ -8,7 +8,7 @@ open(DNA_FILE_PATH+ DNA_FILE + "_" + str(HEIGHT) + "_decoded.txt", "w").close()
 output_file = open(DNA_FILE_PATH+DNA_FILE + "_" + str(HEIGHT) + "_decoded.txt", "a", encoding="utf-8")
 with open(DNA_FILE_PATH+DNA_FILE + "_" + str(HEIGHT) + "_encoded.txt", "r") as file:
     input_file = file.read()
-PAIR_TO_BASE = {"00":"A","01":"C","10":"T","11":"G"}
+PAIR_TO_BASE = {"11":"A","10":"C","01":"T","00":"G"}
 
 #reads chars from i until it hits 11 and returns decoded number
 def parse_number(i): 

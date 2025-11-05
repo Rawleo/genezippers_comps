@@ -45,7 +45,7 @@ def extended_search(i, position, kind):
     return add_length
 
 #finds longest factor or palindrome in the tree
-def longest_factor_or_palindrome(i: int) -> tuple[Optional[list[int]], Optional[int], Optional[str]]:
+def longest_factor_or_palindrome(i):
     string = CONTENT[i:i+HEIGHT]
     palindrome = string.translate(COMPLEMENT_TABLE)
     factor_position = find_factor(string, TREE)

@@ -69,7 +69,7 @@ def decode_SNPs(bit_string, chr):
         
         snp_df['pos'] = snp_df['pos'].cumsum()
     
-    snp_df['ref_nucs'] = get_snp_nuc(list(snp_df['pos']), chr)
+    snp_df['ref_nucs'] = get_snp_nuc(list(snp_df['pos']), chr, CHR_FILE_PATH)
     snp_df['var_type'] = 0
     snp_df['var_info'] = snp_df['ref_nucs'] + "/" + snp_df['alt_nucs']
 

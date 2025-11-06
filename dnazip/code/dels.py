@@ -82,7 +82,7 @@ def decode_dels(bit_string, chr):
         del_df['pos'] = del_df['pos'].cumsum()
 
     # Get reference nucleotides at deletion positions
-    del_df['ref_seq'] = get_del_nucs(list(del_df['pos']), del_sizes, chr)
+    del_df['ref_seq'] = get_del_nucs(list(del_df['pos']), del_sizes, chr, CHR_FILE_PATH)
 
     # Format variant info string (ref/alt format)
     del_df['var_info'] = del_df.apply(lambda row: row['ref_seq'] + '/' + ('-' * row['del_sizes']),axis=1)

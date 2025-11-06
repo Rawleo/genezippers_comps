@@ -41,6 +41,7 @@ def encode_SNPs(snps_df):
 
     return snp_size_vint, pos_bitstring, nuc_bitstring
 
+
 def decode_SNPs(bit_string, chr):
     """
     Decodes SNP data from compressed binary format back to DataFrame

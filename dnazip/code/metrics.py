@@ -66,9 +66,11 @@ def record_current_times():
 def time_difference(end_time, start_time):
     '''
     Returns the difference between the two values
+
     @params: 
     * end_time
     * start_time
+    
     @return:
     * difference: between the two inputs
     '''
@@ -78,9 +80,11 @@ def time_difference(end_time, start_time):
 def record_timings(type, time_type, total_time, csv_path):
     '''
     Appends data to a csv if it exists, otherwise creates one. 
+
     @params: 
     * type: type string (0=ENCODE, 1=DECODE)
     * time_type: time type string (0=CPU, 1=WALL)
+
     @return:
     * difference: between the two inputs
     '''

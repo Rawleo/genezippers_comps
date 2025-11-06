@@ -136,6 +136,7 @@ def get_del_nucs(positions, del_sizes, chr_name, chr_folder):
 
     return del_nucs
 
+
 def fa_to_txt(input_fasta_file, output_txt_file):
     '''
     Converts sequence file into .txt file

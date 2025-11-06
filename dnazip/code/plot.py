@@ -91,6 +91,7 @@ def clustered_compression_compare(input_file_paths, enc_file_paths, algorithm_na
     # Save file to output file path
     plt.savefig(output_file_path, dpi=600)
 
+
 def time_scale_comparison(x_range):
     '''
     Visualizes storage requirements as number of genomes increase per each algorithm

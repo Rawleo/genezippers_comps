@@ -48,7 +48,7 @@ def height_vs_memory_and_time(csv_path: str = "./data.csv"):
     plt.savefig("tree_creation_time_and_memory_vs_height.png", dpi=300)
     plt.show()
 
-def height_vs_time(csv_path: str = "./data.csv", genome=None):
+def height_vs_time(csv_path: str = "./data.csv", file=None):
     # Load the CSV
     try:
         df = pd.read_csv(csv_path)
@@ -61,13 +61,13 @@ def height_vs_time(csv_path: str = "./data.csv", genome=None):
         if col not in df.columns:
             sys.exit(f"Error: Missing column '{col}' in {csv_path}")
 
-    # Drop rows with missing values
+    # Drop rows with missing values + only look at file of interest
     df = df.dropna(subset=required_cols)
+    df = df.where(df['genome'] == file).dropna()
 
     # Sort by height
     df = df.sort_values("tree_height")
-    df = df.where(df['genome'] == genome).dropna()
-
+    
     # Plot
     plt.figure(figsize=(10, 5))
     bar_width = 0.6
@@ -90,10 +90,12 @@ def height_vs_time(csv_path: str = "./data.csv", genome=None):
     )
 
     # Labels and title
+    plt.subplots_adjust(top=0.85)
     plt.xlabel("Tree Height", fontsize=14, weight='bold', labelpad=15)
     plt.ylabel("Time (s)", fontsize=14, weight='bold', labelpad=10)
-    plt.title("Algorithm Runtime vs. Tree Height", fontsize=18, weight='bold', pad=10)
-    plt.xticks(fontsize=12)
+    plt.suptitle("Algorithm Runtime vs. Tree Height", fontsize=18, weight='bold')
+    plt.title(f"Original File Size: {round(df['original_file_size'].iloc[0], 2)}", pad=15)
+    plt.xticks(fontsize=12, ticks=df['tree_height'])
     plt.yticks(fontsize=12)
     plt.legend(loc='upper center', ncols=2)
 
@@ -145,7 +147,7 @@ def compression_comparison(csv_path="./data.csv"):
 
 def main():
     # height_vs_memory_and_time()
-    height_vs_time(genome='CM021588_chr21')
+    height_vs_time(file='Ash1_v2_Genome')
 
 
 

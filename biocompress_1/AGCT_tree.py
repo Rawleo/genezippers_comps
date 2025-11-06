@@ -71,6 +71,13 @@ def create_children(node, height):
     node.a_branch = Node(level=node.level + 1)
     node.c_branch = Node(level=node.level + 1)
     node.t_branch = Node(level=node.level + 1)
+    node.g_branch = Node(level=node.level + 1)
+
+    create_children(node.a_branch, height)
+    create_children(node.c_branch, height)
+    create_children(node.t_branch, height)
+    create_children(node.g_branch, height)
+
 
 
 def create_tree(height):
@@ -86,7 +93,6 @@ def create_tree(height):
     root = Node(level=0)
     create_children(root, height)
     return root
-    create_children(node.t_branch, height)
 
 
 def find_factor(string, tree):

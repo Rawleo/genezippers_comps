@@ -1,26 +1,28 @@
 from pathlib import Path  
 
-FULL          = True
-K_MER_SIZE    = 16
+K_MER         = False
+K_MER_SIZE    = 0
 BASE_PATH     = Path(__file__).resolve().parent.parent
 OUTPUT_DIR    = BASE_PATH / 'huffman_coding' / 'output'
 GENOME_DIR    = BASE_PATH / 'dnazip' / 'data' /'chr'
 TIME_CSV_PATH = OUTPUT_DIR / 'csv' / 'huffman_times.csv'
-GENOME_CHOICE = "Ash1_v2_Genome.txt"
+GENOME_CHOICE = "T2T-CHM13v2_Genome"
 K_MER_TAG     = f"K_MER_{K_MER_SIZE}"
 
+print("K-mer?", K_MER)
+print("K-mer Size:", K_MER_SIZE)
+print("Genome:", GENOME_CHOICE)
 
-if (FULL):
-    GENOME_BIN    = OUTPUT_DIR / f'ENCODED_{GENOME_CHOICE}{K_MER_TAG}'
-    GENOME_FILE   = GENOME_DIR / GENOME_CHOICE
-    DECODED_FILE  = OUTPUT_DIR / f'DECODED_GENOME_{GENOME_CHOICE}{K_MER_TAG}'
-    HUFFMAN_TREE  = OUTPUT_DIR / f'HUFFMAN_TREE_GENOME_{GENOME_CHOICE}{K_MER_TAG}'
+if (K_MER):
+    GENOME_BIN    = OUTPUT_DIR / f'ENCODED_{GENOME_CHOICE}_{K_MER_TAG}'
+    GENOME_FILE   = GENOME_DIR / f"{GENOME_CHOICE}.txt"
+    DECODED_FILE  = OUTPUT_DIR / f'DECODED_GENOME_{GENOME_CHOICE}_{K_MER_TAG}'
+    HUFFMAN_TREE  = OUTPUT_DIR / f'HUFFMAN_TREE_GENOME_{GENOME_CHOICE}_{K_MER_TAG}'
 else:
-    CHR           = 'chr21'
-    GENOME_BIN    = OUTPUT_DIR / f'ENCODED_{CHR}'
-    GENOME_FILE   = GENOME_DIR / f'{CHR}.txt'
-    DECODED_FILE  = OUTPUT_DIR / f'DECODED_{CHR}'
-    HUFFMAN_TREE  = OUTPUT_DIR / f'HUFFMAN_TREE_{CHR}'
+    GENOME_BIN    = OUTPUT_DIR / f'ENCODED_{GENOME_CHOICE}_{K_MER_TAG}_Regular'
+    GENOME_FILE   = GENOME_DIR / f"{GENOME_CHOICE}.txt"
+    DECODED_FILE  = OUTPUT_DIR / f'DECODED_GENOME_{GENOME_CHOICE}_{K_MER_TAG}_Regular'
+    HUFFMAN_TREE  = OUTPUT_DIR / f'HUFFMAN_TREE_GENOME_{GENOME_CHOICE}_{K_MER_TAG}_Regular'
     
 ###
 # Array of Chromosomes

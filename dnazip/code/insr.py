@@ -5,16 +5,18 @@ from constants import *
 import pandas as pd
 
 
-'''
-Build the required Huffman encoding map as a dictionary, then export
-the encoding map to a text file for use by the decoder. This was
-useful when a unified Huffman tree was created. 
-@params: 
- * variants_df - dataframe of all of the variant information.
-@return:
- * encoding_map - a dictionary containing unique k-mer symbols with their corresponding frequency.
-'''
 def create_and_export_huffman_map(variants_df):
+    '''
+    Build the required Huffman encoding map as a dictionary, then export
+    the encoding map to a text file for use by the decoder. This was
+    useful when a unified Huffman tree was created. 
+
+    @params: 
+    * variants_df: dataframe of all of the variant information.
+
+    @return:
+    * encoding_map: a dictionary containing unique k-mer symbols with their corresponding frequency.
+    '''
     # Grab insertion dataframe for all chromosomes
     insr_df = variants_df.where(variants_df['var_type'] == 2).dropna()
     
@@ -30,63 +32,71 @@ def create_and_export_huffman_map(variants_df):
     return encoding_map
 
 
-'''
-Encode an insertion sequence into its bitstring representation with a 
-Huffman encoding map dictionary.
-@params: 
- * ins_seq - string to be processed to into an array of k-mers and then bitstring.
- * encoding_map - the Huffman encoding map dictionary.
- * k_mer_size - the size of the k-mers.
-@return:
- * ins_seq_bitstr - the final encoded bitstring represented as 1's and 0's.
-'''
 def ins_seq_to_bitstr(ins_seq, encoding_map, k_mer_size):
+    '''
+    Encode an insertion sequence into its bitstring representation with a 
+    Huffman encoding map dictionary.
+
+    @params: 
+    * ins_seq: string to be processed to into an array of k-mers and then bitstring.
+    * encoding_map: the Huffman encoding map dictionary.
+    * k_mer_size: the size of the k-mers.
+
+    @return:
+    * ins_seq_bitstr: the final encoded bitstring represented as 1's and 0's.
+    '''
     ins_seq_kmer = insertions_to_kmers(ins_seq, k_mer_size)
     ins_seq_bitstr  = encode_insertions(encoding_map, ins_seq_kmer)
     
     return ins_seq_bitstr
 
 
-'''
-Append the whole insertion sequence of each chromosome to a file.
-@params: 
- * chr - the current chromosome.
- * ins_seq - the insertion sequence of the given chromosome to export. 
-@return:
- * None, but appends the original insertion sequences of each chromosome to the file.
-'''
 def create_insertion_seq_file(chr, ins_seq):
+    '''
+    Append the whole insertion sequence of each chromosome to a file.
+
+    @params: 
+    * chr: the current chromosome.
+    * ins_seq: the insertion sequence of the given chromosome to export. 
+
+    @return:
+    * None, but appends the original insertion sequences of each chromosome to the file.
+    '''
     result = f"{chr} Insertion Sequence: " + ins_seq + '\n'
     append_as_txt(INS_SEQ_CONCAT, result)
     
-    
-'''
-Append the whole insertion sequence of each chromosome to a file.
-@params: 
- * chr - the current chromosome.
- * ins_seq - the insertion sequence of the given chromosome to export. 
-@return:
- * None, but appends the original insertion sequences of each chromosome to the file.
-'''
+
 def create_insertion_dec_file(chr, ins_seq):
+    '''
+    Append the whole insertion sequence of each chromosome to a file.
+
+    @params: 
+    * chr: the current chromosome.
+    * ins_seq: the insertion sequence of the given chromosome to export. 
+
+    @return:
+    * None, but appends the original insertion sequences of each chromosome to the file.
+    '''
     result = f"{chr} Insertion Sequence: " + ins_seq + '\n'
     append_as_txt(INS_DEC_CONCAT, result)
     
 
-'''
-Encodes the insertion data for a given chromosome into its respective bitstring and VINTs.
-@params: 
- * insr_df - insertion dataframe of the current chromosome.
- * encoding_map - the Huffman encoding map dictionary.
- * k_mer_size - the integer size of the k-mers.
-@return:
- * insr_size_vint - VINT representation of the total number of insertions in the dataframe.
- * pos_bitstr - Concatenated bitstring of all of the positions encoded as VINTs.
- * len_bitstr - Concatenated bitstring of all of the insertion lengths encoded as VINTs.
- * bitstr_len_vint - VINT representation of the total length of 1's and 0's in the bitstr. 
- * ins_seq_bitstr - Encoding of the concatenated insertion sequences as 1's and 0's.
-'''
 def encode_ins(insr_df, k_mer_size):
+    '''
+    Encodes the insertion data for a given chromosome into its respective bitstring and VINTs.
+
+    @params: 
+    * insr_df: insertion dataframe of the current chromosome.
+    * encoding_map: the Huffman encoding map dictionary.
+    * k_mer_size: the integer size of the k-mers.
+
+    @return:
+    * insr_size_vint: VINT representation of the total number of insertions in the dataframe.
+    * pos_bitstr: Concatenated bitstring of all of the positions encoded as VINTs.
+    * len_bitstr: Concatenated bitstring of all of the insertion lengths encoded as VINTs.
+    * bitstr_len_vint: VINT representation of the total length of 1's and 0's in the bitstr. 
+    * ins_seq_bitstr: Encoding of the concatenated insertion sequences as 1's and 0's.
+    '''
     # Current chromosome
     chr = insr_df["chr"].values[0]
     
@@ -147,17 +157,19 @@ def encode_ins(insr_df, k_mer_size):
     return insr_size_vint, pos_bitstr, len_bitstr, bitstr_len_vint, ins_seq_bitstr, (encoding_map, number_of_kmers)
 
 
-'''
-Decodes the insertion data for a given chromosome into its respective bitstring and VINTs.
-@params: 
- * bit_string - insertion dataframe of the current chromosome.
- * huffman_root - the Huffman tree necessary for decoding traversal.
- * chr - the current chromosome.
-@return:
- * ins_df - insertion dataframe with the sorted and decoded nucleotide information.
- * bit_string - the rest of the bit_string to decode further.
-'''
 def decode_ins(bit_string, huffman_root, number_of_kmers, chr):
+    '''
+    Decodes the insertion data for a given chromosome into its respective bitstring and VINTs.
+
+    @params: 
+    * bit_string: insertion dataframe of the current chromosome.
+    * huffman_root: the Huffman tree necessary for decoding traversal.
+    * chr: the current chromosome.
+    
+    @return:
+    * ins_df: insertion dataframe with the sorted and decoded nucleotide information.
+    * bit_string: the rest of the bit_string to decode further.
+    '''
     ### Get number of position, length, nucleotide rows.
     ins_size, bits_shifted = readBitVINT(bit_string)
     bit_string = bit_string[bits_shifted:]

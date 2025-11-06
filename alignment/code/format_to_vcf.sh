@@ -104,37 +104,37 @@ BEGIN {
 # --- Main ---
 
 main() {
-    echo ""
-    echo "=========== VARIANT FORMATTER ==========="
-    echo ""
+	echo ""
+	echo "=========== VARIANT FORMATTER ==========="
+	echo ""
 
-    # --- Argument Validation ---
-    if [ "$#" -ne 2 ]; then
-        echo "Error: Invalid number of arguments."
-        echo "Usage: $0 <input_file> <output_file>"
-        exit 1
-    fi
+	# --- Argument Validation ---
+	if [ "$#" -ne 2 ]; then
+		echo "Error: Invalid number of arguments."
+		echo "Usage: $0 <input_file> <output_file>"
+		exit 1
+	fi
 
-    local input_file="$1"
-    local output_file="$2"
-    local output_dir=$(dirname "$output_file")
+	local input_file="$1"
+	local output_file="$2"
+	local output_dir=$(dirname "$output_file")
 
-    if [ ! -f "$input_file" ] || [ ! -r "$input_file" ]; then
-        echo "Error: Input file '$input_file' not found or is not readable."
-        exit 1
-    fi
-    
-    if [ ! -d "$output_dir" ] || [ ! -w "$output_dir" ]; then
-        echo "Error: Output directory '$output_dir' does not exist or is not writable."
-        exit 1
-    fi
+	if [ ! -f "$input_file" ] || [ ! -r "$input_file" ]; then
+		echo "Error: Input file '$input_file' not found or is not readable."
+		exit 1
+	fi
 
-    # --- Run Formatter ---
-    format_to_vcf "$input_file" "$output_file"
+	if [ ! -d "$output_dir" ] || [ ! -w "$output_dir" ]; then
+		echo "Error: Output directory '$output_dir' does not exist or is not writable."
+		exit 1
+	fi
 
-    echo ""
-    echo "=========== FORMATTING COMPLETE ==========="
-    echo ""
+	# --- Run Formatter ---
+	format_to_vcf "$input_file" "$output_file"
+
+	echo ""
+	echo "=========== FORMATTING COMPLETE ==========="
+	echo ""
 }
 
 # Pass all command-line arguments to the main function

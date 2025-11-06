@@ -1,5 +1,6 @@
 import os
 
+
 def writeBitVINT(num):
     '''
     Turns an integer value into a variable integer (VINT).
@@ -10,7 +11,6 @@ def writeBitVINT(num):
     @return:
     * bit_string - (str) binary representation of VINT
     '''
-
     bit_string = ''
 
     while (num >= 128):
@@ -46,7 +46,6 @@ def writeBitVINT(num):
     return bit_string
 
 
-
 def BytesToBitString(bytes_obj):
     '''
     Turns bytes object in to bit string.
@@ -57,7 +56,6 @@ def BytesToBitString(bytes_obj):
     @return:
     * (str) binary representation of bytes object
     '''
-
     return ''.join(format(byte, '08b') for byte in bytes_obj)
 
 
@@ -72,7 +70,6 @@ def readBitVINT(bit_string):
      * num (int): decoded integer value
      * bits_used (int): number of bits consumed from bit_string (multiple of 8)
     """
-
     num = 0          # accumulated integer value
     shift = 0        # bit-position shift for next 7-bit group
     bytes_used = 0   # number of bytes consumed
@@ -156,7 +153,6 @@ def export_as_binary(export_name_with_extension, bitstr):
       string length is not a multiple of 8, the conversion pads the highest
       bits as needed by the integer-to-bytes conversion.
     """
-
     byte_value = int(bitstr, 2).to_bytes((len(bitstr) + 7) // 8, byteorder='big')
     with open(export_name_with_extension, "ab") as file:
         file.write(byte_value)
@@ -174,7 +170,6 @@ def remove_file_if_exists(filepath):
     @return:
     * None, deletes the file if it exists.
     '''
-
     if os.path.exists(filepath):
 
         print("Removing:", filepath)

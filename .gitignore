@@ -15,10 +15,11 @@ dnazip/data/dbSNP/*
 dnazip/data/original_paper_data/*
 dnazip/data/vcf/*
 dnazip/data/output/*
-!dnazip/data/output/csv/
+# !dnazip/data/output/csv/
 dnazip/data/output/csv/*
 dnazip/data/huffman_trees/*
 dnazip/tools/*
+dnazip/data/*
 
 biocompress_1/data
 biocompress_1/__pycache__

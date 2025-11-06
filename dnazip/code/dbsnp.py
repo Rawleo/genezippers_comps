@@ -51,8 +51,8 @@ def decode_dbsnp(bit_string, dbsnp_folder_path, chr):
     * chr: Chromosome identifier
 
     @return: 
-    * bitmap_df[['var_type', 'chr', 'pos', 'var_info']] - DataFrame of dbsnp entries (columns ['chr','pos','var_info']).
-    * bit_string - remaining bit string
+    * bitmap_df[['var_type', 'chr', 'pos', 'var_info']]: DataFrame of dbsnp entries (columns ['chr','pos','var_info']).
+    * bit_string: remaining bit string
     """
     # Construct full path to chromosome-specific dbSNP file
     dbsnp_file_path = dbsnp_folder_path + chr + ".txt"

@@ -18,9 +18,9 @@ def encode_file(input_file_path, dbSNP_path, k_mer_size):
     processing the data chromosome by chromosome.
 
     @params: 
-    * input_file_path - file path (str) to the input variant file. 
-    * dbSNP_path - directory path (str) containing dbSNP reference files.
-    * k_mer_size - integer size of the k-mers.
+    * input_file_path: file path (str) to the input variant file. 
+    * dbSNP_path: directory path (str) containing dbSNP reference files.
+    * k_mer_size: integer size of the k-mers.
     
     @return:
     * None, writes the encoded outout to 'OUTPUT_BIN_PATH'.
@@ -92,7 +92,7 @@ def decode_file(bit_string):
     processing the data chromosome by chromosome.
 
     @params: 
-    * bit_string - the encoded bit_string of 1's and 0's.
+    * bit_string: the encoded bit_string of 1's and 0's.
 
     @return:
     * None, writes the encoded outout to 'OUTPUT_DEC_PATH'.

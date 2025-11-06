@@ -6,10 +6,10 @@ def writeBitVINT(num):
     Turns an integer value into a variable integer (VINT).
 
     @params: 
-    * num - number (int) which should be transformed into a VINT 
+    * num: number (int) which should be transformed into a VINT 
     
     @return:
-    * bit_string - (str) binary representation of VINT
+    * bit_string: (str) binary representation of VINT
     '''
     bit_string = ''
 
@@ -51,7 +51,7 @@ def BytesToBitString(bytes_obj):
     Turns bytes object in to bit string.
 
     @params: 
-    * bytes_obj - bytes object (bin) which should be transformed into a bitstring
+    * bytes_obj: bytes object (bin) which should be transformed into a bitstring
 
     @return:
     * (str) binary representation of bytes object
@@ -144,8 +144,8 @@ def export_as_binary(export_name_with_extension, bitstr):
     Convert a bit string to bytes and append those bytes to a file.
 
     @param:
-    * export_name_with_extension (str) - destination filename (with extension)
-    * bitstr (str) - string of '0' and '1' characters to write as binary
+    * export_name_with_extension (str): destination filename (with extension)
+    * bitstr (str): string of '0' and '1' characters to write as binary
 
     Note:
     * The bit string is interpreted as a big-endian integer and then converted
@@ -165,10 +165,7 @@ def remove_file_if_exists(filepath):
     appended to.
 
     @params: 
-    * filepath - file path (str) to the file to delete. 
-
-    @return:
-    * None, deletes the file if it exists.
+    * filepath: file path (str) to the file to delete. 
     '''
     if os.path.exists(filepath):
 

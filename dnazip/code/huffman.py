@@ -23,14 +23,16 @@ class Node:
         self.rightChild = rightChild
         
 
-'''
-Build the required dictionary, mapping each symbol to their frequency.
-@params: 
- * input_text - string to be processed to assign each unique symbol a frequency.
-@return:
- * freq_dict - a dictionary containing unique symbols with their corresponding frequency.
-'''
 def build_frequency_dict(input_text):
+    '''
+    Build the required dictionary, mapping each symbol to their frequency.
+
+    @params: 
+    * input_text - string to be processed to assign each unique symbol a frequency.
+
+    @return:
+    * freq_dict - a dictionary containing unique symbols with their corresponding frequency.
+    '''
     freq_dict = {}
     for char in input_text:
         if char not in freq_dict:
@@ -40,14 +42,16 @@ def build_frequency_dict(input_text):
     return freq_dict
 
 
-'''
-Build the huffman tree according to their frequencies.
-@params: 
- * freq_dict - a dictionary containing the unique symbol with their corresponding frequency.
-@return:
- * nodes - the binary Huffman Tree beginning at the root.
-'''
 def build_huffman_tree(freq_dict):
+    '''
+    Build the huffman tree according to their frequencies.
+
+    @params: 
+    * freq_dict - a dictionary containing the unique symbol with their corresponding frequency.
+
+    @return:
+    * nodes - the binary Huffman Tree beginning at the root.
+    '''
     nodes = []
     for symbol, freq in freq_dict.items():
         nodes.append(Node(symbol, freq))
@@ -64,15 +68,17 @@ def build_huffman_tree(freq_dict):
     return nodes[0] if nodes else None
 
 
-'''
-Assign correct binary tree mapping to each unique symbol using recursion.
-@params: 
- * root - the binary Huffman Tree beginning at the root.
- * curr - the current node of the tree.
-@return:
- * encoding_map - a dictionary for each unique symbol corresponding to their unique encoding.
-'''
 def map_encodings(root, encoding_map, current):
+    '''
+    Assign correct binary tree mapping to each unique symbol using recursion.
+
+    @params: 
+    * root - the binary Huffman Tree beginning at the root.
+    * curr - the current node of the tree.
+
+    @return:
+    * encoding_map - a dictionary for each unique symbol corresponding to their unique encoding.
+    '''
     if root is None:
         return
     if root.leftChild is None and root.rightChild is None:
@@ -83,15 +89,17 @@ def map_encodings(root, encoding_map, current):
     map_encodings(root.rightChild, encoding_map, current + "1")
 
 
-'''
-Transform input text into an array of k-mers, or k-symbol items.
-@params: 
- * ins_seq - the text sequence to transform.
- * k_mer_size - the integer size of the k-mer.
-@return:
- * k_mer_array - an array of k-mers that will be used for Huffman encoding.
-'''
 def insertions_to_kmers(ins_seq, k_mer_size):
+    '''
+    Transform input text into an array of k-mers, or k-symbol items.
+
+    @params: 
+    * ins_seq - the text sequence to transform.
+    * k_mer_size - the integer size of the k-mer.
+
+    @return:
+    * k_mer_array - an array of k-mers that will be used for Huffman encoding.
+    '''
     k             = k_mer_size
     regex_k       = k * '.'
     k_mer_array   = re.findall(regex_k, ins_seq)
@@ -99,15 +107,17 @@ def insertions_to_kmers(ins_seq, k_mer_size):
     return k_mer_array  
 
 
-'''
-Encode the k_mer_array into a string of bits using Huffman encoding.
-@params: 
- * encoding_map - the Huffman encoding dictionary to encode the array.
- * k_mer_array - an array of k-mers that will be used for huffman encoding.
-@return:
- * ins_bitstr - Python string containing 1's and 0's.
-'''
 def encode_insertions(encoding_map, k_mer_array):
+    '''
+    Encode the k_mer_array into a string of bits using Huffman encoding.
+
+    @params: 
+    * encoding_map - the Huffman encoding dictionary to encode the array.
+    * k_mer_array - an array of k-mers that will be used for huffman encoding.
+
+    @return:
+    * ins_bitstr - Python string containing 1's and 0's.
+    '''
     ins_bitstr = ""
     for k_mer in k_mer_array:
         
@@ -116,16 +126,18 @@ def encode_insertions(encoding_map, k_mer_array):
     return ins_bitstr
 
 
-'''
-Function used to create the Huffman encoding map for encoding. 
-@params: 
- * ins_seq - the text sequence to transform.
- * k_mer_size - the integer size of the k-mer.
-@return: 
- * encoding_map - the Huffman encoding dictionary to encode the array.
- * len(k_mer_array) - number of k_mers encoded.
-'''
 def run_k_mer_huffman(ins_seq, k_mer_size):
+    '''
+    Function used to create the Huffman encoding map for encoding. 
+
+    @params: 
+    * ins_seq - the text sequence to transform.
+    * k_mer_size - the integer size of the k-mer.
+
+    @return: 
+    * encoding_map - the Huffman encoding dictionary to encode the array.
+    * len(k_mer_array) - number of k_mers encoded.
+    '''
     encoding_map    = {}
     k               = k_mer_size
     k_mer_array     = insertions_to_kmers(ins_seq, k)
@@ -137,16 +149,18 @@ def run_k_mer_huffman(ins_seq, k_mer_size):
     return encoding_map, len(k_mer_array)
         
 
-'''
-Decode a string of 1's and 0's by traversing a Huffman tree.
-@params: 
- * encoded_text - encoded string of 1's and 0's.
- * root - Huffman tree root to traverse.
-@return:
- * result - the decoded string.
- * buffer - extra bits to process as regular NUC encodings. 
-'''
 def decode_huffman(encoded_text, root, number_of_kmers):
+    '''
+    Decode a string of 1's and 0's by traversing a Huffman tree.
+
+    @params: 
+    * encoded_text - encoded string of 1's and 0's.
+    * root - Huffman tree root to traverse.
+
+    @return:
+    * result - the decoded string.
+    * buffer - extra bits to process as regular NUC encodings. 
+    '''
     result = ""
     buffer = ""
     count  = 0
@@ -167,15 +181,17 @@ def decode_huffman(encoded_text, root, number_of_kmers):
     return result, buffer
 
 
-'''
-Read in a text file of Huffman encoding map dictionary into an
-actual Python dictionary to recreate a Huffman tree.
-@params: 
- * filepath - path to the Huffman encoding map dictionary.
-@return:
- * encoding_map - the Huffman encoding dictionary to recreate a Huffman tree.
-'''
 def load_dict_from_file(filepath):
+    '''
+    Read in a text file of Huffman encoding map dictionary into an
+    actual Python dictionary to recreate a Huffman tree.
+
+    @params: 
+    * filepath - path to the Huffman encoding map dictionary.
+
+    @return:
+    * encoding_map - the Huffman encoding dictionary to recreate a Huffman tree.
+    '''
     with open(filepath, 'r') as f:
         file_content = f.read()
         
@@ -184,14 +200,16 @@ def load_dict_from_file(filepath):
     return encoding_map
 
 
-'''
-Transform a Huffman encoding map into a Huffman tree used for decoding.
-@params: 
- * encoding_map - the Huffman encoding dictionary to recreate a Huffman tree.
-@return:
- * root - the binary Huffman Tree beginning at the root.
-'''
 def reconstruct_huffman_tree(encoding_map):
+    '''
+    Transform a Huffman encoding map into a Huffman tree used for decoding.
+
+    @params: 
+    * encoding_map - the Huffman encoding dictionary to recreate a Huffman tree.
+
+    @return:
+    * root - the binary Huffman Tree beginning at the root.
+    '''
     root = Node(symbol=None, frequency=None)
 
     for symbol, code in encoding_map.items():
@@ -216,27 +234,31 @@ def reconstruct_huffman_tree(encoding_map):
     return root
 
 
-'''
-Output a text file given the input file path and the input text.
-@params: 
- * export_name - the file path to export to.
- * text - input to text to export.
-@return:
- * None, but outputs a text file.
-'''
 def export_as_txt(export_name_with_extension, text):
+    '''
+    Output a text file given the input file path and the input text.
+
+    @params: 
+    * export_name - the file path to export to.
+    * text - input to text to export.
+
+    @return:
+    * None, but outputs a text file.
+    '''
     with open(export_name_with_extension, "w") as file:
         file.write(str(text))
  
-
-'''
-Append to a text file given the input file path and the input text.
-@params: 
- * export_name - the file path to export to.
- * text - input to text to append to.
-@return:
- * None, but outputs a text file.
-'''       
+ 
 def append_as_txt(export_name, text):
+    '''
+    Append to a text file given the input file path and the input text.
+
+    @params: 
+    * export_name - the file path to export to.
+    * text - input to text to append to.
+    
+    @return:
+    * None, but outputs a text file.
+    '''      
     with open(export_name, "a") as file:
         file.write(str(text))

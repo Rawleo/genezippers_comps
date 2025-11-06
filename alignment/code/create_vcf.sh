@@ -13,7 +13,7 @@ set -e
 
 # Genome assemblies
 REF_CODENAME="hg38"
-TARGET_CODENAME="T2T-CHM13"
+TARGET_CODENAME="PAN027"
 
 # Directories
 GENOME_DIR="../files/genomes"
@@ -400,7 +400,7 @@ main() {
 	# source all2vcf/all_to_vcf/bin/activate
 
 	# Run the core alignment and VCF generation in parallel
-	# run_parallel_processing
+	run_parallel_processing
 
 	# Deactivate Python Environment (if necessary).
 	# deactivate

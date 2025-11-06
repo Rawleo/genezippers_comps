@@ -3,9 +3,6 @@ from config import *
 from metrics import *
 
 
-ONE_MER = "_Regular"
-
-
 '''
  * Author: Ryan Son
  * Date: Sept. 18, 2025
@@ -68,20 +65,20 @@ def run_encode():
     length_vint     = writeBitVINT(len(encoded_text))
     final_bitstr    = length_vint + encoded_text
     
-    export_as_txt(str(HUFFMAN_TREE) + ONE_MER, encoding_map)
-    export_as_binary(str(GENOME_BIN) + ONE_MER, final_bitstr)
+    export_as_txt(str(HUFFMAN_TREE), encoding_map)
+    export_as_binary(str(GENOME_BIN), final_bitstr)
     
 
 def run_decode():
-    bit_string              = read_bin(str(GENOME_BIN) + ONE_MER)
+    bit_string              = read_bin(str(GENOME_BIN))
     bit_string              = add_padding(bit_string)
     length, bits_shifted    = readBitVINT(bit_string)
     bit_string              = bit_string[bits_shifted:]
-    encoding_map            = load_dict_from_file(str(HUFFMAN_TREE) + ONE_MER)
+    encoding_map            = load_dict_from_file(str(HUFFMAN_TREE))
     huffman_root            = reconstruct_huffman_tree(encoding_map)
     sequence                = decode_text(bit_string, huffman_root)
     
-    export_as_txt(str(DECODED_FILE) + ONE_MER, sequence)
+    export_as_txt(str(DECODED_FILE), sequence)
 
 
 '''

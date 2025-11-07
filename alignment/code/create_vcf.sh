@@ -13,7 +13,7 @@ set -e
 
 # Genome assemblies
 REF_CODENAME="hg38"
-TARGET_CODENAME="PAN027"
+TARGET_CODENAME="Han1"
 
 # Directories
 GENOME_DIR="../files/genomes"
@@ -236,7 +236,7 @@ run_parallel_processing() {
 # 1. Use awk to process the file and generate the formatted output.
 # 2. Pipe (|) the output of awk directly into the multi-level sort command.
 format_to_vcf() {
-	awk '
+    awk '
 # Helper function to generate a string by repeating a character N times.
 function repeat(char, n,    result, i) {
     result = ""
@@ -317,10 +317,10 @@ BEGIN {
     # Print the final, formatted line (only for SNPs, Deletions, and non-split Insertions)
     print flag, $1, $2, ref_out"/"alt_out
 }
-' "$1" | sort -t ',' -k 1,1n -k 2,2V -k 3,3n >$2
+' "$1" | LC_ALL=C sort -t ',' -k 1,1n -k 2,2V -k 3,3n -k 4,4 >$2
 
-	echo "Formatting complete."
-	ls -lh "$2"
+    echo "Formatting complete."
+    ls -lh "$2"
 }
 
 merge_and_finalize() {

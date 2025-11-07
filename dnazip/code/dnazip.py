@@ -138,9 +138,17 @@ def decode_file(bit_string):
     
     # Formatting
     decode_df['pos'] = decode_df['pos'].astype(int)
+    
+    chrom_order = [f'chr{i}' for i in range(1, 23)] + ['chrX'] + ['chrY']
+    
+    decode_df['chr'] = pd.Categorical(
+        decode_df['chr'],
+        categories=chrom_order,
+        ordered=True
+    )
 
     # Output Decoded File
-    decode_df.sort_values(by=['var_type', 'chr', 'pos']).to_csv(OUTPUT_DEC_PATH,
+    decode_df.sort_values(by=['var_type', 'chr', 'pos', 'var_info']).to_csv(OUTPUT_DEC_PATH,
                      index=False,
                      header=None) # type: ignore
 

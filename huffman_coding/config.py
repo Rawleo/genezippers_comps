@@ -5,8 +5,9 @@ K_MER_SIZE    = 0
 BASE_PATH     = Path(__file__).resolve().parent.parent
 OUTPUT_DIR    = BASE_PATH / 'huffman_coding' / 'output'
 GENOME_DIR    = BASE_PATH / 'dnazip' / 'data' /'chr'
+PLOT_OUT_PATH = OUTPUT_DIR / 'plots' / 'space_savings_vs_kmer.png'
 TIME_CSV_PATH = OUTPUT_DIR / 'csv' / 'huffman_times.csv'
-GENOME_CHOICE = "T2T-CHM13v2_Genome"
+GENOME_CHOICE = "PAN027_mat_v1_Genome"
 K_MER_TAG     = f"K_MER_{K_MER_SIZE}"
 
 print("K-mer?", K_MER)

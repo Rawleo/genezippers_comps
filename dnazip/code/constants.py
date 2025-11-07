@@ -26,11 +26,11 @@ dnazip/
 ###
 BASE_DIR     = Path(__file__).resolve().parent.parent
 OUTPUT_DIR   = BASE_DIR / 'data' / 'output'
-VARIANT_NAME = 'HG004_GRCh38'
+VARIANT_NAME = 'hg38_ash1_genome'
 K_MER_SIZE   = 4
 DELTA_POS    = True
 DBSNP_ON     = True
-HUFFMAN_ON   = False
+HUFFMAN_ON   = True
 
 # K_MER OVERRIDE
 if (not HUFFMAN_ON):
@@ -61,7 +61,7 @@ CHROMOSOMES = [
     'chr6', 'chr7', 'chr8', 'chr9', 'chr10',
     'chr11', 'chr12', 'chr13', 'chr14', 'chr15', 
     'chr16', 'chr17', 'chr18', 'chr19', 'chr20', 
-    'chr21', 'chr22'
+    'chr21', 'chr22', 'chrX', 'chrY'
 ]
 
 ###

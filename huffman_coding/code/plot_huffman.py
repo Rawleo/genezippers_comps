@@ -619,23 +619,20 @@ if __name__ == "__main__":
         except NameError:
             print("Skipping plot: PLOT_OUT_PATH not defined in config.py", file=sys.stderr)
     else:
-        print("SkiGpping 'ash1' file size plot due to data processing error.")
+        print("Skipping 'ash1' file size plot due to data processing error.")
 
     print("\n--- Generating Scaling Comparison plot ---")
     
     # Define BASE_PATH
-    # Path(__file__) only works when running a .py file directly.
-    # We'll add a fallback for interactive environments (like notebooks).
     try:
         BASE_PATH = Path(__file__).resolve().parent.parent.parent
     except NameError:
         print("WARNING: '__file__' is not defined. Using Path.cwd() as fallback.")
         print("You may need to manually adjust BASE_PATH if this is incorrect.")
-        # Assuming the CWD is 'huffman_coding' as in the original example
         BASE_PATH = Path.cwd().parent 
 
     # --- Adjusted Base Paths ---
-    # Paths are now absolute, based on the new BASE_PATH variable
+    # Paths based on BASE_PATH variable
 
     try:
         # Paths for DNAZip components
@@ -643,13 +640,13 @@ if __name__ == "__main__":
         base_dbsnp_path = BASE_PATH / 'dnazip' / 'data' / 'dbSNP'
         base_dnazip_path = BASE_PATH / 'dnazip' / 'data' / 'output'
         
-        # Path for standalone Huffman (matches your OUT_GENOME variable)
+        # Path for standalone Huffman
         base_huffman_path = BASE_PATH / 'huffman_coding' / 'output' / 'data'
         
         # Path for Biocompress
         base_biocompress_path = BASE_PATH / 'biocompress_1' / 'data'        
         
-        # --- Adjusted File Lists ---
+        # --- File Lists ---
         
         uncompressed_files = [
             base_chr_path / "Han1_Genome.txt",
@@ -669,15 +666,12 @@ if __name__ == "__main__":
             base_huffman_path / "ENCODED_T2T-CHM13v2_Genome_K_MER_8.bin",
         ]
         
-        # Corrected 'Han1_Genome_13.bin' to 'Ash1_v2_Genome_13.bin' to match other lists.
-        # The '_13' suffix is assumed to be Biocompress-specific and not related to K_MER_SIZE.
         biocompress_files = [
             base_biocompress_path / "Han1_Genome_13.bin",
             base_biocompress_path / "PAN027_mat_v1_Genome_13.bin",
             base_biocompress_path / "T2T-CHM13v2_Genome_13.bin",
         ]
         
-        # DNAZip base files
         chr_fa_files = [ base_chr_path / f"chr{i}.fa" for i in list(range(1, 23)) + ['X', 'Y'] ]
         dbsnp_txt_files = [ base_dbsnp_path / f"chr{i}.txt" for i in list(range(1, 23)) + ['X', 'Y'] ]
         

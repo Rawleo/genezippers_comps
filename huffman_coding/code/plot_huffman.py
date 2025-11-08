@@ -481,8 +481,8 @@ def plot_scaling_comparison_log(
     
     ax.set_title('Storage Scaling by Number of Genomes', fontsize=16)
     
-    ax.set_xlabel('Number of Genomes [log scale]', fontsize=14, labelpad=10)
-    ax.set_ylabel('Total Storage Size (GB) [log scale]', fontsize=14, labelpad=10)
+    ax.set_xlabel('Number of Genomes [$log_{10}$]', fontsize=14, labelpad=10)
+    ax.set_ylabel('Total Storage Size (GB) [$log_{10}$]', fontsize=14, labelpad=10)
     
     ax.set_xscale('log')
     ax.set_yscale('log')

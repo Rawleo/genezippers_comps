@@ -27,10 +27,10 @@ dnazip/
 BASE_DIR     = Path(__file__).resolve().parent.parent
 OUTPUT_DIR   = BASE_DIR / 'data' / 'output'
 VARIANT_NAME = 'hg38_ash1_genome'
-K_MER_SIZE   = 4
-DELTA_POS    = True
+K_MER_SIZE   = 8
+DELTA_POS    = False
 DBSNP_ON     = True
-HUFFMAN_ON   = True
+HUFFMAN_ON   = False
 
 # K_MER OVERRIDE
 if (not HUFFMAN_ON):
@@ -42,13 +42,13 @@ if (not HUFFMAN_ON):
 DBSNP_PATH                  = f"{BASE_DIR}/data/dbSNP/"
 CHR_FILE_PATH               = f'{BASE_DIR}/data/chr/'
 INPUT_FILE_PATH             = f"{BASE_DIR}/data/variants/{VARIANT_NAME}_sorted_variants.txt"
-OUTPUT_BIN_PATH             = f"{OUTPUT_DIR}/{VARIANT_NAME}_Encoded.bin"
+OUTPUT_BIN_PATH             = f"{OUTPUT_DIR}/{VARIANT_NAME}_{DELTA_POS}_{DBSNP_ON}_{HUFFMAN_ON}_{K_MER_SIZE}_Encoded.bin"
 OUTPUT_DEC_PATH             = f"{OUTPUT_DIR}/{VARIANT_NAME}_Decoded.txt"
 INS_SEQ_CONCAT              = f"{OUTPUT_DIR}/{VARIANT_NAME}_INS_SEQ.txt"
 INS_DEC_CONCAT              = f"{OUTPUT_DIR}/{VARIANT_NAME}_INS_DEC.txt"
-ENC_FILE_PATH               = f"{OUTPUT_DIR}/{VARIANT_NAME}_Encoded.bin"
+ENC_FILE_PATH               = f"{OUTPUT_DIR}/{VARIANT_NAME}_{DELTA_POS}_{DBSNP_ON}_{HUFFMAN_ON}_{K_MER_SIZE}_Encoded.bin"
 TREE_PATH                   = f"{BASE_DIR}/data/huffman_trees/{VARIANT_NAME}.txt"
-FIGURE_PATH                 = f"{BASE_DIR}/figures/{VARIANT_NAME}_Figure.png"
+FIGURE_PATH                 = f"{BASE_DIR}/figures/{VARIANT_NAME}_{DELTA_POS}_{DBSNP_ON}_{HUFFMAN_ON}_{K_MER_SIZE}_Figure.png"
 FIGURE_REMDBSNP_PATH        = f"{BASE_DIR}/figures/{VARIANT_NAME}_removed_dbSNP.png"
 TIME_CSV_PATH               = f"{OUTPUT_DIR}/csv/{VARIANT_NAME}_times.csv"
 
@@ -62,6 +62,10 @@ CHROMOSOMES = [
     'chr11', 'chr12', 'chr13', 'chr14', 'chr15', 
     'chr16', 'chr17', 'chr18', 'chr19', 'chr20', 
     'chr21', 'chr22', 'chrX', 'chrY'
+    
+    # 'chrX', 'chrY'
+    
+    # 'chr21'
 ]
 
 ###

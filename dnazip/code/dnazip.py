@@ -171,6 +171,7 @@ def main():
     
     print("CPU Time Encode:", time_difference(end_cpu_time_encode, start_cpu_time_encode), "seconds")
     print("Wall Time Encode:", time_difference(end_wall_time_encode, start_wall_time_encode), "seconds")
+    print(VARIANT_NAME)
     
     # Record ENCODE Start and End Timings
     record_timings(0, 0, time_difference(end_cpu_time_encode, start_cpu_time_encode), TIME_CSV_PATH)

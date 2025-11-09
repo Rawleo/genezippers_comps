@@ -57,22 +57,20 @@ def plot_grouped_compression_by_variant(variants_dir: Path, output_dir: Path, ou
     # Define Raw Path Template Separately
     raw_path_template = variants_dir / "{variant}_sorted_variants.txt"
     
-    # Remove 'Raw Variant' from plotted combinations
     combinations = {
-        # 'Raw Variant': { ... } # Removed from plot
-        'Baseline': {
+        'VINT': {
             'path_template': output_dir / "{variant}_False_False_False_0_Encoded.bin",
             'color': '#1E88E5' # Blue
         },
-        'dbSNP': {
+        'VINT + dbSNP': {
             'path_template': output_dir / "{variant}_False_True_False_0_Encoded.bin",
             'color': '#FFC107' # Yellow
         },
-        'dbSNP + Huffman (8-mer)': {
+        'VINT + dbSNP + Huffman (8-mer)': {
             'path_template': output_dir / "{variant}_False_True_True_8_Encoded.bin",
             'color': '#43A047' # Green
         },
-        'Delta + dbSNP + Huffman (8-mer)': {
+        'VINT + Delta + dbSNP + Huffman (8-mer)': {
             'path_template': output_dir / "{variant}_True_True_True_8_Encoded.bin",
             'color': '#004D40' # Dark Green/Teal
         }

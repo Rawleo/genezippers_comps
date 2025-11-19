@@ -1,5 +1,17 @@
-# The GeneZippers
-Carleton College Data Compression Algorithm Comps F'25
+# From Bases to Bits: An Evolution of DNA Compression Algorithms
+This repository contains the results of a senior capstone project conducted by Gavin Saxer, Ryan Son, and Jared Arroyo Ruiz, computer Science seniors at Carleton College (2026). 
+
+This project evaluates three distinct genomic data compression strategies to assess their efficacy in handling massive genomic datasets. We compare a general text-based approach (Huffman Coding) against two specialized DNA compressors: DNAzip (reference-based) and Biocompress 1 (non-reference-based). Our analysis aims to quantify the advantages of DNA-specialized compression over general text compression, and subsequently, to determine the benefits of employing reference-based methods within the domain of specialized genomic compression.
+
+<div style="width:90%; margin: auto;">
+<img src="figures/time_v_storage.png">
+</div>
+
+
+# Our Genomic Library
+
+# Reproducing the Paper's Analysis
+
 
 ## Project Directory Tree
 

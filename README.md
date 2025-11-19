@@ -44,7 +44,6 @@ comps_f25_rgj/
 │   ├── data
 │   ├── data.csv
 │   ├── decompressor.py
-│   ├── notes.txt
 │   ├── plot.py
 │   └── preprocessor.py
 ├── dnazip

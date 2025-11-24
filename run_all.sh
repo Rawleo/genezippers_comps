@@ -64,6 +64,9 @@ run_script() {
 # ============================================
 run_script "setup_env.sh" "Setup Python Environment"
 
+VENV_NAME="venv"
+source "$SCRIPT_DIR/$VENV_NAME/bin/activate"
+
 # ============================================
 # Step 2: Setup Tools (bigBedToBed)
 # ============================================

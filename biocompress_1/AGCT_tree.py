@@ -96,27 +96,6 @@ def create_tree(height):
 
 
 def find_factor(string, tree):
-    """
-    Traverses the tree using the bases in the given string up to HEIGHT or the string's length,
-    and returns the positions and level of the deepest node encountered that contains positions.
-
-    Args:
-        string (str): The DNA sequence to search for in the tree.
-        tree (Node): The root node of the AGCT tree.
-
-    Returns:
-        tuple: (positions, level) where positions is a list of integers from the deepest node with positions,
-               and level is the corresponding node's level. If no such node is found, returns (None, None).
-    """
-    curr = tree
-    last_pos: Optional[list[int]] = None
-    last_level: Optional[int] = None
-    root = Node(level=0)
-    create_children(root, HEIGHT)
-    return root
-
-
-def find_factor(string, tree):
     curr = tree
     last_pos: Optional[list[int]] = None
     last_level: Optional[int] = None

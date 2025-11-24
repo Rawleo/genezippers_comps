@@ -9,7 +9,7 @@ from dels import *
 from snp import *
 from insr import *
 from decode import *
-from combined_plots import *
+from metrics import *
 
 
 def encode_file(input_file_path, dbSNP_path, k_mer_size):
@@ -192,7 +192,7 @@ def main():
     print("Wall Time Decode:", time_difference(end_wall_time_decode, start_wall_time_decode), "seconds")
 
     # Create Figures
-    compression_comparison(INPUT_FILE_PATH, ENC_FILE_PATH, VARIANT_NAME, FIGURE_PATH)
+    # compression_comparison(INPUT_FILE_PATH, ENC_FILE_PATH, VARIANT_NAME, FIGURE_PATH)
     
     # Record DECODE Start and End Timings
     record_timings(1, 0, time_difference(end_cpu_time_decode, start_cpu_time_decode), TIME_CSV_PATH)

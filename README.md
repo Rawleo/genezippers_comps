@@ -4,7 +4,7 @@ This repository contains the results of a senior capstone project conducted by G
 This project evaluates three distinct genomic data compression strategies to assess their efficacy in handling massive genomic datasets. We compare a general text-based approach (Huffman Coding) against two specialized DNA compressors: DNAzip (reference-based) and Biocompress 1 (non-reference-based). Our analysis aims to quantify the advantages of DNA-specialized compression over general text compression, and subsequently, to determine the benefits of employing reference-based methods within the domain of specialized genomic compression.
 
 <div style="width:60%; margin: auto;">
-<img src="figures/rmcover.png" alt="Cover image" style="width:90%; display:block; margin:0 auto;">  
+<img src="figures/rm_cover.png" alt="Cover image" style="width:90%; display:block; margin:0 auto;">  
 </div>
 
 

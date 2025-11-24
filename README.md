@@ -39,76 +39,78 @@ Three scripts support the workflow:
 ## Project Directory Tree
 
 ```python
-comps_f25_rgj/
+genezippers_comps/
 ├── alignment
-│   ├── alignment.md
-│   ├── code
-│   │   ├── create_vcf.sh
-│   │   ├── format_to_vcf.sh
-│   │   ├── merge_vcf.sh
-│   │   └── rename_chr.sh
-│   ├── files
-│   │   ├── genomes
-│   │   ├── output_ash1_v2.2
-│   │   ├── output_Han1
-│   │   ├── output_PAN027
-│   │   └── output_T2T-CHM13
-│   ├── requirements.txt
-│   └── tools
-│       ├── all2vcf
-│       └── mummer
+│   ├── alignment.md
+│   └── code
+│       ├── create_vcf.sh
+│       ├── format_to_vcf.sh
+│       ├── merge_vcf.sh
+│       └── rename_chr.sh
 ├── biocompress_1
-│   ├── AGCT_tree.py
-│   ├── biocompress.py
-│   ├── compare.py
-│   ├── compressor.py
-│   ├── config.py
-│   ├── converter.py
-│   ├── data
-│   ├── data.csv
-│   ├── decompressor.py
-│   ├── plot.py
-│   └── preprocessor.py
+│   ├── AGCT_tree.py
+│   ├── biocompress.py
+│   ├── compare.py
+│   ├── compressor.py
+│   ├── config.py
+│   ├── converter.py
+│   ├── data.csv
+│   ├── decompressor.py
+│   ├── notes.txt
+│   ├── plot.py
+│   ├── preprocessor.py
+│   └── __pycache__
+│       ├── AGCT_tree.cpython-39.pyc
+│       ├── config.cpython-39.pyc
+│       └── converter.cpython-39.pyc
+├── clean_genomes.sh
 ├── dnazip
-│   ├── code
-│   │   ├── bitfile.py
-│   │   ├── constants.py
-│   │   ├── dbsnp.py
-│   │   ├── decode.py
-│   │   ├── dels.py
-│   │   ├── dnazip.py
-│   │   ├── huffman.py
-│   │   ├── insr.py
-│   │   ├── metrics.py
-│   │   ├── plot_2.py
-│   │   ├── plot.py
-│   │   ├── preprocess_dbsnp.py
-│   │   ├── reader.py
-│   │   └── snp.py
-│   ├── data
-│   │   ├── chr
-│   │   ├── dbSNP
-│   │   ├── figures
-│   │   ├── huffman_trees
-│   │   ├── output
-│   │   ├── variants
-│   │   └── vcf
-│   ├── dnazip_setup.sh
-│   ├── figures
-│   └── tools
-│       └── bigBedToBed
+│   ├── code
+│   │   ├── bitfile.py
+│   │   ├── combined_plots.py
+│   │   ├── constants.py
+│   │   ├── dbsnp.py
+│   │   ├── decode.py
+│   │   ├── dels.py
+│   │   ├── dnazip.py
+│   │   ├── huffman.py
+│   │   ├── insr.py
+│   │   ├── metrics.py
+│   │   ├── preprocess_dbsnp.py
+│   │   ├── reader.py
+│   │   └── snp.py
+│   ├── data
+│   │   └── variants
+│   │       ├── HG002_GRCh38_sorted_variants.txt
+│   │       ├── HG003_GRCh38_sorted_variants.txt
+│   │       ├── HG004_GRCh38_sorted_variants.txt
+│   │       └── vcf_files.zip
+│   └── dnazip_setup.sh
+├── download_genomes.sh
+├── extract_chromosomes.sh
 ├── figures
+│   ├── algorithm_comp.png
+│   ├── ash1_genome_k_mer_plot.png
+│   ├── chr21_compression_comparison.png
+│   ├── genome_scaling_plot_log.png
+│   ├── rm_cover.png
+│   ├── storage_savings_vs_variants_plot_all.png
+│   ├── storage_savings_vs_variants_plot_han1.png
+│   └── time_v_storage.png
 ├── huffman_coding
-│   ├── code
-│   │   ├── config.py
-│   │   ├── huffman.py
-│   │   ├── k_mer_huffman.py
-│   │   ├── metrics.py
-│   │   ├── plot_huffman.py
-│   │   └── regular_huffman.py
-│   ├── output
-│   │   ├── csv
-│   │   ├── data
-│   │   └── plots
-└── README.md
+│   └── code
+│       ├── config.py
+│       ├── huffman.py
+│       ├── k_mer_huffman.py
+│       ├── metrics.py
+│       ├── plot_huffman.py
+│       └── regular_huffman.py
+├── process_dbsnp.sh
+├── README.md
+├── requirements.txt
+├── run_all.sh
+├── run_compression_benchmarks.sh
+├── setup_env.sh
+├── setup_tools.sh
+└── unzip_vcf_files.sh
 ```

@@ -72,14 +72,12 @@ genezippers_comps/
 │   ├── converter.py
 │   ├── data.csv
 │   ├── decompressor.py
-│   ├── notes.txt
 │   ├── plot.py
 │   └── preprocessor.py
 ├── clean_genomes.sh
 ├── dnazip
 │   ├── code
 │   │   ├── bitfile.py
-│   │   ├── combined_plots.py
 │   │   ├── constants.py
 │   │   ├── dbsnp.py
 │   │   ├── decode.py

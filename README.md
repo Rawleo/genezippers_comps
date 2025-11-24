@@ -58,11 +58,7 @@ genezippers_comps/
 │   ├── decompressor.py
 │   ├── notes.txt
 │   ├── plot.py
-│   ├── preprocessor.py
-│   └── __pycache__
-│       ├── AGCT_tree.cpython-39.pyc
-│       ├── config.cpython-39.pyc
-│       └── converter.cpython-39.pyc
+│   └── preprocessor.py
 ├── clean_genomes.sh
 ├── dnazip
 │   ├── code
@@ -89,14 +85,6 @@ genezippers_comps/
 ├── download_genomes.sh
 ├── extract_chromosomes.sh
 ├── figures
-│   ├── algorithm_comp.png
-│   ├── ash1_genome_k_mer_plot.png
-│   ├── chr21_compression_comparison.png
-│   ├── genome_scaling_plot_log.png
-│   ├── rm_cover.png
-│   ├── storage_savings_vs_variants_plot_all.png
-│   ├── storage_savings_vs_variants_plot_han1.png
-│   └── time_v_storage.png
 ├── huffman_coding
 │   └── code
 │       ├── config.py

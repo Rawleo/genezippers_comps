@@ -9,7 +9,7 @@ from dels import *
 from snp import *
 from insr import *
 from decode import *
-from plot import *
+from combined_plots import *
 
 
 def encode_file(input_file_path, dbSNP_path, k_mer_size):

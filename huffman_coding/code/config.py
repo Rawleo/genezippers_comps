@@ -18,7 +18,7 @@ huffman_coding/
 """
 
 K_MER         = True
-K_MER_SIZE    = 4
+K_MER_SIZE    = 8
 BASE_PATH     = Path(__file__).resolve().parent.parent.parent
 OUTPUT_DIR    = BASE_PATH / 'huffman_coding' / 'output'
 OUT_GENOME    = OUTPUT_DIR / 'data'
@@ -27,10 +27,6 @@ PLOT_OUT_PATH = OUTPUT_DIR / 'plots' / 'space_savings_vs_kmer.png'
 TIME_CSV_PATH = OUTPUT_DIR / 'csv' / 'huffman_times.csv'
 GENOME_CHOICE = "Ash1_v2_CHR21"
 K_MER_TAG     = f"K_MER_{K_MER_SIZE}"
-
-# print("K-mer?", K_MER)
-# print("K-mer Size:", K_MER_SIZE)
-# print("Genome:", GENOME_CHOICE)
 
 if (K_MER):
     GENOME_BIN    = OUT_GENOME / f'ENCODED_{GENOME_CHOICE}_{K_MER_TAG}'

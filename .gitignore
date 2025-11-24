@@ -3,6 +3,7 @@
 ./venv
 venv
 tools
+genomes
 
 alignment/files/*
 alignment/tools/*
@@ -15,16 +16,22 @@ dnazip/code/__pycache__/*
 dnazip/data/chr/*
 dnazip/data/dbSNP/*
 dnazip/data/original_paper_data/*
-!dnazip/data/vcf/vcf_files.zip
+!dnazip/data/variants/vcf_files.zip
 dnazip/data/output/chr
 dnazip/data/output/csv/*
 dnazip/data/huffman_trees/*
-dnazip/data/vcf/*
+dnazip/data/variants/*
+dnazip/data/output/chr/*
+dnazip/data/output/*
+dnazip/data/huffman_trees/*
+dnazip/data/variants/*
+dnazip/figures/*
 
 biocompress_1/data
 biocompress_1/__pycache__
 
 
 huffman_coding/__pycache__
+huffman_coding/code/__pycache__
 huffman_coding/output
 

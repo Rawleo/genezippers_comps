@@ -88,7 +88,7 @@ def get_snp_nuc(positions, chr_name, chr_folder):
     * nucs: list of nucleotides found at the specified positions
     '''
     # Construct path to reference chromosome file
-    ref_chr_path = chr_folder + chr_name + '.fa'
+    ref_chr_path = chr_folder + chr_name + '.fna'
     
     # Read the reference sequence
     ref_record = SeqIO.read(ref_chr_path, "fasta")
@@ -118,7 +118,7 @@ def get_del_nucs(positions, del_sizes, chr_name, chr_folder):
     * del_nucs: list of deleted nucleotide sequences
     '''
     # Construct path to reference chromosome file
-    ref_chr_path = chr_folder + chr_name + '.fa'
+    ref_chr_path = chr_folder + chr_name + '.fna'
     
     # Read the reference sequence
     ref_record = SeqIO.read(ref_chr_path, "fasta")
@@ -145,11 +145,61 @@ def fa_to_txt(input_fasta_file, output_txt_file):
     * input_fasta_file: file path to sequence file (.fna, .fasta, etc.)
     * output_txt_file: file path where to output cleaned sequence
     '''
+    genome = ""
     # Parse the input FASTA file and process each sequence record
     for seq_record in SeqIO.parse(input_fasta_file, "fasta"):
         # Clean the sequence by removing unwanted nucleotides and convert to uppercase
-        clean_seq = sequence_cleaner(seq_record.seq).upper()
+        clean_seq = str(sequence_cleaner(seq_record.seq).upper())
+        genome += clean_seq
 
         # Open the output text file in write mode and write the cleaned sequence
-        with open(output_txt_file, "w") as f:
-            f.write(clean_seq)
+    with open(output_txt_file, "w") as f:
+        f.write(genome)
+
+
+def extract_chromosomes(input_path, output_path, target_ids):
+    """
+    Extracts specific chromosomes from a FASTA file and saves them to a new file.
+    
+    Parameters:
+    - input_path (str): Path to the original genome assembly FASTA.
+    - output_path (str): Path where the extracted sequences will be saved.
+    - target_ids (list): A list of strings representing the chromosome IDs to extract.
+    
+    Returns:
+    - int: The count of sequences successfully extracted.
+    """
+    
+    # 1. Check if input file exists
+    if not os.path.exists(input_path):
+        raise FileNotFoundError(f"The file {input_path} was not found.")
+
+    print(f"Indexing {input_path} (this may take a moment for huge files)...")
+    
+    # 2. Create an index (fast random access)
+    # key_function=None uses the full ID string from the FASTA header
+    record_index = SeqIO.index(input_path, "fasta")
+    
+    extracted_records = []
+    missing_ids = []
+
+    # 3. Retrieve specific records
+    for chrom_id in target_ids:
+        try:
+            extracted_records.append(record_index[chrom_id])
+        except KeyError:
+            missing_ids.append(chrom_id)
+
+    # 4. Write to output if we found anything
+    if extracted_records:
+        count = SeqIO.write(extracted_records, output_path, "fasta")
+        print(f"Success! Wrote {count} sequences to '{output_path}'.")
+    else:
+        print("No matching chromosomes found. Nothing written.")
+        count = 0
+
+    # 5. Report missing IDs
+    if missing_ids:
+        print(f"Warning: The following IDs were not found in the file: {missing_ids}")
+        
+    return count

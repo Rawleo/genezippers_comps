@@ -70,9 +70,9 @@ if [ "$SKIP_BIGBED" != "true" ]; then
             ;;
         Darwin)
             if [ "$ARCH" = "x86_64" ]; then
-                UCSC_PATH="darwin.x86_64"
+                UCSC_PATH="macOSX.x86_64"
             elif [ "$ARCH" = "arm64" ]; then
-                UCSC_PATH="darwin.arm64"
+                UCSC_PATH="macOSX.arm64"
             else
                 echo -e "${RED}Error: Unsupported macOS architecture: $ARCH${NC}"
                 SKIP_BIGBED=true
@@ -125,5 +125,7 @@ fi
 
 echo -e "\n${YELLOW}To use this tool, add it to your PATH:${NC}"
 echo -e "${YELLOW}  export PATH=\"$UCSC_BIN_DIR:\$PATH\"${NC}"
+
+chmod +x $UCSC_BIN_DIR/bigBedToBed
 
 echo -e "\n${GREEN}Setup complete!${NC}"

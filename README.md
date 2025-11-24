@@ -118,3 +118,5 @@ genezippers_comps/
 ├── setup_tools.sh
 └── unzip_vcf_files.sh
 ```
+
+## **Related Repository:** [GeneZippers Website](https://github.com/Rawleo/genezippers_web) ##

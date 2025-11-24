@@ -8,7 +8,7 @@ This project evaluates three distinct genomic data compression strategies to ass
 </div>
 
 
-# Data Sources and Analysis Workflow
+# Data Sources and Alignment Workflow
 This project performs chromosome-level comparisons between reference and target genomes to generate VCF files for downstream processing.
 
 All target and reference genomes was sourced from the [NCBI database](https://www.ncbi.nlm.nih.gov/datasets/genome/)
@@ -18,7 +18,7 @@ All target and reference genomes was sourced from the [NCBI database](https://ww
 - [T2T-CHM13](https://www.ncbi.nlm.nih.gov/datasets/genome/GCF_009914755.1/)
 - [Han1](https://www.ncbi.nlm.nih.gov/datasets/genome/GCA_024586135.1/)
 
-The analysis pipeline relies on a small set of command-line tools:
+The alignment pipeline relies on a small set of command-line tools:
 
 - MUMmer4 – for whole-genome alignment
 - all2vcf – for converting alignment output into VCF
@@ -29,86 +29,94 @@ Three scripts support the workflow:
 - merge_vcf.sh – combines multiple VCF files from one directory into a single file.
 - format_vcf.sh – converts pseudo-VCF output into a simplified text format for use in DNAZip.
 
-# Reproducing the Paper's Analysis
+# Running the Project
 
-## Running Biocompress 1 and Huffman Coding
+To reproduce the full analysis, we provide a master script `run_all.sh` that automates the entire workflow.
 
-## Running DNAzip
+```bash
+# Ensure the script is executable
+chmod +x run_all.sh
 
+# Run the full pipeline
+./run_all.sh
+```
+
+The script performs the following operations in order:
+1.  **Setup Python Environment**: Creates a virtual environment and installs requirements.
+2.  **Setup Tools**: Downloads `bigBedToBed` and other necessary utilities.
+3.  **Download Genomes**: Fetches required genome assemblies.
+4.  **Extract Chromosomes**: Splits genomes into individual chromosomes and cleans them.
+5.  **Process dbSNP Data**: Prepares SNP databases.
+6.  **Unzip VCF Files**: Prepares variant call format files.
+7.  **Run Compression Benchmarks**: Executes the compression algorithms and generates results.
+
+Progress is logged to the console, and a summary is displayed upon completion.
 
 ## Project Directory Tree
 
 ```python
-comps_f25_rgj/
+genezippers_comps/
 ├── alignment
-│   ├── alignment.md
-│   ├── code
-│   │   ├── create_vcf.sh
-│   │   ├── format_to_vcf.sh
-│   │   ├── merge_vcf.sh
-│   │   └── rename_chr.sh
-│   ├── files
-│   │   ├── genomes
-│   │   ├── output_ash1_v2.2
-│   │   ├── output_Han1
-│   │   ├── output_PAN027
-│   │   └── output_T2T-CHM13
-│   ├── requirements.txt
-│   └── tools
-│       ├── all2vcf
-│       └── mummer
+│   ├── alignment.md
+│   └── code
+│       ├── create_vcf.sh
+│       ├── format_to_vcf.sh
+│       ├── merge_vcf.sh
+│       └── rename_chr.sh
 ├── biocompress_1
-│   ├── AGCT_tree.py
-│   ├── biocompress.py
-│   ├── compare.py
-│   ├── compressor.py
-│   ├── config.py
-│   ├── converter.py
-│   ├── data
-│   ├── data.csv
-│   ├── decompressor.py
-│   ├── plot.py
-│   └── preprocessor.py
+│   ├── AGCT_tree.py
+│   ├── biocompress.py
+│   ├── compare.py
+│   ├── compressor.py
+│   ├── config.py
+│   ├── converter.py
+│   ├── data.csv
+│   ├── decompressor.py
+│   ├── notes.txt
+│   ├── plot.py
+│   └── preprocessor.py
+├── clean_genomes.sh
 ├── dnazip
-│   ├── code
-│   │   ├── bitfile.py
-│   │   ├── constants.py
-│   │   ├── dbsnp.py
-│   │   ├── decode.py
-│   │   ├── dels.py
-│   │   ├── dnazip.py
-│   │   ├── huffman.py
-│   │   ├── insr.py
-│   │   ├── metrics.py
-│   │   ├── plot_2.py
-│   │   ├── plot.py
-│   │   ├── preprocess_dbsnp.py
-│   │   ├── reader.py
-│   │   └── snp.py
-│   ├── data
-│   │   ├── chr
-│   │   ├── dbSNP
-│   │   ├── figures
-│   │   ├── huffman_trees
-│   │   ├── output
-│   │   ├── variants
-│   │   └── vcf
-│   ├── dnazip_setup.sh
-│   ├── figures
-│   └── tools
-│       └── bigBedToBed
+│   ├── code
+│   │   ├── bitfile.py
+│   │   ├── combined_plots.py
+│   │   ├── constants.py
+│   │   ├── dbsnp.py
+│   │   ├── decode.py
+│   │   ├── dels.py
+│   │   ├── dnazip.py
+│   │   ├── huffman.py
+│   │   ├── insr.py
+│   │   ├── metrics.py
+│   │   ├── preprocess_dbsnp.py
+│   │   ├── reader.py
+│   │   └── snp.py
+│   ├── data
+│   │   └── variants
+│   │       ├── HG002_GRCh38_sorted_variants.txt
+│   │       ├── HG003_GRCh38_sorted_variants.txt
+│   │       ├── HG004_GRCh38_sorted_variants.txt
+│   │       └── vcf_files.zip
+│   └── dnazip_setup.sh
+├── download_genomes.sh
+├── extract_chromosomes.sh
 ├── figures
 ├── huffman_coding
-│   ├── code
-│   │   ├── config.py
-│   │   ├── huffman.py
-│   │   ├── k_mer_huffman.py
-│   │   ├── metrics.py
-│   │   ├── plot_huffman.py
-│   │   └── regular_huffman.py
-│   ├── output
-│   │   ├── csv
-│   │   ├── data
-│   │   └── plots
-└── README.md
+│   └── code
+│       ├── config.py
+│       ├── huffman.py
+│       ├── k_mer_huffman.py
+│       ├── metrics.py
+│       ├── plot_huffman.py
+│       └── regular_huffman.py
+├── process_dbsnp.sh
+├── README.md
+├── requirements.txt
+├── run_all.sh
+├── run_compression_benchmarks.sh
+├── setup_env.sh
+├── setup_tools.sh
+└── unzip_vcf_files.sh
 ```
+
+## **Related Repository:** [GeneZippers Website](https://github.com/Rawleo/genezippers_web) ##

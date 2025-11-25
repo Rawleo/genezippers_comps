@@ -68,7 +68,7 @@ def main():
 
     print("Step 1: Running compress.py")
     start=time.time()
-    result = subprocess.run(["python", "compressor.py"], check=True, text=True, stdout=subprocess.PIPE, stderr=None)  
+    result = subprocess.run(["python3", "compressor.py"], check=True, text=True, stdout=subprocess.PIPE, stderr=None)  
     compression_metrics = json.loads(result.stdout)
     end=time.time()
     print(f"Total Compression Time: {end - start:.2f} seconds")
@@ -79,7 +79,7 @@ def main():
 
     print("Step 2: Running decompress.py")
     start=time.time()
-    subprocess.run(["python", "decompressor.py"], check=True)
+    subprocess.run(["python3", "decompressor.py"], check=True)
     end=time.time()
     print(f"Total Decompression Time: {end - start:.2f} seconds")
 

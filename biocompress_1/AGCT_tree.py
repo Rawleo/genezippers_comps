@@ -3,7 +3,7 @@ from typing import Optional
 from config import HEIGHT
 
 
-@dataclass(slots=True)
+@dataclass
 class Node:
     level: int
     is_leaf: bool = False

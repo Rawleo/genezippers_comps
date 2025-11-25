@@ -143,6 +143,9 @@ def encode_ins(insr_df, k_mer_size):
         
         # Add remainder bits to the whole bitstring sequence
         ins_seq_bitstr += remainder_bitstr
+        # print(chr)
+        # print(remainder_nucs)
+        # print("Remainder:", remainder_bitstr)
     else: 
         encoding_map = {}
         number_of_kmers = 0
@@ -196,9 +199,13 @@ def decode_ins(bit_string, huffman_root, number_of_kmers, chr):
     ### Final insertion sequence
     if (HUFFMAN_ON):
         ins_seq, buffer  = decode_huffman(huffman_bitmap, huffman_root, number_of_kmers) 
+        
+        # print(chr, buffer)
             
         # Process non-Huffman encoded nucleotides
         extra_nucs = ''.join([TWO_BIT_ENCODING[buffer[(i*2):((i*2)+2)]] for i in range(len(buffer) // 2)])
+        
+        # print(chr, extra_nucs)
         
         # Append Huffman portion with non-Huffman 
         ins_seq += extra_nucs

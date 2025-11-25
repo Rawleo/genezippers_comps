@@ -4,5 +4,5 @@
 # changes have been made.
 
 for file in *chr*; do
-	mv "$file" "${file/CM*_/}"
+	mv "$file" "${file/* /}"
 done

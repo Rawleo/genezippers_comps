@@ -1,60 +1,55 @@
 # Setting up environment
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
 import os
+import pandas as pd
 from constants import *
+
+# Column names for dbSNP tables
+DBSNP_COLS = [
+    'chrom', 'chromStart', 'chromEnd', 'name', 'ref', 'altCount', 'alts',
+    'shiftBases', 'freqSourceCount', 'minorAlleleFreq', 'majorAllele',
+    'minorAllele', 'maxFuncImpact', 'varType', 'ucscNotes',
+    '_dataOffset', '_dataLen'
+]
 
 for file in os.listdir(DBSNP_PATH):
 
-    #Only look at chromosomes
-    if (file.split(".")[-1] == "txt"):
+    # Only process plain-text chromosome files
+    if not file.endswith(".txt"):
+        continue
 
-        path = f"{DBSNP_PATH}/{file}"
+    path = f"{DBSNP_PATH}/{file}"
 
-        chr_vars = pd.read_csv(path,
-                               sep='\t',
-                               names=['chrom',
-                                'chromStart',
-                                'chromEnd',
-                                'name',
-                                'ref',
-                                'altCount',
-                                'alts',
-                                'shiftBases',
-                                'freqSourceCount',
-                                'minorAlleleFreq',
-                                'majorAllele',
-                                'minorAllele',
-                                'maxFuncImpact',
-                                'varType',
-                                'ucscNotes',
-                                '_dataOffset',
-                                '_dataLen'
-                                ]
-                              )
+    # Load table
+    df = pd.read_csv(path, sep='\t', names=DBSNP_COLS)
 
-        snv_vars = chr_vars.where(chr_vars['varType'] == 'snv').dropna()
-        snv_common_vars = snv_vars[snv_vars['ucscNotes'].apply(lambda x: 'commonAll' in str(x).split(','))]
-        filterd_snv_cvars = snv_common_vars[['chrom', 'chromStart', 'ref', 'altCount', 'alts']]
+    # Filter SNVs only
+    snvs = df[df['varType'] == 'snv']
 
-        # Given each alternative, make a new entry for it
-        filterd_snv_cvars = (filterd_snv_cvars
-                  .assign(alt=filterd_snv_cvars['alts'].str.split(','))
-                  .explode('alt')
-                  .reset_index(drop=True)
-                  ) 
-        
-        # Formatting
-        filterd_snv_cvars['chromStart'] = filterd_snv_cvars['chromStart'].astype('Int64')
-        filterd_snv_cvars = filterd_snv_cvars.where(filterd_snv_cvars['alt'] != '').dropna()
+    # Keep only variants with "commonAll" in ucscNotes
+    common_snvs = snvs[snvs['ucscNotes']
+                       .astype(str)
+                       .str.split(',')
+                       .apply(lambda notes: 'commonAll' in notes)]
 
-        filterd_snv_cvars['ref_alt'] = filterd_snv_cvars['ref'] + "/" + filterd_snv_cvars['alt']
+    # Select needed columns
+    common_snvs = common_snvs[['chrom', 'chromStart', 'ref', 'alts']]
 
-        # Rewrite pre-existing file
-        filterd_snv_cvars[['chrom', 'chromStart', 'ref_alt']].to_csv(path, 
-                                                                      header=None,
-                                                                      index=False)
-        
-        print(f"{file} has been converted to the proper format")
+    # Split multi-alt into rows
+    common_snvs = (
+        common_snvs
+        .assign(alt=common_snvs['alts'].str.split(','))
+        .explode('alt')
+        .dropna(subset=['alt'])
+        .reset_index(drop=True)
+    )
 
+    # Format fields
+    common_snvs['chromStart'] = common_snvs['chromStart'].astype('Int64')
+    common_snvs['ref_alt'] = common_snvs['ref'] + "/" + common_snvs['alt']
+
+    # Overwrite file with cleaned format
+    common_snvs[['chrom', 'chromStart', 'ref_alt']].to_csv(
+        path, header=None, index=False
+    )
+
+    print(f"{file} has been converted to the proper format")

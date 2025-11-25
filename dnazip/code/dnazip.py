@@ -9,7 +9,7 @@ from dels import *
 from snp import *
 from insr import *
 from decode import *
-from plot import *
+from metrics import *
 
 
 def encode_file(input_file_path, dbSNP_path, k_mer_size):
@@ -138,9 +138,17 @@ def decode_file(bit_string):
     
     # Formatting
     decode_df['pos'] = decode_df['pos'].astype(int)
+    
+    chrom_order = [f'chr{i}' for i in range(1, 23)] + ['chrX'] + ['chrY']
+    
+    decode_df['chr'] = pd.Categorical(
+        decode_df['chr'],
+        categories=chrom_order,
+        ordered=True
+    )
 
     # Output Decoded File
-    decode_df.sort_values(by=['var_type', 'chr', 'pos']).to_csv(OUTPUT_DEC_PATH,
+    decode_df.sort_values(by=['var_type', 'chr', 'pos', 'var_info']).to_csv(OUTPUT_DEC_PATH,
                      index=False,
                      header=None) # type: ignore
 
@@ -163,6 +171,7 @@ def main():
     
     print("CPU Time Encode:", time_difference(end_cpu_time_encode, start_cpu_time_encode), "seconds")
     print("Wall Time Encode:", time_difference(end_wall_time_encode, start_wall_time_encode), "seconds")
+    print(VARIANT_NAME)
     
     # Record ENCODE Start and End Timings
     record_timings(0, 0, time_difference(end_cpu_time_encode, start_cpu_time_encode), TIME_CSV_PATH)
@@ -181,9 +190,6 @@ def main():
 
     print("CPU Time Decode:", time_difference(end_cpu_time_decode, start_cpu_time_decode), "seconds")
     print("Wall Time Decode:", time_difference(end_wall_time_decode, start_wall_time_decode), "seconds")
-
-    # Create Figures
-    compression_comparison(INPUT_FILE_PATH, ENC_FILE_PATH, VARIANT_NAME, FIGURE_PATH)
     
     # Record DECODE Start and End Timings
     record_timings(1, 0, time_difference(end_cpu_time_decode, start_cpu_time_decode), TIME_CSV_PATH)

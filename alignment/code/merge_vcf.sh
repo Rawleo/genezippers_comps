@@ -15,11 +15,11 @@ set -e
 
 # Genome assemblies
 REF_CODENAME="hg38"
-TARGET_CODENAME="T2T-CHM13"
+TARGET_CODENAME="Han1"
 
 # Directories
 GENOME_DIR="../files/genomes"
-OUTPUT_DIR="../files/output_${TARGET_CODENAME}"
+OUTPUT_DIR="../files/output_${TARGET_CODENAME}/merge"
 
 # Global array to be populated by the find function
 declare -a VCF_FILES_TO_MERGE

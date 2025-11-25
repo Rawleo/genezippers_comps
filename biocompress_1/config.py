@@ -1,4 +1,4 @@
-DNA_FILE = "ecoli"
+DNA_FILE = "Ash1_v2_CHR21"
 DNA_FILE_PATH = "../dnazip/data/chr/"
 DNA_FILE_TXT = DNA_FILE + ".txt"
 DNA_FILE_FA = DNA_FILE + ".fa"

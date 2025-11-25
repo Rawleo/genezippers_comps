@@ -48,7 +48,7 @@ def height_vs_memory_and_time(csv_path: str = "./data.csv"):
     plt.savefig("tree_creation_time_and_memory_vs_height.png", dpi=300)
     plt.show()
 
-def height_vs_time(csv_path: str = "./data.csv"):
+def height_vs_time(csv_path: str = "./data.csv", file=None):
     # Load the CSV
     try:
         df = pd.read_csv(csv_path)
@@ -61,21 +61,22 @@ def height_vs_time(csv_path: str = "./data.csv"):
         if col not in df.columns:
             sys.exit(f"Error: Missing column '{col}' in {csv_path}")
 
-    # Drop rows with missing values
+    # Drop rows with missing values + only look at file of interest
     df = df.dropna(subset=required_cols)
+    df = df.where(df['genome'] == file).dropna()
 
     # Sort by height
     df = df.sort_values("tree_height")
-
+    
     # Plot
-    plt.figure(figsize=(9, 6))
+    plt.figure(figsize=(10, 5))
     bar_width = 0.6
 
     # Stacked bars
     plt.bar(
         df["tree_height"],
         df["tree_creation_time"],
-        color="royalblue",
+        color="#1E88E5",
         width=bar_width,
         label="Tree Creation Time"
     )
@@ -83,17 +84,20 @@ def height_vs_time(csv_path: str = "./data.csv"):
         df["tree_height"],
         df["compressor_time"],
         bottom=df["tree_creation_time"],
-        color="darkorange",
+        color="#FFC107",
         width=bar_width,
         label="Compressor Time"
     )
 
     # Labels and title
-    plt.xlabel("Tree Height")
-    plt.ylabel("Time (seconds)")
-    plt.title("Tree Creation and Compression Time vs. Tree Height")
-    plt.grid(axis="y", linestyle="--", alpha=0.6)
-    plt.legend()
+    plt.subplots_adjust(top=0.85)
+    plt.xlabel("Tree Height", fontsize=14, weight='bold', labelpad=15)
+    plt.ylabel("Time (s)", fontsize=14, weight='bold', labelpad=10)
+    plt.suptitle("Algorithm Runtime vs. Tree Height", fontsize=18, weight='bold')
+    plt.title(f"Original File Size: {round(df['original_file_size'].iloc[0], 2)}", pad=15)
+    plt.xticks(fontsize=12, ticks=df['tree_height'])
+    plt.yticks(fontsize=12)
+    plt.legend(loc='upper center', ncols=2)
 
     # Save and show
     plt.tight_layout()
@@ -143,8 +147,7 @@ def compression_comparison(csv_path="./data.csv"):
 
 def main():
     # height_vs_memory_and_time()
-    # height_vs_time()
-    compression_comparison()
+    height_vs_time(file='Ash1_v2_Genome')
 
 
 
